@@ -165,10 +165,12 @@
     <Content Include="Content\css\owl.carousel.min.css" />
     <Content Include="Content\css\owl.theme.default.min.css" />
     <Content Include="Content\css\style.css" />
+    <Content Include="Content\images\keys\email.png" />
+    <Content Include="Content\images\keys\magnifier.png" />
+    <Content Include="Content\images\keys\whatsapp.png" />
     <Content Include="Content\images\pictures\img_1.jpg" />
     <Content Include="Content\images\backgrounds\img_bg_1.jpg" />
     <Content Include="Content\images\keys\key-console.png" />
-    <Content Include="Content\images\keys\loupe.png" />
     <Content Include="Content\images\loader.gif" />
     <Content Include="Content\images\social\facebook.png" />
     <Content Include="Content\images\social\google-plus.png" />
