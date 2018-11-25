@@ -35,11 +35,6 @@ namespace DessertTaCeinture.WEB
                       "~/Scripts/bootstrap.js"
                       ));
 
-            bundles.Add(new StyleBundle("~/font/css").Include(
-                        "~/Content/css/icomoon.css",
-                        "~/Content/css/themify-icons.css"
-                    ));
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                      "~/Content/css/animate.css",
