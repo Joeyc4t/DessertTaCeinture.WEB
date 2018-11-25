@@ -198,3 +198,12 @@ C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeintur
 C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeinture.WEB.dll
 C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeinture.WEB.pdb
 C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeinture.WEB.csprojAssemblyReference.cache
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\BCrypt.Net.dll
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\System.Net.Http.Formatting.dll
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\System.Web.Http.dll
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\System.Web.Http.WebHost.dll
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\BCrypt.Net.pdb
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\BCrypt.Net.xml
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\System.Net.Http.Formatting.xml
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\System.Web.Http.xml
+C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\bin\System.Web.Http.WebHost.xml

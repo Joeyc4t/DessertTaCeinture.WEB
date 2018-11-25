@@ -13,12 +13,12 @@ namespace DessertTaCeinture.WEB.Services
 
         private Session() { }
 
-        public void StoreClient(UserModel model)
+        public void StoreUser(UserModel model)
         {
             HttpContext.Current.Session["loggedUser"] = model;
         }
 
-        public UserModel GetConnectedClient()
+        public UserModel GetConnectedUser()
         {
             return (HttpContext.Current.Session["loggedUser"] as UserModel);
         }

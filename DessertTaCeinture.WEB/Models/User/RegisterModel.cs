@@ -33,6 +33,8 @@ namespace DessertTaCeinture.WEB.Models.User
         [DisplayName("Prénom")]
         public string FirstName { get; set; }
 
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [DisplayName("Date de naissance")]
         public DateTime BirthDate { get; set; }
 
