@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace DessertTaCeinture.WEB.Models.User
 {
@@ -15,7 +12,6 @@ namespace DessertTaCeinture.WEB.Models.User
         private string _Salt;
         private string _LastName;
         private string _FirstName;
-        private DateTime? _BirthDate;
         private bool? _Gender;
         private DateTime? _InscriptionDate;
         private bool? _IsActive;
@@ -102,18 +98,6 @@ namespace DessertTaCeinture.WEB.Models.User
             set
             {
                 _FirstName = value;
-            }
-        }
-
-        public DateTime? BirthDate
-        {
-            get
-            {
-                return _BirthDate;
-            }
-            set
-            {
-                _BirthDate = value;
             }
         }
 
