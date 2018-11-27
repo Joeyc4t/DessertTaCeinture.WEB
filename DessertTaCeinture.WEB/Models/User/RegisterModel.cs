@@ -6,7 +6,6 @@ namespace DessertTaCeinture.WEB.Models.User
 {
     public class RegisterModel
     {
-
         [Required]
         [StringLength(50)]
         [DisplayName("Adresse mail")]
@@ -20,7 +19,7 @@ namespace DessertTaCeinture.WEB.Models.User
         [Required]
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "les mots de passe doivent être similaire")]
-        [DisplayName("Confirmer le mot de passe")]
+        [DisplayName("Confirmez le mot de passe")]
         public string ConfirmPassword { get; set; }
 
         [Required]

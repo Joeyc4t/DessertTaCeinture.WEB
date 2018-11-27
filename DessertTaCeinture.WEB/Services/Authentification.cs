@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http.Results;
 
 namespace DessertTaCeinture.WEB.Services
@@ -27,19 +28,17 @@ namespace DessertTaCeinture.WEB.Services
                 client.BaseAddress = new Uri("http://localhost:50140/");
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = client.GetAsync($"api/User/Get").Result;
+                HttpResponseMessage Res = client.GetAsync($"api/User?id={model.Email}").Result;
 
                 if (Res.IsSuccessStatusCode)
                 {
                     var Response = Res.Content.ReadAsStringAsync().Result;
-                    IQueryable<UserModel> GlobalModels = JsonConvert.DeserializeObject(Response) as IQueryable<UserModel>;
+                    UserModel globalModel = JsonConvert.DeserializeObject<UserModel>(Response);
 
-                    UserModel GlobalModel = GlobalModels.FirstOrDefault(u => u.Email == model.Email);
-
-                    string hash = BCrypt.Net.BCrypt.HashPassword(model.Password, GlobalModel.Salt);
-                    if (BCrypt.Net.BCrypt.Verify(GlobalModel.Password, hash))
+                    string hash = BCrypt.Net.BCrypt.HashPassword(model.Password, globalModel.Salt);
+                    if (globalModel.Password.Equals(hash))
                     {
-                        Session.Instance.StoreUser(GlobalModel);
+                        Session.Instance.StoreUser(globalModel);
                         return client != null;
                     }
                     else return false;

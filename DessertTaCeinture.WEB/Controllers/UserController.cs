@@ -15,12 +15,10 @@ namespace DessertTaCeinture.WEB.Controllers
 {
     public class UserController : Controller
     {
+        #region Instances
         private Authentification AuthService = Authentification.Instance;
-
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        private Session CurrentSession = Services.Session.Instance;
+        #endregion
 
         public ActionResult Create()
         {
@@ -58,8 +56,44 @@ namespace DessertTaCeinture.WEB.Controllers
                     return View(model);
                 }
             }
-
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(LoginModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (!AuthService.LoginUser(model))
+            {
+                return View(model);
+            }            
+            return RedirectToAction("Index", "Home");
+        }
+
+        public PartialViewResult LoginForm()
+        {
+            return PartialView("_LoginForm", new LoginModel());
+        }
+
+        public ActionResult Logout()
+        {
+            AuthService.Logout();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Details()
+        {
+            return View(AutoMapper<UserModel, DetailsModel>.AutoMap(CurrentSession.GetConnectedUser()));
         }
 
         public ActionResult Edit(int id)
@@ -67,7 +101,7 @@ namespace DessertTaCeinture.WEB.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPut]
         public ActionResult Edit(int id, FormCollection collection)
         {
             try
@@ -87,7 +121,7 @@ namespace DessertTaCeinture.WEB.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpDelete]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try
@@ -101,5 +135,34 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View();
             }
         }
+
+        #region Private methods
+        private UserModel GetLoggedUser(LoginModel model)
+        {
+            UserModel globalModel = new UserModel();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/User?id={model.Email}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        globalModel = JsonConvert.DeserializeObject<UserModel>(result);
+                    }
+                }
+                return globalModel;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        #endregion
     }
 }

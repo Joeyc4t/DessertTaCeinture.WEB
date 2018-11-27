@@ -1956,4 +1956,9 @@ form label {
   }
 }
 
+#modalDivLogin {
+    position: absolute;
+    margin-top: 10%;
+}
+
 /*# sourceMappingURL=style.css.map */

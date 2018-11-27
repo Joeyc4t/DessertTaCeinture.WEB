@@ -35,13 +35,29 @@
                             </ul>
                         </li>
                         <li><a href="#">Contact</a></li>
-                        <li class="btn-cta"><a href="#"><span>Se connecter</span></a></li>
-                        <li class="btn-cta"><span>@Html.ActionLink("S'enregistrer", "Create", "User")</span></li>
+                        @if (Session["loggedUser"] != null)
+                        {
+                            <li class="btn-cta"><a href="@Url.Action("Details","User")"><span>Mon profil</span></a></li>
+                            <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
+                        }
+                        else
+                        {
+                            <li class="btn-cta" id="modalLogin"><a href="@Url.Action("Login","User")"><span>Se connecter</span></a></li>
+                        }
                     </ul>
                 </div>
             </div>
         </div>
     </nav>
+
+    <div id="modalDivLogin" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div id="modal-content-login" class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
 
     @RenderBody()
 
@@ -84,5 +100,21 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/modernizr")
 
+    <script>
+        $(document).ready(function () {
+            $("#modalLogin > a").on("click", function (e) {
+                e.preventDefault();
+                var modal = $("#modalDivLogin");
+                var contentModal = $("#modal-content-login");
+                $.ajax({
+                    url: "@Url.Action("Login", "User", null)",
+                    success: function (data) {
+                        contentModal.html(data);
+                        modal.modal();
+                    }
+                })
+            })
+        });
+    </script>
 </body>
 </html>
