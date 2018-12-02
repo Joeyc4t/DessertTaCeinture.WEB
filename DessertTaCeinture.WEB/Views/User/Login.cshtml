@@ -1,7 +1,62 @@
 ﻿@model DessertTaCeinture.WEB.Models.User.LoginModel
 
 @{
-    Layout = null;
+    ViewBag.Title = "Connexion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.Partial("_LoginForm")
+<div class="gtco-loader"></div>
+<div id="page">
+    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0 text-left">
+                    <div class="row row-mt-15em">
+                        @using (Html.BeginForm("Login", "User"))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="col-md-12 animate-box">
+                                <div class="form-wrap">
+                                    <div class="tab">
+                                        <div class="tab-content">
+                                            <div class="tab-content-inner active" data-content="signup">
+                                                <h3 class="cursive-font text-center">Connexion</h3>
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <div class="row form-group">
+                                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4 col-md-offset-2">
+                                                        <input type="submit" class="btn btn-primary btn-block" value="Se connecter">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <span>@Html.ActionLink("Mot de passe oublié ?", "Create", "User")</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <span class="pull-right">Pas encore de compte ? @Html.ActionLink("S'enregistrer", "Create", "User")</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>

@@ -3,12 +3,9 @@ using DessertTaCeinture.WEB.Services;
 using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Controllers
@@ -48,8 +45,11 @@ namespace DessertTaCeinture.WEB.Controllers
                         toInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                         HttpResponseMessage Res = await client.PostAsync("api/User", toInsert);
+                        if (Res.IsSuccessStatusCode)
+                            return RedirectToAction("Index", "Home");
+                        else
+                            return RedirectToAction("Error", "Home");
                     }
-                    return RedirectToAction("Index", "Home");
                 }
                 catch
                 {
@@ -66,17 +66,15 @@ namespace DessertTaCeinture.WEB.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
             if (!AuthService.LoginUser(model))
-            {
                 return View(model);
-            }            
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -96,19 +94,46 @@ namespace DessertTaCeinture.WEB.Controllers
             return View(AutoMapper<UserModel, DetailsModel>.AutoMap(CurrentSession.GetConnectedUser()));
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
+            if (id == null)
+                return RedirectToAction("Error", "Home");
+
             return View();
         }
 
-        [HttpPut]
-        public ActionResult Edit(int id, FormCollection collection)
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(EditPwdModel model)
         {
+            if (model.NewPassword == model.OldPassword)
+                ModelState.AddModelError("NewPassword", "Le nouveau mot de passe doit être différent de l'ancien !");
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            UserModel localModel = CurrentSession.GetConnectedUser();
+
+            if (localModel == null)
+                return RedirectToAction("Error", "Home");
+
             try
             {
-                // TODO: Add update logic here
+                using (var client = new HttpClient())
+                {
+                    localModel.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, localModel.Salt);
 
-                return RedirectToAction("Index");
+                    client.BaseAddress = new Uri("http://localhost:50140/");
+
+                    StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(localModel));
+                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    HttpResponseMessage Res = await client.PutAsync($"api/User?id={localModel.Id}", toUpdate);
+                    if (Res.IsSuccessStatusCode)
+                        return RedirectToAction("Index", "Home");
+                    else
+                        return RedirectToAction("Error", "Home");
+                }
             }
             catch
             {
@@ -116,23 +141,44 @@ namespace DessertTaCeinture.WEB.Controllers
             }
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+                return RedirectToAction("Error", "Home");
+
+            UserModel model = CurrentSession.GetConnectedUser();
+            if (model.Id != id)
+                return RedirectToAction("Error", "Home");
+
+            return View(model);
         }
 
-        [HttpDelete]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
             try
             {
-                // TODO: Add delete logic here
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                return RedirectToAction("Index");
+                    HttpResponseMessage Res = client.DeleteAsync($"api/User?id={id}").Result;
+
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        Logout();
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                        return RedirectToAction("Error", "Home");
+                }                
             }
             catch
             {
-                return View();
+                return RedirectToAction("Error", "Home");
             }
         }
 

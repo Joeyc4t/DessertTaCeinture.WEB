@@ -1,0 +1,67 @@
+﻿@model DessertTaCeinture.WEB.Models.User.EditPwdModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="gtco-loader"></div>
+<div id="page">
+    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0 text-left">
+                    <div class="row row-mt-15em">
+                        @using (Html.BeginForm("Edit", "User"))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="col-md-12 animate-box">
+                                <div class="form-wrap">
+                                    <div class="tab">
+                                        <div class="tab-content">
+                                            <div class="tab-content-inner active" data-content="signup">
+                                                <h3 class="cursive-font text-center">Modification du mot de passe</h3>
+                                                <div class="row form-group">
+                                                    @Html.LabelFor(model => model.OldPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.OldPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.OldPassword, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="row form-group">
+                                                    @Html.LabelFor(model => model.NewPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.NewPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.NewPassword, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="row form-group">
+                                                    @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4 col-md-offset-3">
+                                                        <input type="submit" class="btn btn-primary btn-block" value="Valider">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p>@Html.ActionLink("Annuler", "Details", "User")</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>

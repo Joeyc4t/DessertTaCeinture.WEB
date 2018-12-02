@@ -34,12 +34,15 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     var Response = Res.Content.ReadAsStringAsync().Result;
                     UserModel globalModel = JsonConvert.DeserializeObject<UserModel>(Response);
-
-                    string hash = BCrypt.Net.BCrypt.HashPassword(model.Password, globalModel.Salt);
-                    if (globalModel.Password.Equals(hash))
+                    if (globalModel.IsActive == true)
                     {
-                        Session.Instance.StoreUser(globalModel);
-                        return client != null;
+                        string hash = BCrypt.Net.BCrypt.HashPassword(model.Password, globalModel.Salt);
+                        if (globalModel.Password.Equals(hash))
+                        {
+                            Session.Instance.StoreUser(globalModel);
+                            return client != null;
+                        }
+                        else return false;
                     }
                     else return false;
                 }

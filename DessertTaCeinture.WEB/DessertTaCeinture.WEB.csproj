@@ -166,6 +166,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\User\DetailsModel.cs" />
+    <Compile Include="Models\User\EditPwdModel.cs" />
     <Compile Include="Models\User\LoginModel.cs" />
     <Compile Include="Models\User\RegisterModel.cs" />
     <Compile Include="Models\User\UserModel.cs" />
@@ -400,13 +401,15 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Errors\GenericError.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\Shared\_LoginForm.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\User\Delete.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

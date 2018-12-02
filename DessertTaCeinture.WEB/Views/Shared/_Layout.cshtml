@@ -20,7 +20,7 @@
         <div class="gtco-container">
             <div class="row">
                 <div class="col-sm-4 col-xs-12">
-                    <div id="gtco-logo"><a href="#">Dessert Ta Ceinture <em>.</em></a></div>
+                    <div id="gtco-logo"><a href="@Url.Action("Index","Home")">Dessert Ta Ceinture <em>.</em></a></div>
                 </div>
                 <div class="col-xs-8 text-right menu-1">
                     <ul>
@@ -107,7 +107,7 @@
                 var modal = $("#modalDivLogin");
                 var contentModal = $("#modal-content-login");
                 $.ajax({
-                    url: "@Url.Action("Login", "User", null)",
+                    url: "@Url.Action("LoginForm", "User", null)",
                     success: function (data) {
                         contentModal.html(data);
                         modal.modal();

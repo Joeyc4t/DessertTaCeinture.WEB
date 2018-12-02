@@ -13,56 +13,59 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row row-mt-15em">
-                            <div class="col-md-12 animate-box">
-                                <div class="form-wrap">
-                                    <div class="tab">
-                                        <div class="tab-content">
-                                            <div class="tab-content-inner active" data-content="signup">
-                                                <div class="col-md-6">
-                                                    <h3 class="cursive-font col-md-offset-3">Mon profil</h3>
-                                                    <dl class="dl-horizontal animate-box col-md-offset-2">
-                                                        <dt>@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                        <dd>@Html.DisplayFor(model => model.Email)</dd>
+                        <div class="col-md-12 animate-box">
+                            <div class="form-wrap">
+                                <div class="tab">
+                                    <div class="tab-content">
+                                        <div class="tab-content-inner active">
+                                            <div class="col-md-6">
+                                                <h3 class="cursive-font col-md-offset-3">Mon profil</h3>
+                                                <dl class="dl-horizontal animate-box col-md-offset-2">
+                                                    <dt>@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd>@Html.DisplayFor(model => model.Email)</dd>
 
-                                                        <dt>@Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                        <dd>@Html.DisplayFor(model => model.LastName)</dd>
+                                                    <dt>@Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd>@Html.DisplayFor(model => model.LastName)</dd>
 
-                                                        <dt>@Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                        <dd>@Html.DisplayFor(model => model.FirstName)</dd>
+                                                    <dt>@Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd>@Html.DisplayFor(model => model.FirstName)</dd>
 
-                                                        <dt>@Html.LabelFor(model => model.InscriptionDate, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                        <dd>@Html.DisplayFor(model => model.InscriptionDate)</dd>
-                                                    </dl>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <h3 class="cursive-font col-md-offset-3">Mes statistiques</h3>
-                                                    <dl class="dl-horizontal animate-box col-md-offset-2">
-                                                        <dt>@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                        <dd>@Html.DisplayFor(model => model.Email)</dd>
-
-                                                        <dt>@Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                        <dd>@Html.DisplayFor(model => model.LastName)</dd>
-
-                                                        <dt>@Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                        <dd>@Html.DisplayFor(model => model.FirstName)</dd>
-
-                                                        <dt>@Html.LabelFor(model => model.InscriptionDate, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                        <dd>@Html.DisplayFor(model => model.InscriptionDate)</dd>
-                                                    </dl>
-                                                </div>
-                                                <br/>
-                                                <div class="text-right">
-                                                    <span>@Html.ActionLink("Mettre à jour mon profil", "Edit", new { id = Model.Id })</span> |
-                                                    <span>@Html.ActionLink("Retour à l'accueil", "Index", "Home")</span>
-                                                </div>
+                                                    <dt>@Html.LabelFor(model => model.InscriptionDate, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd>@Html.DisplayFor(model => model.InscriptionDate)</dd>
+                                                </dl>
                                             </div>
+                                            <div class="col-md-6">
+                                                <h3 class="cursive-font col-md-offset-3">Mes statistiques</h3>
+                                                <dl class="dl-horizontal animate-box col-md-offset-2">
+                                                    <dt>@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd>@Html.DisplayFor(model => model.Email)</dd>
+
+                                                    <dt>@Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd>@Html.DisplayFor(model => model.LastName)</dd>
+
+                                                    <dt>@Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd>@Html.DisplayFor(model => model.FirstName)</dd>
+
+                                                    <dt>@Html.LabelFor(model => model.InscriptionDate, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd>@Html.DisplayFor(model => model.InscriptionDate)</dd>
+                                                </dl>
+                                            </div>
+                                            <div class="animate-box col-md-offset-1 text-left">
+                                                <span>@Html.ActionLink("Changer mon mot de passe", "Edit", new { id = Model.Id })</span> |
+                                                <span>@Html.ActionLink("Désactiver mon compte", "Delete", new { id = Model.Id })</span>
+                                            </div>    
+                                            <br/>
+                                            <div class="animate-box text-right">
+                                                <span>@Html.ActionLink("Retour à l'accueil", "Index", "Home")</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                    </div>
+                            </div>                            
+                        </div>
                 </div>
             </div>
         </div>
-            </div>
+        </div>
     </header>
 </div>

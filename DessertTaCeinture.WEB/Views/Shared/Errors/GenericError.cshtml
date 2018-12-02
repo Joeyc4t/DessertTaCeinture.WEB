@@ -1,0 +1,35 @@
+﻿<div class="gtco-loader"></div>
+<div id="page">
+    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0 text-left">
+                    <div class="row row-mt-15em">
+                        <div class="form-wrap">
+                            <div class="tab">
+                                <div class="tab-content">
+                                    <div class="tab-content-inner active" data-content="signup">
+                                        <div class="row form-horizontal animate-box">
+                                            <h1 class="text-center">Oops !</h1>
+                                            <p class="text-center">Une erreur est survenue lors de votre demande.</p>
+                                            @using (Html.BeginForm("Delete", "User"))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <div class="row form-group">
+                                                    <div class="col-md-12">
+                                                        <p class="text-center">@Html.ActionLink("Revenir à l'accueil", "Index", "Home")</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>

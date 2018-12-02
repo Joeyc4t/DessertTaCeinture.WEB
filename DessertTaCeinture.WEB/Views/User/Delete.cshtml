@@ -1,0 +1,45 @@
+﻿@model DessertTaCeinture.WEB.Models.User.UserModel
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="gtco-loader"></div>
+<div id="page">
+    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0 text-left">
+                    <div class="row row-mt-15em">
+                        <div class="form-wrap">
+                            <div class="tab">
+                                <div class="tab-content">
+                                    <div class="tab-content-inner active" data-content="signup">
+                                        <h3 class="cursive-font text-center">Désactivation</h3>
+                                        <div class="row form-horizontal">
+                                            <p class="text-center  animate-box">Êtes-vous certain de vouloir suspendre votre compte ?</p>
+                                            @using (Html.BeginForm("Delete", "User"))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <div class="row form-group">
+                                                    <div class="col-md-4 col-md-offset-3">
+                                                        <input type="submit" class="btn btn-primary btn-block" value="Valider">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p>@Html.ActionLink("Annuler", "Details", "User")</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
