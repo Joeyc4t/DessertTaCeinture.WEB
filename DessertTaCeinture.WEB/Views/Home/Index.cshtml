@@ -6,7 +6,7 @@
 
 <div class="gtco-loader"></div>
 <div id="page">       
-    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/Home.jpg)" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="gtco-container">
             <div class="row">
@@ -21,30 +21,23 @@
                                 <div class="tab">
                                     <div class="tab-content">
                                         <div class="tab-content-inner active" data-content="signup">
-                                            <h3 class="cursive-font">Trouver une recette</h3>
+                                            <h3 class="cursive-font">Recherche rapide</h3>
                                             <form action="#">
                                                 <div class="row form-group">
                                                     <div class="col-md-12">
-                                                        <label for="activities">Thème</label>
-                                                        <select name="#" id="themes" class="form-control">
-                                                            <option value=""></option>
-                                                            <option value="">thème a</option>
-                                                            <option value="">thème b</option>
-                                                            <option value="">thème c</option>
-                                                            <option value="">thème d</option>
-                                                            <option value="">thème e</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="row form-group">
-                                                    <div class="col-md-12">
-                                                        <label for="date-start">Ingrédient principal</label>
+                                                        <label for="date-start">Intitulé</label>
                                                         <input type="text" id="mainIngredient" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
                                                     <div class="col-md-12">
-                                                        <label for="date-start">Nombre de personnes</label>
+                                                        <label for="date-start">Ingrédient</label>
+                                                        <input type="text" id="mainIngredient" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-12">
+                                                        <label for="date-start">Sans</label>
                                                         <select name="#" id="numberOfPers" class="form-control">
                                                             <option value=""></option>
                                                             <option value="2">2</option>
@@ -74,29 +67,8 @@
 
     <div class="gtco-section">
         <div class="gtco-container">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                    <h2 class="cursive-font primary-color">Dernières douceurs</h2>
-                </div>
-            </div>            
-            <div class="row">
-                @for (int i = 1; i <= 6; i++)
-                {
-                    <div class="col-lg-4 col-md-4 col-sm-6">
-                        <a href="#" class="fh5co-card-item">
-                            <figure>
-                                <img src="~/Content/images/pictures/img_1.jpg" alt="Image" class="img-responsive">
-                            </figure>
-                            <div class="fh5co-text">
-                                <h2>Titre</h2>
-                                <p>Par - Autheur -</p>
-                                <p>Date d'ajout</p>
-                                <p><span class="price cursive-font">Voir</span></p>
-                            </div>
-                        </a>
-                    </div>
-                }
-            </div>
+
         </div>
     </div>
+
 </div>

@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.Title</title>
+
+<title>@ViewBag.Title</title>
+
+<div class="gtco-loader"></div>
+<div id="page">
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url(../../Content/images/backgrounds/4249962.jpg)">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0">
+                    <div class="row row-mt-15em">
+                        <span class="intro-text-small">N'hésitez pas ...</span>
+                        <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                            <h1 class="cursive-font">Contactez-nous !</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="gtco-section">
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-6 animate-box">
+                        <h3>Par mail</h3>
+                        <form action="#">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="sr-only" for="name">Nom</label>
+                                    <input type="text" id="name" class="form-control" placeholder="Votre nom...">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="sr-only" for="email">Email</label>
+                                    <input type="text" id="email" class="form-control" placeholder="Votre adresse mail...">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="sr-only" for="message">Message</label>
+                                    <textarea name="message" id="message" cols="30" rows="10" class="form-control" placeholder="Dites nous quelque chose..."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Envoyer" class="btn btn-primary">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-5 col-md-push-1 animate-box">
+                        <div class="gtco-contact-info">
+                            <h3>Informations</h3>
+                            <ul>
+                                <li><img src="~/Content/images/keys/placeholder.png" /> Place de l'école des Cadets, 5000 <strong>NAMUR</strong></li>
+                                <li><img src="~/Content/images/keys/whatsapp.png" /><a href="tel://1234567890"> +1 234 567 890</a></li>
+                                <li><img src="~/Content/images/keys/email.png" /><a href="mailto:info@sweets.com"> info@yoursite.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

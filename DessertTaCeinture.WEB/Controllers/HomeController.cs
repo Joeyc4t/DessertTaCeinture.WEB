@@ -17,5 +17,10 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             return View("~/Views/Shared/Errors/GenericError.cshtml");
         }
+
+        public ActionResult Contact()
+        {
+            return View();
+        }
     }
 }

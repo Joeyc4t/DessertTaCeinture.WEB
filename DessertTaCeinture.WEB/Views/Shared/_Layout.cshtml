@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-xs-8 text-right menu-1">
                     <ul>
-                        <li><a href="#">Menu</a></li>
+                        <li><a href="@Url.Action("Index","Recipe")">Recettes</a></li>
                         <li class="has-dropdown">
                             <a href="#">DropDownList</a>
                             <ul class="dropdown">
@@ -34,7 +34,7 @@
                                 <li><a href="#">Item 4</a></li>
                             </ul>
                         </li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
                         @if (Session["loggedUser"] != null)
                         {
                             <li class="btn-cta"><a href="@Url.Action("Details","User")"><span>Mon profil</span></a></li>
@@ -61,18 +61,10 @@
 
     @RenderBody()
 
-    <footer id="gtco-footer" role="contentinfo" style="background-image: url(../../Content/images/backgrounds/img_bg_1.jpg)">
+    <footer id="gtco-footer" role="contentinfo" style="background-image: url(../../Content/images/backgrounds/linear-gradient.png)">
         <div class="gtco-container">
             <div class="row row-pb-md">
                 <div class="col-md-12 text-center">
-                    <div class="gtco-widget">
-                        <h3>Contactez-nous</h3>
-                        <ul class="gtco-quick-contact">
-                            <li><a><img src="~/Content/images/keys/whatsapp.png" /> +1 234 567 890</a></li>
-                            <li><a><img src="~/Content/images/keys/email.png" /> info@DessertTaCeinture.be</a></li>
-                        </ul>
-                    </div>
-                    <br />
                     <div class="gtco-widget">
                         <h3>Nous suivre</h3>
                         <ul class="gtco-social-icons">
@@ -89,7 +81,8 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> 
+
 
     <div class="gototop js-top">
         <a href="#" class="js-gotop"><img src="~/Content/images/keys/key-console.png" /></a>
