@@ -69,6 +69,8 @@ StyleCopReport.xml
 *_p.c
 *_h.h
 *.ilk
+*.dll
+*.pdb
 *.meta
 *.obj
 *.iobj
