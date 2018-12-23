@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dessert Ta Ceinture</title>
+    <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
@@ -24,20 +24,30 @@
                 </div>
                 <div class="col-xs-8 text-right menu-1">
                     <ul>
-                        <li><a href="@Url.Action("Index","Recipe")">Recettes</a></li>
+                        <li><a href="@Url.Action("Recipes","Home")">Recettes</a></li>
                         <li class="has-dropdown">
-                            <a href="#">DropDownList</a>
+                            <a href="#">Accès rapide</a>
                             <ul class="dropdown">
-                                <li><a href="#">Item 1</a></li>
+                                <li><a href="#">Les recettes les mieux notées</a></li>
                                 <li><a href="#">Item 2</a></li>
                                 <li><a href="#">Item 3</a></li>
                                 <li><a href="#">Item 4</a></li>
                             </ul>
                         </li>
                         <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
-                        @if (Session["loggedUser"] != null)
+                        @if (Session["loggedUser"] != null && Session["loggedModerator"] == null && Session["loggedAdmin"] == null)
                         {
                             <li class="btn-cta"><a href="@Url.Action("Details","User")"><span>Mon profil</span></a></li>
+                            <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
+                        }
+                        else if (Session["loggedUser"] != null && Session["loggedModerator"] != null)
+                        {
+                            <li class="btn-cta"><a href="#"><span>Modération</span></a></li>
+                            <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
+                        }
+                        else if (Session["loggedUser"] != null && Session["loggedAdmin"] != null)
+                        {
+                            <li class="btn-cta"><a href="#"><span>Administration</span></a></li>
                             <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
                         }
                         else

@@ -91,7 +91,10 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Details()
         {
-            return View(AutoMapper<UserModel, DetailsModel>.AutoMap(CurrentSession.GetConnectedUser()));
+            if(IsConnectedUser())
+                return View(AutoMapper<UserModel, DetailsModel>.AutoMap(CurrentSession.GetConnectedUser()));
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         public ActionResult Edit(int? id)
@@ -183,6 +186,12 @@ namespace DessertTaCeinture.WEB.Controllers
         }
 
         #region Private methods
+        private bool IsConnectedUser()
+        {
+            if (CurrentSession.GetConnectedUser() != null) return true;
+            else return false;
+        }
+
         private UserModel GetLoggedUser(LoginModel model)
         {
             UserModel globalModel = new UserModel();

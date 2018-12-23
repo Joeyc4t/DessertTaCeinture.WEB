@@ -13,6 +13,11 @@ namespace DessertTaCeinture.WEB.Controllers
             return View();
         }
 
+        public ActionResult Recipes()
+        {
+            return View();
+        }
+
         public ActionResult Error()
         {
             return View("~/Views/Shared/Errors/GenericError.cshtml");

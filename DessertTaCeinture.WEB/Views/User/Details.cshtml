@@ -1,7 +1,7 @@
 ﻿@model DessertTaCeinture.WEB.Models.User.DetailsModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Mon profil";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,17 +9,52 @@
 <div id="page">
     <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/img_bg_3.jpg)" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
-        <div class="gtco-container">
+        <div class="gtco-container">            
             <div class="row">
                 <div class="col-md-12">
                     <div class="row row-mt-15em">
                         <div class="col-md-12 animate-box">
-                            <div class="form-wrap">
+                            <div class="form-wrap">                                
                                 <div class="tab">
                                     <div class="tab-content">
-                                        <div class="tab-content-inner active">
+                                        @*Navigation*@
+                                        <nav class="gtco-nav animate-box">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <a href="@Url.Action("Index", "Home")" style="margin-left: 5px"><img src="~/Content/images/keys/reply.png" alt="Alternate Text" /></a>
+                                                </div>
+                                                <div class="col-sm-8 text-right menu-1">
+                                                    <ul>
+                                                        <li style="margin-right: 5px"></li>
+                                                        <li style="margin-right: 5px"><span>@Html.ActionLink("Mes recettes", "Index", "Recipe")</span></li>
+                                                        <li style="margin-right: 5px"><span>@Html.ActionLink("Changer mon mot de passe", "Edit", new { id = Model.Id })</span></li>
+                                                    </ul>
+                                                </div>                                                
+                                            </div>
+                                        </nav>
+                                        @*/Navigation*@
+                                        <div class="tab-content-inner active" style="margin-top: 6%;">
+                                            @*Profile*@
+                                            <div class="col-md-6 right">
+                                                <h3 class="cursive-font col-md-offset-3">Statistiques</h3>
+                                                <dl class="dl-horizontal animate-box col-md-offset-2">
+                                                    <dt>@Html.Label("Recettes totales", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd></dd>
+
+                                                    <dt>@Html.Label("Recettes postées", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd></dd>
+
+                                                    <dt>@Html.Label("Commentaires", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd></dd>
+
+                                                    <dt>@Html.Label("Cotations", htmlAttributes: new { @class = "control-label col-md-2" })</dt>
+                                                    <dd></dd>
+                                                </dl>
+                                            </div>
+                                            @*/Profile*@
+                                            @*Statistics*@
                                             <div class="col-md-6">
-                                                <h3 class="cursive-font col-md-offset-3">Mon profil</h3>
+                                                <h3 class="cursive-font col-md-offset-3">Profil</h3>
                                                 <dl class="dl-horizontal animate-box col-md-offset-2">
                                                     <dt>@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
                                                     <dd>@Html.DisplayFor(model => model.Email)</dd>
@@ -32,40 +67,21 @@
 
                                                     <dt>@Html.LabelFor(model => model.InscriptionDate, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
                                                     <dd>@Html.DisplayFor(model => model.InscriptionDate)</dd>
-                                                </dl>
+                                                </dl>                                                
                                             </div>
-                                            <div class="col-md-6">
-                                                <h3 class="cursive-font col-md-offset-3">Mes statistiques</h3>
-                                                <dl class="dl-horizontal animate-box col-md-offset-2">
-                                                    <dt>@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                    <dd>@Html.DisplayFor(model => model.Email)</dd>
-
-                                                    <dt>@Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                    <dd>@Html.DisplayFor(model => model.LastName)</dd>
-
-                                                    <dt>@Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                    <dd>@Html.DisplayFor(model => model.FirstName)</dd>
-
-                                                    <dt>@Html.LabelFor(model => model.InscriptionDate, htmlAttributes: new { @class = "control-label col-md-2" })</dt>
-                                                    <dd>@Html.DisplayFor(model => model.InscriptionDate)</dd>
-                                                </dl>
-                                            </div>
-                                            <div class="animate-box col-md-offset-1 text-left">
-                                                <span>@Html.ActionLink("Changer mon mot de passe", "Edit", new { id = Model.Id })</span> |
+                                            @*/Statistics*@
+                                            <br />
+                                            <div class="animate-box text-right" style="font-size: x-small">
                                                 <span>@Html.ActionLink("Désactiver mon compte", "Delete", new { id = Model.Id })</span>
-                                            </div>    
-                                            <br/>
-                                            <div class="animate-box text-right">
-                                                <span>@Html.ActionLink("Retour à l'accueil", "Index", "Home")</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>                            
                         </div>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </header>
 </div>

@@ -1,12 +1,8 @@
 ﻿using DessertTaCeinture.WEB.Models.User;
-using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Web.Http.Results;
 
 namespace DessertTaCeinture.WEB.Services
 {

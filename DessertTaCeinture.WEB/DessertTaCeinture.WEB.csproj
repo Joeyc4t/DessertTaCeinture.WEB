@@ -160,12 +160,24 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PictureController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
+    <Compile Include="Controllers\Recipe_IngredientsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Category\CategoryModel.cs" />
+    <Compile Include="Models\Enumerations\EIngredientUnits.cs" />
+    <Compile Include="Models\Ingredient\IngredientModel.cs" />
+    <Compile Include="Models\Origin\OriginModel.cs" />
+    <Compile Include="Models\Picture\PictureModel.cs" />
+    <Compile Include="Models\Recipe\CreateRecipeModel.cs" />
+    <Compile Include="Models\Recipe\RecipeModel.cs" />
+    <Compile Include="Models\Recipe_Ingredients\Recipe_IngredientsModel.cs" />
+    <Compile Include="Models\Theme\ThemeModel.cs" />
     <Compile Include="Models\User\DetailsModel.cs" />
     <Compile Include="Models\User\EditPwdModel.cs" />
     <Compile Include="Models\User\LoginModel.cs" />
@@ -175,6 +187,8 @@
     <Compile Include="Services\Authentification.cs" />
     <Compile Include="Services\Session.cs" />
     <Compile Include="Tools\AutoMapper.cs" />
+    <Compile Include="Tools\DataContainer.cs" />
+    <Compile Include="Tools\DataWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\animate.css" />
@@ -195,6 +209,8 @@
     <Content Include="Content\images\keys\email.png" />
     <Content Include="Content\images\keys\magnifier.png" />
     <Content Include="Content\images\keys\placeholder.png" />
+    <Content Include="Content\images\keys\plus.png" />
+    <Content Include="Content\images\keys\reply.png" />
     <Content Include="Content\images\keys\whatsapp.png" />
     <Content Include="Content\images\pictures\img_1.jpg" />
     <Content Include="Content\images\keys\key-console.png" />
@@ -414,11 +430,17 @@
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\Recipe\Index.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Picture\Create.cshtml" />
+    <Content Include="Views\Home\Recipes.cshtml" />
+    <Content Include="Views\Recipe\Index.cshtml" />
+    <Content Include="Views\Recipe\Create.cshtml" />
+    <Content Include="Views\Shared\_AddIngredient.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\images\recipes\" />
+    <Folder Include="Views\Admin\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
