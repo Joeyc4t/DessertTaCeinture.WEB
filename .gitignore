@@ -505,3 +505,5 @@ ASALocalRun/
 # Local History for Visual Studio
 
 # End of https://www.gitignore.io/api/csharp,visualstudio
+/DessertTaCeinture.WEB/obj/Debug/DessertTaCeinture.WEB.csproj.CoreCompileInputs.cache
+/DessertTaCeinture.WEB/obj/Debug/DessertTaCeinture.WEB.csprojAssemblyReference.cache
