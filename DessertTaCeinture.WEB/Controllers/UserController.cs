@@ -13,13 +13,17 @@ namespace DessertTaCeinture.WEB.Controllers
     public class UserController : Controller
     {
         #region Instances
-        private Authentification AuthService = Authentification.Instance;
-        private Session CurrentSession = Services.Session.Instance;
+        private Authentification AuthService = Services.Authentification.Instance;
+        private Session SessionService = Services.Session.Instance;
+        private User UserService = Services.User.Instance;
         #endregion
 
         public ActionResult Create()
         {
-            return View();
+            if (IsConnectedUser())
+                return View();
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
@@ -62,7 +66,9 @@ namespace DessertTaCeinture.WEB.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            return View();
+            if (IsConnectedUser())
+                return View();
+            else return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
@@ -92,7 +98,7 @@ namespace DessertTaCeinture.WEB.Controllers
         public ActionResult Details()
         {
             if(IsConnectedUser())
-                return View(AutoMapper<UserModel, DetailsModel>.AutoMap(CurrentSession.GetConnectedUser()));
+                return View(AutoMapper<UserModel, DetailsModel>.AutoMap(SessionService.GetConnectedUser()));
             else
                 return RedirectToAction("Error", "Home");
         }
@@ -115,7 +121,7 @@ namespace DessertTaCeinture.WEB.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            UserModel localModel = CurrentSession.GetConnectedUser();
+            UserModel localModel = SessionService.GetConnectedUser();
 
             if (localModel == null)
                 return RedirectToAction("Error", "Home");
@@ -146,10 +152,10 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (id == null || !IsConnectedUser())
                 return RedirectToAction("Error", "Home");
 
-            UserModel model = CurrentSession.GetConnectedUser();
+            UserModel model = SessionService.GetConnectedUser();
             if (model.Id != id)
                 return RedirectToAction("Error", "Home");
 
@@ -188,36 +194,9 @@ namespace DessertTaCeinture.WEB.Controllers
         #region Private methods
         private bool IsConnectedUser()
         {
-            if (CurrentSession.GetConnectedUser() != null) return true;
+            if (SessionService.GetConnectedUser() != null) return true;
             else return false;
-        }
-
-        private UserModel GetLoggedUser(LoginModel model)
-        {
-            UserModel globalModel = new UserModel();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/User?id={model.Email}").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        globalModel = JsonConvert.DeserializeObject<UserModel>(result);
-                    }
-                }
-                return globalModel;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        }        
         #endregion
     }
 }

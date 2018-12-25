@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,5 +28,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         [Required]
         [DisplayName("Partager")]
         public bool IsPublic { get; set; }
+
+        List<Recipe_IngredientsModel> Ingredients { get; set; }
     }
 }
