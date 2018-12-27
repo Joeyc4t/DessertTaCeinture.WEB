@@ -1,5 +1,4 @@
-﻿using DessertTaCeinture.WEB.Models.Enumerations;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,7 +11,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
         private int _RecipeId;
         private int _IngredientId;
         private int _Quantity;
-        private EIngredientUnits _Unit;
+        private string _Unit;
         #endregion
 
         #region Properties
@@ -73,7 +72,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
 
         [Required]
         [StringLength(20)]
-        public EIngredientUnits Unit
+        public string Unit
         {
             get
             {

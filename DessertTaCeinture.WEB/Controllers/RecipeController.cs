@@ -1,5 +1,4 @@
 ﻿using DessertTaCeinture.WEB.Models.Recipe;
-using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
 using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Services;
 using DessertTaCeinture.WEB.Tools;
@@ -39,14 +38,15 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             if (IsConnectedUser())
             {
-                ViewBag.Ingredient = new SelectList(RecipeService.GetIngredients(), "Id", "Name");
-                ViewBag.Unit = new SelectList(RecipeService.GetUnits());
+                CreateRecipeModel model = new CreateRecipeModel()
+                {
+                    Categories = RecipeService.GetCategories(),
+                    Origins = RecipeService.GetOrigins(),
+                    Themes = RecipeService.GetThemes(),
+                    Ingredients = RecipeService.GetIngredients()
+                };
 
-                ViewBag.Origin = new SelectList(RecipeService.GetOrigins(), "Id", "Country");
-                ViewBag.Category = new SelectList(RecipeService.GetCategories(), "Id", "Name");
-                ViewBag.Theme = new SelectList(RecipeService.GetThemes(), "Id", "Name");
-
-                return View();
+                return View(model);
             }
             else
                 return RedirectToAction("Error", "Home");

@@ -7,19 +7,39 @@
     List<SelectListItem> share = new List<SelectListItem>();
     share.Add(new SelectListItem { Text = "Oui", Value = true.ToString() });
     share.Add(new SelectListItem { Text = "Non", Value = false.ToString() });
+
+    List<SelectListItem> origins = new List<SelectListItem>();
+    foreach (var origin in Model.Origins) { origins.Add(new SelectListItem { Text = origin.Country, Value = origin.Id.ToString() }); }
+
+    List<SelectListItem> themes = new List<SelectListItem>();
+    foreach(var theme in Model.Themes) { themes.Add(new SelectListItem { Text = theme.Name, Value = theme.Id.ToString() }); }
+
+    List<SelectListItem> categories = new List<SelectListItem>();
+    foreach(var cat in Model.Categories) { categories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString() }); }
+
+    List<SelectListItem> ingredients = new List<SelectListItem>();
+    foreach (var ingredient in Model.Ingredients) { ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() }); }
+
+    List<SelectListItem> units = new List<SelectListItem>();
+    units.Add(new SelectListItem { Text = "mg", Value = "mg" });
+    units.Add(new SelectListItem { Text = "g", Value = "g" });
+    units.Add(new SelectListItem { Text = "kg", Value = "kg" });
+    units.Add(new SelectListItem { Text = "ml", Value = "ml" });
+    units.Add(new SelectListItem { Text = "cl", Value = "cl" });
+    units.Add(new SelectListItem { Text = "l", Value = "l" });
 }
 <script>
     function addRow() {
-        var dpList = document.getElementById("selectedIngredient");
+        //var dpList = document.getElementById("selectedIngredient");
 
-        var ingredient = dpList.options[dpList.selectedIndex].text;
-        var qty = document.getElementById("Quantity").value;
-        var unit = document.getElementById("selectedUnit").value;
+        //var ingredient = dpList.options[dpList.selectedIndex].text;
+        //var qty = document.getElementById("Quantity").value;
+        //var unit = document.getElementById("selectedUnit").value;
                 
-        var node = document.createElement("li");
-        var textnode = document.createTextNode(ingredient + " " + qty + " " + unit);
-        node.appendChild(textnode);
-        document.getElementById("ingredientsList").appendChild(node);
+        //var node = document.createElement("li");
+        //var textnode = document.createTextNode(ingredient + " " + qty + " " + unit);
+        //node.appendChild(textnode);
+        //document.getElementById("ingredientsList").appendChild(node);
     }
 </script>
 @using (Html.BeginForm("Create", "Recipe", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -51,25 +71,25 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    @Html.LabelFor(model => model.OriginId, "Origine", htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    @Html.LabelFor(model => model.OriginId, htmlAttributes: new { @class = "control-label col-md-2" })
                                                     <div class="col-md-8">
-                                                        @Html.DropDownList("Origin", null, string.Empty, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.OriginId, origins, string.Empty, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.OriginId, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    @Html.LabelFor(model => model.CategoryId, "Catégorie", htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
                                                     <div class="col-md-8">
-                                                        @Html.DropDownList("Category", null, string.Empty, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.CategoryId, categories, string.Empty, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    @Html.LabelFor(model => model.ThemeId, "Thématique", htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    @Html.LabelFor(model => model.ThemeId, htmlAttributes: new { @class = "control-label col-md-2" })
                                                     <div class="col-md-8">
-                                                        @Html.DropDownList("Theme", null, string.Empty, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.ThemeId, themes, string.Empty, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.ThemeId, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -102,19 +122,19 @@
 
                 <div class="row">
                     <div class="col-md-12">
+
                         @*Ingredient menu*@
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <div class="form-group">
-                                @Html.Label("Choisir", htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-3">
-                                    @Html.DropDownList("Ingredient", null, string.Empty, htmlAttributes: new { @class = "form-control", id = "selectedIngredient" })
+                                    @Html.DropDownListFor(model => model.RecipeIngredient.IngredientId, ingredients, string.Empty, htmlAttributes: new { @class = "form-control", id = "selectedIngredient" })
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control text-box single-line" id="Quantity" name="Quantity" type="number" data-val="true" data-val-number="Le champ Quantité doit être un nombre." data-val-range="Le champ Quantité doit être compris entre 0 et 9999." data-val-range-max="9999" data-val-range-min="0" data-val-required="Le champ Quantité est requis.">
+                                    @Html.EditorFor(model => model.RecipeIngredient.Quantity, new { htmlAttributes = new { @class = "form-control" } })
                                 </div>
                                 <div class="col-md-2">
-                                    @Html.DropDownList("Unit", null, string.Empty, htmlAttributes: new { @class = "form-control", id = "selectedUnit" })
+                                    @Html.DropDownListFor(model => model.RecipeIngredient.Unit, units, string.Empty, htmlAttributes: new { @class = "form-control", id = "selectedUnit" })
                                 </div>
                                 <div class="col-md-1">
                                     <input id="addIngredient" type="button" class="btn btn-primary btn-block" value="+" onclick="addRow()" style="width: 75px;" />
@@ -125,6 +145,7 @@
                             </div>
                         </div>
                         @*/Ingredient menu*@
+
                     </div>
                     <div class="col-md-12 col-md-offset-4">
                         <ul id="ingredientsList"></ul>

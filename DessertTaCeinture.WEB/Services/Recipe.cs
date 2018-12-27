@@ -1,5 +1,4 @@
 ﻿using DessertTaCeinture.WEB.Models.Category;
-using DessertTaCeinture.WEB.Models.Enumerations;
 using DessertTaCeinture.WEB.Models.Ingredient;
 using DessertTaCeinture.WEB.Models.Origin;
 using DessertTaCeinture.WEB.Models.Theme;
@@ -157,17 +156,6 @@ namespace DessertTaCeinture.WEB.Services
             {
                 return null;
             }
-        }
-
-        public List<string> GetUnits()
-        {
-            List<string> units = new List<string>();
-
-            foreach (object item in Enum.GetValues(typeof(EIngredientUnits)))
-            {
-                units.Add(item.ToString());
-            }
-            return units;
         }
     }
 }
