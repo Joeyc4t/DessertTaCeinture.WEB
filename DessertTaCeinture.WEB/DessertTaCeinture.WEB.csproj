@@ -164,7 +164,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PictureController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
-    <Compile Include="Controllers\Recipe_IngredientsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -185,7 +184,9 @@
     <Compile Include="Models\User\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Authentification.cs" />
+    <Compile Include="Services\Recipe.cs" />
     <Compile Include="Services\Session.cs" />
+    <Compile Include="Services\User.cs" />
     <Compile Include="Tools\AutoMapper.cs" />
     <Compile Include="Tools\DataContainer.cs" />
     <Compile Include="Tools\DataWrapper.cs" />
@@ -435,7 +436,7 @@
     <Content Include="Views\Home\Recipes.cshtml" />
     <Content Include="Views\Recipe\Index.cshtml" />
     <Content Include="Views\Recipe\Create.cshtml" />
-    <Content Include="Views\Shared\_AddIngredient.cshtml" />
+    <Content Include="Views\Recipe_Ingredients\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
