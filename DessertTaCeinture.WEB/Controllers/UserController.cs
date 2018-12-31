@@ -16,11 +16,12 @@ namespace DessertTaCeinture.WEB.Controllers
         private Authentification AuthService = Services.Authentification.Instance;
         private Session SessionService = Services.Session.Instance;
         private User UserService = Services.User.Instance;
-        #endregion
+
+        #endregion Instances
 
         public ActionResult Create()
         {
-            if (IsConnectedUser())
+            if (!IsConnectedUser())
                 return View();
             else
                 return RedirectToAction("Error", "Home");
@@ -30,16 +31,16 @@ namespace DessertTaCeinture.WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(RegisterModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     UserModel localModel = AutoMapper<RegisterModel, UserModel>.AutoMap(model);
-                        localModel.Salt = BCrypt.Net.BCrypt.GenerateSalt();
-                        localModel.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, localModel.Salt);
-                        localModel.InscriptionDate = DateTime.Now;
-                        localModel.IsActive = true;
-                        localModel.RoleId = 1;
+                    localModel.Salt = BCrypt.Net.BCrypt.GenerateSalt();
+                    localModel.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, localModel.Salt);
+                    localModel.InscriptionDate = DateTime.Now;
+                    localModel.IsActive = true;
+                    localModel.RoleId = 1;
 
                     using (var client = new HttpClient())
                     {
@@ -63,46 +64,52 @@ namespace DessertTaCeinture.WEB.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult Login()
+        public ActionResult Delete(int? id)
         {
-            if (IsConnectedUser())
-                return View();
-            else return RedirectToAction("Error", "Home");
-        }
+            if (id == null || !IsConnectedUser())
+                return RedirectToAction("Error", "Home");
 
-        [HttpPost]
+            UserModel model = SessionService.GetConnectedUser();
+            if (model.Id != id)
+                return RedirectToAction("Error", "Home");
+
+            return View(model);
+        }
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model)
+        public ActionResult DeleteConfirmed(int id)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (!AuthService.LoginUser(model))
-                return View(model);
+                    HttpResponseMessage Res = client.DeleteAsync($"api/User?id={id}").Result;
 
-            return RedirectToAction("Index", "Home");
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        Logout();
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                        return RedirectToAction("Error", "Home");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
-
-        public PartialViewResult LoginForm()
-        {
-            return PartialView("_LoginForm", new LoginModel());
-        }
-
-        public ActionResult Logout()
-        {
-            AuthService.Logout();
-            return RedirectToAction("Index", "Home");
-        }
-
         public ActionResult Details()
         {
-            if(IsConnectedUser())
+            if (IsConnectedUser())
                 return View(AutoMapper<UserModel, DetailsModel>.AutoMap(SessionService.GetConnectedUser()));
             else
                 return RedirectToAction("Error", "Home");
         }
-
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -110,7 +117,6 @@ namespace DessertTaCeinture.WEB.Controllers
 
             return View();
         }
-
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditPwdModel model)
@@ -149,46 +155,36 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View();
             }
         }
-
-        public ActionResult Delete(int? id)
+        [HttpGet]
+        public ActionResult Login()
         {
-            if (id == null || !IsConnectedUser())
-                return RedirectToAction("Error", "Home");
-
-            UserModel model = SessionService.GetConnectedUser();
-            if (model.Id != id)
-                return RedirectToAction("Error", "Home");
-
-            return View(model);
+            if (IsConnectedUser())
+                return View();
+            else return RedirectToAction("Error", "Home");
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Login(LoginModel model)
         {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            if (!ModelState.IsValid)
+                return View(model);
 
-                    HttpResponseMessage Res = client.DeleteAsync($"api/User?id={id}").Result;
+            if (!AuthService.LoginUser(model))
+                return View(model);
 
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        Logout();
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                        return RedirectToAction("Error", "Home");
-                }                
-            }
-            catch
-            {
-                return RedirectToAction("Error", "Home");
-            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        public PartialViewResult LoginForm()
+        {
+            return PartialView("_LoginForm", new LoginModel());
+        }
+
+        public ActionResult Logout()
+        {
+            AuthService.Logout();
+            return RedirectToAction("Index", "Home");
         }
 
         #region Private methods
@@ -196,7 +192,8 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             if (SessionService.GetConnectedUser() != null) return true;
             else return false;
-        }        
-        #endregion
+        }
+
+        #endregion Private methods
     }
 }
