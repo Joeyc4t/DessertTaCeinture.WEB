@@ -175,6 +175,7 @@
     <Compile Include="Models\Recipe\CreateRecipeModel.cs" />
     <Compile Include="Models\Recipe\RecipeModel.cs" />
     <Compile Include="Models\Recipe_Ingredients\Recipe_IngredientsModel.cs" />
+    <Compile Include="Models\Recipe_Ingredients\Recipe_IngredientViewModel.cs" />
     <Compile Include="Models\Theme\ThemeModel.cs" />
     <Compile Include="Models\User\DetailsModel.cs" />
     <Compile Include="Models\User\EditPwdModel.cs" />
@@ -435,6 +436,7 @@
     <Content Include="Views\Home\Recipes.cshtml" />
     <Content Include="Views\Recipe\Index.cshtml" />
     <Content Include="Views\Recipe\Create.cshtml" />
+    <Content Include="Views\Recipe\_RecipeIngredientRow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

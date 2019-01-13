@@ -12,98 +12,42 @@
     foreach (var origin in Model.Origins) { origins.Add(new SelectListItem { Text = origin.Country, Value = origin.Id.ToString() }); }
 
     List<SelectListItem> themes = new List<SelectListItem>();
-    foreach(var theme in Model.Themes) { themes.Add(new SelectListItem { Text = theme.Name, Value = theme.Id.ToString() }); }
+    foreach (var theme in Model.Themes) { themes.Add(new SelectListItem { Text = theme.Name, Value = theme.Id.ToString() }); }
 
     List<SelectListItem> categories = new List<SelectListItem>();
-    foreach(var cat in Model.Categories) { categories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString() }); }
-
-    List<SelectListItem> ingredients = new List<SelectListItem>();
-    foreach (var ingredient in Model.Ingredients) { ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() }); }
-
-    List<SelectListItem> units = new List<SelectListItem>();
-    units.Add(new SelectListItem { Text = "mg", Value = "mg" });
-    units.Add(new SelectListItem { Text = "g", Value = "g" });
-    units.Add(new SelectListItem { Text = "kg", Value = "kg" });
-    units.Add(new SelectListItem { Text = "ml", Value = "ml" });
-    units.Add(new SelectListItem { Text = "cl", Value = "cl" });
-    units.Add(new SelectListItem { Text = "l", Value = "l" });
+    foreach (var cat in Model.Categories) { categories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString() }); }
 }
-<script>
-    function addRow() {
-        //var dpList = document.getElementById("selectedIngredient");
 
-        //var ingredient = dpList.options[dpList.selectedIndex].text;
-        //var qty = document.getElementById("Quantity").value;
-        //var unit = document.getElementById("selectedUnit").value;
-                
-        //var node = document.createElement("li");
-        //var textnode = document.createTextNode(ingredient + " " + qty + " " + unit);
-        //node.appendChild(textnode);
-        //document.getElementById("ingredientsList").appendChild(node);
+<script type="text/javascript">
+    function AddRow() {
+        $.ajax({
+            async: false,
+            url: '/Recipe/GetIngredientRow'
+        }).success(function (partialView) {
+                $('#RecipeIngredientsSection').append(partialView);
+            });
+    }
+    function DelRow() {
+        var element = document.getElementById("RecipeIngredientsSection");
+        if (element.childElementCount > 1)
+            element.removeChild(RecipeIngredientsSection.lastChild);
     }
 </script>
+
 @using (Html.BeginForm("Create", "Recipe", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="gtco-loader"></div>
     <div id="page">
-        <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/img_bg_3.jpg)" data-stellar-background-ratio="0.5">
+        <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url(../../Content/images/backgrounds/4249962.jpg); height:350px; margin-bottom: -300px;">
             <div class="overlay"></div>
             <div class="gtco-container">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 col-md-offset-0">
                         <div class="row row-mt-15em">
-                            <div class="col-md-12 animate-box">
-                                <div class="form-wrap">
-                                    <div class="tab">
-                                        <div class="tab-content">
-                                            @Html.AntiForgeryToken()
-                                            <div class="form-horizontal">
-                                                <h3 class="cursive-font">Nouvelles recettes</h3>
-                                                <hr />
-                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-8">
-                                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.OriginId, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-8">
-                                                        @Html.DropDownListFor(model => model.OriginId, origins, string.Empty, htmlAttributes: new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.OriginId, "", new { @class = "text-danger" })
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-8">
-                                                        @Html.DropDownListFor(model => model.CategoryId, categories, string.Empty, htmlAttributes: new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.ThemeId, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-8">
-                                                        @Html.DropDownListFor(model => model.ThemeId, themes, string.Empty, htmlAttributes: new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.ThemeId, "", new { @class = "text-danger" })
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.IsPublic, "Publier", htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-8">
-                                                        @Html.DropDownListFor(model => model.IsPublic, share, htmlAttributes: new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.IsPublic, "", new { @class = "text-danger" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div style="margin-top:-75px;">
+                                <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
+                                    <h1 class="cursive-font">Nouvelle recette</h1>
                                 </div>
                             </div>
                         </div>
@@ -115,50 +59,109 @@
         <div class="gtco-section">
             <div class="gtco-container">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                        <h2 class="cursive-font primary-color">Ingrédients</h2>
-                    </div>
-                </div>
-
-                <div class="row">
                     <div class="col-md-12">
+                        <div class="row row-mt-15em">
+                            <div class="col-md-12 animate-box">
+                                <div class="form-wrap">
+                                    <div class="tab">
+                                        <div class="tab-content" style="border: 2px dashed #FBB448; padding: 25px 25px 100px 25px">
+                                            @Html.AntiForgeryToken()
+                                            <div class="form-horizontal">
+                                                <h3 class="cursive-font">Détails</h3>
+                                                <hr />
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.OriginId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownListFor(model => model.OriginId, origins, string.Empty, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.OriginId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownListFor(model => model.CategoryId, categories, string.Empty, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ThemeId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownListFor(model => model.ThemeId, themes, string.Empty, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.ThemeId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.IsPublic, "Publier", htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownListFor(model => model.IsPublic, share, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.IsPublic, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                        @*Ingredient menu*@
-                        <div class="form-horizontal">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <div class="form-group">
-                                <div class="col-md-3">
-                                    @Html.DropDownListFor(model => model.RecipeIngredient.IngredientId, ingredients, string.Empty, htmlAttributes: new { @class = "form-control", id = "selectedIngredient" })
-                                </div>
-                                <div class="col-md-2">
-                                    @Html.EditorFor(model => model.RecipeIngredient.Quantity, new { htmlAttributes = new { @class = "form-control" } })
-                                </div>
-                                <div class="col-md-2">
-                                    @Html.DropDownListFor(model => model.RecipeIngredient.Unit, units, string.Empty, htmlAttributes: new { @class = "form-control", id = "selectedUnit" })
-                                </div>
-                                <div class="col-md-1">
-                                    <input id="addIngredient" type="button" class="btn btn-primary btn-block" value="+" onclick="addRow()" style="width: 75px;" />
-                                </div>
-                                <div class="col-md-1">
-                                    <input id="delIngredient" type="button" class="btn btn-primary btn-block" value="-" onclick="delRow()" style="width: 75px;" />
+                                            <div class="form-horizontal">
+                                                <h3 class="cursive-font">Ingrédients</h3>
+                                                <hr />
+                                                <div class="row" id="RecipeIngredientsSection">
+                                                    @Html.Partial("_RecipeIngredientRow", Model.RecipeIngredients.FirstOrDefault())
+                                                </div>
+                                                <br />
+                                                <div class="col-md-8 col-md-offset-2">
+                                                    <div class="col-md-6">
+                                                        <input id="addIngredient" type="button" class="btn btn-primary btn-block" onclick="AddRow()" value="Ligne supplémentaire" />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input id="delIngredient" type="button" class="btn btn-primary btn-block" onclick="DelRow()" value="Supprimer la dernière ligne" />
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <br />
+                                            </div>
+
+                                            <div class="form-horizontal">
+                                                <h3 class="cursive-font">Etapes</h3>
+                                                <hr />
+                                                <div class="row" id="RecipeIngredientsStep">
+
+                                                </div>
+                                                <br />
+                                                <div class="col-md-8 col-md-offset-2">
+                                                    <div class="col-md-6">
+                                                        <input id="addIngredient" type="button" class="btn btn-primary btn-block" onclick="AddStep()" value="Etape supplémentaire" />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input id="delIngredient" type="button" class="btn btn-primary btn-block" onclick="DelStep()" value="Supprimer la dernière étape" />
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <br />
+                                                <hr />
+                                            </div>
+
+                                            <div class="form-horizontal">
+                                                <div class="col-md-8 col-md-offset-8">
+                                                    <div class="col-md-3">
+                                                        <input type="submit" class="btn btn-primary btn-block" value="Enregistrer">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        @Html.ActionLink("Annuler", "Details", "User")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        @*/Ingredient menu*@
-
                     </div>
-                    <div class="col-md-12 col-md-offset-4">
-                        <ul id="ingredientsList"></ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gtco-container">
-                <div class="col-md-4 col-md-offset-2">
-                    <input type="submit" class="btn btn-primary btn-block" value="Enregistrer">
-                </div>
-                <div class="col-md-4 col-md-offset-2">
-                    <p>@Html.ActionLink("Annuler", "Details", "User")</p>
                 </div>
             </div>
         </div>

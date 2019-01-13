@@ -1,4 +1,5 @@
 ﻿using DessertTaCeinture.WEB.Models.Recipe;
+using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
 using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Services;
 using DessertTaCeinture.WEB.Tools;
@@ -43,8 +44,10 @@ namespace DessertTaCeinture.WEB.Controllers
                     Categories = RecipeService.GetCategories(),
                     Origins = RecipeService.GetOrigins(),
                     Themes = RecipeService.GetThemes(),
-                    Ingredients = RecipeService.GetIngredients()
+                    RecipeIngredients = new List<Recipe_IngredientViewModel>()
                 };
+
+                model.RecipeIngredients.Add(InitIngredientRow());
 
                 return View(model);
             }
@@ -112,6 +115,11 @@ namespace DessertTaCeinture.WEB.Controllers
             }
         }
 
+        public ActionResult GetIngredientRow()
+        {
+            return PartialView("_RecipeIngredientRow", InitIngredientRow());
+        }
+
         #region Private methods
         private bool IsConnectedUser()
         {
@@ -154,6 +162,16 @@ namespace DessertTaCeinture.WEB.Controllers
             {
                 return null;
             }
+        }
+
+        private Recipe_IngredientViewModel InitIngredientRow()
+        {
+            Recipe_IngredientViewModel model = new Recipe_IngredientViewModel()
+            {
+                Ingredients = RecipeService.GetIngredients()
+            };
+
+            return model;
         }
         #endregion
     }
