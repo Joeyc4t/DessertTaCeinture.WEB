@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
 {
-    public class Recipe_IngredientsModel
+    public class Recipe_IngredientModel
     {
         #region Fields
         private int _ConcatId;
+        private int _Index;
         private int _RecipeId;
         private int _IngredientId;
         private int _Quantity;
@@ -38,6 +39,19 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
             set
             {
                 _RecipeId = value;
+            }
+        }
+
+        [Required]
+        public int Index
+        {
+            get
+            {
+                return _Index;
+            }
+            set
+            {
+                _Index = value;
             }
         }
 

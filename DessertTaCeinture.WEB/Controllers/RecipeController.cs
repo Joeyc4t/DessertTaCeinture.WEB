@@ -17,6 +17,8 @@ namespace DessertTaCeinture.WEB.Controllers
         #region Instances
         private Session SessionService = Services.Session.Instance;
         private Recipe RecipeService = Services.Recipe.Instance;
+
+        public List<Recipe_IngredientModel> ingredients = new List<Recipe_IngredientModel>();
         #endregion
 
         public ActionResult Index()
@@ -35,6 +37,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
+        [HttpGet]
         public ActionResult Create()
         {
             if (IsConnectedUser())
@@ -44,16 +47,15 @@ namespace DessertTaCeinture.WEB.Controllers
                     Categories = RecipeService.GetCategories(),
                     Origins = RecipeService.GetOrigins(),
                     Themes = RecipeService.GetThemes(),
-                    RecipeIngredients = new List<Recipe_IngredientViewModel>()
+                    RecipeIngredients = new List<Recipe_IngredientModel>()
                 };
 
-                model.RecipeIngredients.Add(InitIngredientRow());
+                model.RecipeIngredients.Add(new Recipe_IngredientModel() { Index = 1 });
 
                 return View(model);
             }
             else
-                return RedirectToAction("Error", "Home");
-            
+                return RedirectToAction("Error", "Home");            
         }
 
         [HttpPost]
@@ -61,9 +63,10 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                    return View(model);
 
-
-                return RedirectToAction("Index");
+                return RedirectToAction("Create");
             }
             catch
             {
@@ -115,9 +118,17 @@ namespace DessertTaCeinture.WEB.Controllers
             }
         }
 
-        public ActionResult GetIngredientRow()
+        [HttpGet]
+        public ActionResult CreateField(int? index)
         {
-            return PartialView("_RecipeIngredientRow", InitIngredientRow());
+            ViewBag.Index = index ?? 0;
+            return PartialView(new Recipe_IngredientModel() { Index = (int)index });
+        }
+
+        [HttpPost]
+        public void CreateField(Recipe_IngredientModel model)
+        {
+            ingredients.Add(model);
         }
 
         #region Private methods
@@ -162,16 +173,6 @@ namespace DessertTaCeinture.WEB.Controllers
             {
                 return null;
             }
-        }
-
-        private Recipe_IngredientViewModel InitIngredientRow()
-        {
-            Recipe_IngredientViewModel model = new Recipe_IngredientViewModel()
-            {
-                Ingredients = RecipeService.GetIngredients()
-            };
-
-            return model;
         }
         #endregion
     }

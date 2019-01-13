@@ -1,8 +1,9 @@
 ﻿@model DessertTaCeinture.WEB.Models.Recipe.CreateRecipeModel
 
 @{
+    int index = Model.RecipeIngredients.Count;
+
     ViewBag.Title = "Nouvelle recette";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 
     List<SelectListItem> share = new List<SelectListItem>();
     share.Add(new SelectListItem { Text = "Oui", Value = true.ToString() });
@@ -18,19 +19,32 @@
     foreach (var cat in Model.Categories) { categories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString() }); }
 }
 
-<script type="text/javascript">
+<script type="text/javascript">   
+    var currentIndex = @index;
+    
     function AddRow() {
+        currentIndex++;
         $.ajax({
             async: false,
-            url: '/Recipe/GetIngredientRow'
+            type: "GET",
+            url: '/Recipe/CreateField?index=' + currentIndex
         }).success(function (partialView) {
-                $('#RecipeIngredientsSection').append(partialView);
+            $('#RecipeIngredientsSection').append(partialView);
             });
     }
+
     function DelRow() {
         var element = document.getElementById("RecipeIngredientsSection");
         if (element.childElementCount > 1)
             element.removeChild(RecipeIngredientsSection.lastChild);
+    }
+
+    function disallowNegativeNumber(e) {
+        var charCode = (e.which) ? e.which : event.keyCode
+        if (charCode == 45) {
+            return false;
+        }
+        return true;
     }
 </script>
 
@@ -66,11 +80,12 @@
                                     <div class="tab">
                                         <div class="tab-content" style="border: 2px dashed #FBB448; padding: 25px 25px 100px 25px">
                                             @Html.AntiForgeryToken()
+
                                             <div class="form-horizontal">
                                                 <h3 class="cursive-font">Détails</h3>
                                                 <hr />
                                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                <div class="form-group">
+                                                <div class="form-group" id="formDetail">
                                                     @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
                                                     <div class="col-md-8">
                                                         @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
@@ -106,20 +121,28 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            
                                             <div class="form-horizontal">
                                                 <h3 class="cursive-font">Ingrédients</h3>
                                                 <hr />
-                                                <div class="row" id="RecipeIngredientsSection">
-                                                    @Html.Partial("_RecipeIngredientRow", Model.RecipeIngredients.FirstOrDefault())
-                                                </div>
-                                                <br />
-                                                <div class="col-md-8 col-md-offset-2">
-                                                    <div class="col-md-6">
-                                                        <input id="addIngredient" type="button" class="btn btn-primary btn-block" onclick="AddRow()" value="Ligne supplémentaire" />
+                                                <form id="formRows" method="post">
+                                                    <div class="row" id="RecipeIngredientsSection">
+                                                        @foreach (var field in Model.RecipeIngredients)
+                                                        {
+                                                            @Html.Partial("CreateField", field)
+                                                        }
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <input id="delIngredient" type="button" class="btn btn-primary btn-block" onclick="DelRow()" value="Supprimer la dernière ligne" />
+                                                </form>
+                                                
+                                                <div class="col-md-8 col-md-offset-2">
+                                                    <div class="col-md-4">
+                                                        <input id="addIngredient" type="button" class="btn btn-primary btn-block" onclick="AddRow()" value="Ingrédient supplémentaire" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input id="delIngredient" type="button" class="btn btn-primary btn-block" onclick="DelRow()" value="Supprimer le dernier ingrédient" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input id="validateRows" type="button" class="btn btn-primary btn-block" onclick="ValidateRows()" value="Valider" />
                                                     </div>
                                                 </div>
                                                 <br />

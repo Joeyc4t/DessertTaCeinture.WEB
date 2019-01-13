@@ -36,6 +36,6 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         public List<OriginModel> Origins { get; set; }
         public List<ThemeModel> Themes { get; set; }
         public List<CategoryModel> Categories { get; set; }
-        public List<Recipe_IngredientViewModel> RecipeIngredients { get; set; }
+        public IList<Recipe_IngredientModel> RecipeIngredients { get; set; }
     }
 }
