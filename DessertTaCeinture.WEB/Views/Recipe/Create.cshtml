@@ -1,8 +1,6 @@
 ﻿@model DessertTaCeinture.WEB.Models.Recipe.CreateRecipeModel
 
 @{
-    int index = Model.RecipeIngredients.Count;
-
     ViewBag.Title = "Nouvelle recette";
 
     List<SelectListItem> share = new List<SelectListItem>();
@@ -19,18 +17,19 @@
     foreach (var cat in Model.Categories) { categories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString() }); }
 }
 
-<script type="text/javascript">   
-    var currentIndex = @index;
-    
+<script type="text/javascript">
+
+    var currentIndex = 0;
+
     function AddRow() {
         currentIndex++;
         $.ajax({
             async: false,
             type: "GET",
-            url: '/Recipe/CreateField?index=' + currentIndex
+            url: '/Recipe_Ingredient/CreateField?index=' + currentIndex
         }).success(function (partialView) {
             $('#RecipeIngredientsSection').append(partialView);
-            });
+        });
     }
 
     function DelRow() {
@@ -121,28 +120,19 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="form-horizontal">
                                                 <h3 class="cursive-font">Ingrédients</h3>
                                                 <hr />
-                                                <form id="formRows" method="post">
-                                                    <div class="row" id="RecipeIngredientsSection">
-                                                        @foreach (var field in Model.RecipeIngredients)
-                                                        {
-                                                            @Html.Partial("CreateField", field)
-                                                        }
+                                                <div class="row" id="RecipeIngredientsSection">
+                                                </div>
+
+                                                <div class="col-md-8 col-md-offset-4">
+                                                    <div class="col-md-3">
+                                                        <input id="addIngredient" type="button" class="btn btn-primary btn-block" onclick="AddRow()" value="+" />
                                                     </div>
-                                                </form>
-                                                
-                                                <div class="col-md-8 col-md-offset-2">
-                                                    <div class="col-md-4">
-                                                        <input id="addIngredient" type="button" class="btn btn-primary btn-block" onclick="AddRow()" value="Ingrédient supplémentaire" />
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <input id="delIngredient" type="button" class="btn btn-primary btn-block" onclick="DelRow()" value="Supprimer le dernier ingrédient" />
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <input id="validateRows" type="button" class="btn btn-primary btn-block" onclick="ValidateRows()" value="Valider" />
+                                                    <div class="col-md-3">
+                                                        <input id="delIngredient" type="button" class="btn btn-primary btn-block" onclick="DelRow()" value="-" />
                                                     </div>
                                                 </div>
                                                 <br />
@@ -153,7 +143,6 @@
                                                 <h3 class="cursive-font">Etapes</h3>
                                                 <hr />
                                                 <div class="row" id="RecipeIngredientsStep">
-
                                                 </div>
                                                 <br />
                                                 <div class="col-md-8 col-md-offset-2">

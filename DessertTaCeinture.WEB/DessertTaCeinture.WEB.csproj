@@ -164,6 +164,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PictureController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
+    <Compile Include="Controllers\Recipe_IngredientController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -435,7 +436,7 @@
     <Content Include="Views\Home\Recipes.cshtml" />
     <Content Include="Views\Recipe\Index.cshtml" />
     <Content Include="Views\Recipe\Create.cshtml" />
-    <Content Include="Views\Recipe\CreateField.cshtml" />
+    <Content Include="Views\Recipe_Ingredient\CreateField.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

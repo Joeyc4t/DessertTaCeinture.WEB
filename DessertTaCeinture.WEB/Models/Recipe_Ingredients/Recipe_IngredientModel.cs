@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DessertTaCeinture.WEB.Models.Ingredient;
+using DessertTaCeinture.WEB.Models.Recipe;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,13 +11,15 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
         #region Fields
         private int _ConcatId;
         private int _Index;
-        private int _RecipeId;
         private int _IngredientId;
         private int _Quantity;
+        private int _RecipeId;
         private string _Unit;
-        #endregion
+
+        #endregion Fields
 
         #region Properties
+
         [Key]
         public int ConcatId
         {
@@ -26,19 +30,6 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
             set
             {
                 _ConcatId = Convert.ToInt32((RecipeId.ToString()) + (IngredientId.ToString()));
-            }
-        }
-
-        [Required]
-        public int RecipeId
-        {
-            get
-            {
-                return _RecipeId;
-            }
-            set
-            {
-                _RecipeId = value;
             }
         }
 
@@ -54,6 +45,8 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
                 _Index = value;
             }
         }
+
+        public virtual IngredientModel Ingredient { get; set; }
 
         [Required]
         [DisplayName("Ingrédient")]
@@ -84,6 +77,21 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
             }
         }
 
+        public virtual RecipeModel Recipe { get; set; }
+
+        [Required]
+        public int RecipeId
+        {
+            get
+            {
+                return _RecipeId;
+            }
+            set
+            {
+                _RecipeId = value;
+            }
+        }
+
         [Required]
         [StringLength(20)]
         public string Unit
@@ -97,6 +105,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
                 _Unit = value;
             }
         }
-        #endregion
+
+        #endregion Properties
     }
 }

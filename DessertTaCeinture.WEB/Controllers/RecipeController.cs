@@ -15,27 +15,11 @@ namespace DessertTaCeinture.WEB.Controllers
     public class RecipeController : Controller
     {
         #region Instances
-        private Session SessionService = Services.Session.Instance;
-        private Recipe RecipeService = Services.Recipe.Instance;
-
         public List<Recipe_IngredientModel> ingredients = new List<Recipe_IngredientModel>();
-        #endregion
+        private Recipe RecipeService = Services.Recipe.Instance;
+        private Session SessionService = Services.Session.Instance;
 
-        public ActionResult Index()
-        {            
-            if(IsConnectedUser())
-                return View(GetUserRecipes());
-            else
-                return RedirectToAction("Error", "Home");
-        }
-
-        public ActionResult Details(int id)
-        {
-            if (IsConnectedUser())
-                return View();
-            else
-                return RedirectToAction("Error", "Home");
-        }
+        #endregion Instances
 
         [HttpGet]
         public ActionResult Create()
@@ -55,12 +39,43 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View(model);
             }
             else
-                return RedirectToAction("Error", "Home");            
+                return RedirectToAction("Error", "Home");
         }
-
         [HttpPost]
-        public ActionResult Create(CreateRecipeModel model)
+        public ActionResult Create(FormCollection collection)
         {
+            CreateRecipeModel model = new CreateRecipeModel()
+            {
+                CreationDate = DateTime.Now,
+                CreatorId = ((UserModel)Session["loggedUser"]).Id,
+                CategoryId = int.Parse(Request.Form["CategoryId"]),
+                OriginId = int.Parse(Request.Form["OriginId"]),
+                ThemeId = int.Parse(Request.Form["ThemeId"]),
+                Title = Request.Form["Title"],
+                RecipeIngredients = new List<Recipe_IngredientModel>()
+            };
+
+            List<string> requestResult = new List<string>();
+            int i = 1;
+
+            while (collection["RecipeIngredients[" + i + "]"] != null)
+            {
+                requestResult.Add(collection["RecipeIngredients[" + i + "]"]);
+                i++;
+            }
+
+            for (int j = 0; j < requestResult.Count; j++)
+            {
+                string[] ingredient = requestResult[j].Split(',');
+                model.RecipeIngredients.Add(new Recipe_IngredientModel()
+                {
+                    Index = j,
+                    IngredientId = int.Parse(ingredient[0]),
+                    Quantity = int.Parse(ingredient[1]),
+                    Unit = ingredient[2]
+                });
+            }
+
             try
             {
                 if (!ModelState.IsValid)
@@ -73,29 +88,6 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View(model);
             }
         }
-
-        public ActionResult Edit(int id)
-        {
-            if (IsConnectedUser())
-                return View();
-            else
-                return RedirectToAction("Error", "Home");
-        }
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         public ActionResult Delete(int id)
         {
             if (IsConnectedUser())
@@ -103,13 +95,11 @@ namespace DessertTaCeinture.WEB.Controllers
             else
                 return RedirectToAction("Error", "Home");
         }
-
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try
             {
-
                 return RedirectToAction("Index");
             }
             catch
@@ -117,27 +107,41 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View();
             }
         }
-
-        [HttpGet]
-        public ActionResult CreateField(int? index)
+        public ActionResult Details(int id)
         {
-            ViewBag.Index = index ?? 0;
-            return PartialView(new Recipe_IngredientModel() { Index = (int)index });
+            if (IsConnectedUser())
+                return View();
+            else
+                return RedirectToAction("Error", "Home");
         }
-
-        [HttpPost]
-        public void CreateField(Recipe_IngredientModel model)
+        public ActionResult Edit(int id)
         {
-            ingredients.Add(model);
+            if (IsConnectedUser())
+                return View();
+            else
+                return RedirectToAction("Error", "Home");
+        }
+        [HttpPost]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        public ActionResult Index()
+        {
+            if (IsConnectedUser())
+                return View(GetUserRecipes());
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         #region Private methods
-        private bool IsConnectedUser()
-        {
-            if (SessionService.GetConnectedUser() != null) return true;
-            else return false;
-        }
-
         private List<RecipeModel> GetUserRecipes()
         {
             UserModel connectedUser = SessionService.GetConnectedUser();
@@ -174,6 +178,12 @@ namespace DessertTaCeinture.WEB.Controllers
                 return null;
             }
         }
-        #endregion
+        private bool IsConnectedUser()
+        {
+            if (SessionService.GetConnectedUser() != null) return true;
+            else return false;
+        }
+
+        #endregion Private methods
     }
 }
