@@ -27,6 +27,14 @@ namespace DessertTaCeinture.WEB.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
+        [HttpGet]
+        public ActionResult Index()
+        {
+            if (IsConnectedUser())
+                return View(UserService.GetAll());
+            else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(RegisterModel model)
@@ -75,6 +83,7 @@ namespace DessertTaCeinture.WEB.Controllers
 
             return View(model);
         }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -103,6 +112,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 return RedirectToAction("Error", "Home");
             }
         }
+
         public ActionResult Details()
         {
             if (IsConnectedUser())
@@ -110,6 +120,7 @@ namespace DessertTaCeinture.WEB.Controllers
             else
                 return RedirectToAction("Error", "Home");
         }
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -117,6 +128,7 @@ namespace DessertTaCeinture.WEB.Controllers
 
             return View();
         }
+
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditPwdModel model)
@@ -155,6 +167,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View();
             }
         }
+
         [HttpGet]
         public ActionResult Login()
         {
@@ -162,6 +175,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View();
             else return RedirectToAction("Error", "Home");
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -194,6 +208,11 @@ namespace DessertTaCeinture.WEB.Controllers
             else return false;
         }
 
+        private bool IsConnectedAdmin()
+        {
+            if (SessionService.GetConnectedAdmin() != null) return true;
+            else return false;
+        }
         #endregion Private methods
     }
 }

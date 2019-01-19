@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DessertTaCeinture.WEB.Models.User
@@ -34,6 +35,7 @@ namespace DessertTaCeinture.WEB.Models.User
 
         [Required]
         [StringLength(50)]
+        [DisplayName("Adresse mail")]
         public string Email
         {
             get
@@ -75,6 +77,7 @@ namespace DessertTaCeinture.WEB.Models.User
 
         [Required]
         [StringLength(50)]
+        [DisplayName("Nom de famille")]
         public string LastName
         {
             get
@@ -89,6 +92,7 @@ namespace DessertTaCeinture.WEB.Models.User
 
         [Required]
         [StringLength(50)]
+        [DisplayName("Prénom")]
         public string FirstName
         {
             get
@@ -100,7 +104,8 @@ namespace DessertTaCeinture.WEB.Models.User
                 _FirstName = value;
             }
         }
-
+        
+        [DisplayName("Genre")]
         public bool? Gender
         {
             get
@@ -114,6 +119,7 @@ namespace DessertTaCeinture.WEB.Models.User
         }
 
         [Required]
+        [DisplayName("Date d'inscription")]
         public DateTime? InscriptionDate
         {
             get
@@ -127,6 +133,7 @@ namespace DessertTaCeinture.WEB.Models.User
         }
 
         [Required]
+        [DisplayName("Profil actif")]
         public bool? IsActive
         {
             get

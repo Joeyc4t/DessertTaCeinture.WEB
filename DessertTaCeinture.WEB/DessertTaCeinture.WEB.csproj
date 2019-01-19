@@ -162,6 +162,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\PictureController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\Recipe_IngredientController.cs" />
@@ -171,6 +172,7 @@
     </Compile>
     <Compile Include="Models\Category\CategoryModel.cs" />
     <Compile Include="Models\Ingredient\IngredientModel.cs" />
+    <Compile Include="Models\News\NewsModel.cs" />
     <Compile Include="Models\Origin\OriginModel.cs" />
     <Compile Include="Models\Picture\PictureModel.cs" />
     <Compile Include="Models\Recipe\CreateRecipeModel.cs" />
@@ -184,6 +186,7 @@
     <Compile Include="Models\User\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Authentification.cs" />
+    <Compile Include="Services\News.cs" />
     <Compile Include="Services\Recipe.cs" />
     <Compile Include="Services\Session.cs" />
     <Compile Include="Services\User.cs" />
@@ -208,6 +211,7 @@
     <Content Include="Content\images\backgrounds\img_bg_3.jpg" />
     <Content Include="Content\images\backgrounds\linear-gradient.png" />
     <Content Include="Content\images\keys\email.png" />
+    <Content Include="Content\images\keys\garbage.png" />
     <Content Include="Content\images\keys\magnifier.png" />
     <Content Include="Content\images\keys\placeholder.png" />
     <Content Include="Content\images\keys\plus.png" />
@@ -441,6 +445,10 @@
     <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Admin\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Shared\Errors\NotAuthorized.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\News\Index.cshtml" />
+    <Content Include="Views\News\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
