@@ -36,6 +36,11 @@ namespace DessertTaCeinture.WEB.Services
             return (HttpContext.Current.Session["loggedUser"] as UserModel);
         }
 
+        public UserModel GetConnectedAdmin()
+        {
+            return (HttpContext.Current.Session["loggedAdmin"] as UserModel);
+        }
+
         public void CloseSession()
         {
             HttpContext.Current.Session["loggedUser"] = null;

@@ -158,7 +158,7 @@ namespace DessertTaCeinture.WEB.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            if (IsConnectedUser())
+            if (!IsConnectedUser())
                 return View();
             else return RedirectToAction("Error", "Home");
         }

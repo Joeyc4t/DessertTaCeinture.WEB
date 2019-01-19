@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/font/css")
+    @Styles.Render("~/Content/template")
+    @Styles.Render("~/Content/css")
+</head>
+
+    <nav class="gtco-nav" role="navigation">
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                    <div id="gtco-logo"><a href="@Url.Action("Index","Home")">Live site <em>.</em></a></div>
+                </div>
+                <div class="col-xs-8 text-right menu-1">
+                    <ul>
+                        <li class="btn-cta"><a href="@Url.Action("Logout","Admin")"><span>Se déconnecter</span></a></li>   
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+<body>
+
+    <div id="page">
+        <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(../../Content/images/backgrounds/linear-gradient.png)" data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="gtco-container">
+                <div class="row">
+                    <div class="col-md-12 col-md-offset-0 text-left" style="margin-top: -150px;">
+                        <div class="row row-mt-15em">
+                            <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                                <h1 class="cursive-font">Dashboard</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        @RenderBody()
+
+    </div>
+
+    <footer id="gtco-footer" role="contentinfo" style="background-image: url(../../Content/images/backgrounds/linear-gradient.png); padding:0 0">
+        <div class="gtco-container">
+            <div class="row row-pb-md">
+                <div class="col-md-12 text-center">
+                    <div class="gtco-widget" style="margin-top:25px;">                     
+                        <div class="col-md-12 text-center copyright">
+                            <h4 class="" style="color : white;">&copy; @DateTime.Now.Year Dessert Ta Ceinture.</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer> 
+
+
+    <div class="gototop js-top">
+        <a href="#" class="js-gotop"><img src="~/Content/images/keys/key-console.png" /></a>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
+
+</body>
+</html>

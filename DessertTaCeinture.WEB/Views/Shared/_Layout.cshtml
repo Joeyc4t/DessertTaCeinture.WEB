@@ -35,19 +35,14 @@
                             </ul>
                         </li>
                         <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
-                        @if (Session["loggedUser"] != null && Session["loggedModerator"] == null && Session["loggedAdmin"] == null)
+                        @if (Session["loggedUser"] != null && Session["loggedAdmin"] == null)
                         {
                             <li class="btn-cta"><a href="@Url.Action("Details","User")"><span>Mon profil</span></a></li>
                             <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
                         }
-                        else if (Session["loggedUser"] != null && Session["loggedModerator"] != null)
-                        {
-                            <li class="btn-cta"><a href="#"><span>Modération</span></a></li>
-                            <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
-                        }
                         else if (Session["loggedUser"] != null && Session["loggedAdmin"] != null)
                         {
-                            <li class="btn-cta"><a href="#"><span>Administration</span></a></li>
+                            <li class="btn-cta"><a href="@Url.Action("Index","Admin")"><span>Administration</span></a></li>
                             <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
                         }
                         else
@@ -87,7 +82,7 @@
                             </ul>
                         </div>                        
                         <div class="col-md-12 text-center copyright">
-                            <h4 class="" style="color : white;">&copy; 2018 Dessert Ta Ceinture. All Rights Reserved.</h4>
+                            <h4 class="" style="color : white;">&copy; @DateTime.Now.Year Dessert Ta Ceinture.</h4>
                         </div>
                     </div>
                 </div>

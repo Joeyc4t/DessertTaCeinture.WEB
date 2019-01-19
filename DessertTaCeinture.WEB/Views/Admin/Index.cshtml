@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Administration";
+}
+
+<div class="gtco-section">
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                <h2 class="cursive-font primary-color">Dernières douceurs</h2>
+            </div>
+        </div>
+        <div class="row">
+            @for (int i = 1; i <= 6; i++)
+            {
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="#" class="fh5co-card-item">
+                        <figure>
+                            <img src="~/Content/images/pictures/img_1.jpg" alt="Image" class="img-responsive">
+                        </figure>
+                        <div class="fh5co-text">
+                            <h2>Titre</h2>
+                            <p>Par - Autheur -</p>
+                            <p>Date d'ajout</p>
+                            <p><span class="price cursive-font">Voir</span></p>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
