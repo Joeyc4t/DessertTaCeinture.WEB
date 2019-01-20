@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DessertTaCeinture.WEB.Models.Home;
+using DessertTaCeinture.WEB.Services;
 using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Controllers
 {
     public class HomeController : Controller
     {
+        #region Instances
+        private News NewsService = News.Instance;
+        #endregion
+
         public ActionResult Index()
         {
-            return View();
+            IndexViewModel model = new IndexViewModel();
+            model.News = NewsService.GetLastPublished();
+
+            return View(model);
         }
 
         public ActionResult Recipes()

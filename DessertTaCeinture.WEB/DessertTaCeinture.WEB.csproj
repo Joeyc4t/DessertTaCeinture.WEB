@@ -171,6 +171,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Category\CategoryModel.cs" />
+    <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Models\Ingredient\IngredientModel.cs" />
     <Compile Include="Models\News\NewsModel.cs" />
     <Compile Include="Models\Origin\OriginModel.cs" />
@@ -199,6 +200,7 @@
     <Content Include="Content\css\bootstrap-datepicker.min.css" />
     <Content Include="Content\css\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\datepicker.css" />
     <Content Include="Content\css\flexslider.css" />
     <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\magnific-popup.css" />
@@ -206,17 +208,21 @@
     <Content Include="Content\css\owl.theme.default.min.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\images\backgrounds\4249962.jpg" />
+    <Content Include="Content\images\backgrounds\geometric-gradiant.jpg" />
+    <Content Include="Content\images\backgrounds\gradiant.jpg" />
     <Content Include="Content\images\backgrounds\Home.jpg" />
-    <Content Include="Content\images\backgrounds\img_bg_3.jpg" />
     <Content Include="Content\images\backgrounds\linear-gradient.png" />
+    <Content Include="Content\images\backgrounds\orange-gradiant.jpg" />
+    <Content Include="Content\images\keys\edit.png" />
     <Content Include="Content\images\keys\email.png" />
+    <Content Include="Content\images\keys\eye.png" />
     <Content Include="Content\images\keys\garbage.png" />
     <Content Include="Content\images\keys\magnifier.png" />
     <Content Include="Content\images\keys\placeholder.png" />
     <Content Include="Content\images\keys\plus.png" />
     <Content Include="Content\images\keys\reply.png" />
     <Content Include="Content\images\keys\whatsapp.png" />
+    <Content Include="Content\images\news\default-image.png" />
     <Content Include="Content\images\pictures\img_1.jpg" />
     <Content Include="Content\images\keys\key-console.png" />
     <Content Include="Content\images\loader.gif" />
@@ -229,6 +235,7 @@
     <Content Include="fonts\bootstrap\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="LICENSE.txt" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -390,6 +397,7 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Content\bootstrap\datepicker.less" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\google_map.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -449,6 +457,9 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\Create.cshtml" />
+    <Content Include="Views\News\Edit.cshtml" />
+    <Content Include="Views\News\Delete.cshtml" />
+    <Content Include="Views\News\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

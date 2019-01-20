@@ -35,14 +35,9 @@
                             </ul>
                         </li>
                         <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
-                        @if (Session["loggedUser"] != null && Session["loggedAdmin"] == null)
+                        @if (Session["loggedUser"] != null || Session["loggedAdmin"] != null)
                         {
                             <li class="btn-cta"><a href="@Url.Action("Details","User")"><span>Mon profil</span></a></li>
-                            <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
-                        }
-                        else if (Session["loggedUser"] != null && Session["loggedAdmin"] != null)
-                        {
-                            <li class="btn-cta"><a href="@Url.Action("Index","Admin")"><span>Administration</span></a></li>
                             <li class="btn-cta"><a href="@Url.Action("Logout","User")"><span>Se déconnecter</span></a></li>
                         }
                         else
@@ -66,7 +61,7 @@
 
     @RenderBody()
 
-    <footer id="gtco-footer" role="contentinfo" style="background-image: url(../../Content/images/backgrounds/linear-gradient.png); padding:0 0">
+    <footer id="gtco-footer" role="contentinfo" style="background-image: url(../../Content/images/backgrounds/orange-gradiant.jpg); padding:0 0">
         <div class="gtco-container">
             <div class="row row-pb-md">
                 <div class="col-md-12 text-center">

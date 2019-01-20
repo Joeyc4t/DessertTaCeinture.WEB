@@ -6,8 +6,8 @@
 }
 
 <h3>News :</h3>
-<p>
-    @Html.ActionLink("+", "Create")
+<p class="pull-right">
+    <a href="@Url.Action("Create","News")"><img src="~/Content/images/keys/plus.png" /></a>
 </p>
 <table class="table">
     <tr>
@@ -26,33 +26,38 @@
         <th>
             @Html.DisplayNameFor(model => model.ReleaseDate)
         </th>
-        <th></th>
-    </tr>
+        <th>
+            Actions
+        </th>
+    </tr> 
 
     @foreach (var item in Model)
     {
         <tr>
-            <td>
+            <td width="10%">
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
-            <td>
+            <td width="10%">
                 @Html.DisplayFor(modelItem => item.ImageUrl)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Summary)
+            <td width="30%">
+                <div style="max-height : 150px; overflow-y:scroll;">
+                    @Html.DisplayFor(modelItem => item.Summary)
+                </div>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
+            <td width="30%">
+                <div style="max-height : 150px; overflow-y:scroll;">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </div>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            <td width="10%">
+                @item.ReleaseDate.ToString("dd/MM/yyyy")
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            <td width="10%">
+                <a href="@Url.Action("Edit","News", new { id = item.Id })"><img src="~/Content/images/keys/edit.png" /></a>&nbsp;
+                <a href="@Url.Action("Details","News", new { id = item.Id })" target="_blank"><img src="~/Content/images/keys/eye.png" /></a>&nbsp;
+                <a href="@Url.Action("Delete","News", new { id = item.Id })"><img src="~/Content/images/keys/garbage.png" /></a>
             </td>
         </tr>
     }
-
 </table>

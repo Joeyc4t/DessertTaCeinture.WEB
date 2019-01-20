@@ -1,4 +1,6 @@
-﻿@{ 
+﻿@model DessertTaCeinture.WEB.Models.Home.IndexViewModel
+
+@{ 
     ViewBag.Title = "Dessert ta ceinture";
 }
 <div class="gtco-loader"></div>
@@ -66,21 +68,21 @@
         <div class="gtco-container">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                    <h2 class="cursive-font primary-color">Dernières douceurs</h2>
+                    <h2 class="cursive-font primary-color">Dernières news</h2>
                 </div>
             </div>
             <div class="row">
-                @for (int i = 1; i <= 6; i++)
+                @foreach (var item in Model.News)
                 {
                     <div class="col-lg-4 col-md-4 col-sm-6">
-                        <a href="#" class="fh5co-card-item">
+                        <a href="@Url.Action("Details", "News", new { id = item.Id})" class="fh5co-card-item">
                             <figure>
-                                <img src="~/Content/images/pictures/img_1.jpg" alt="Image" class="img-responsive">
+                                <img src="@item.ImageUrl" alt="Image" class="img-responsive">
                             </figure>
                             <div class="fh5co-text">
-                                <h2>Titre</h2>
-                                <p>Par - Autheur -</p>
-                                <p>Date d'ajout</p>
+                                <h2>@item.Title</h2>
+                                <p>@item.ReleaseDate.ToString("dd/MM/yyyy")</p>
+                                <p>@item.Summary</p>
                                 <p><span class="price cursive-font">Voir</span></p>
                             </div>
                         </a>

@@ -1,0 +1,29 @@
+﻿@model DessertTaCeinture.WEB.Models.News.NewsModel
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="gtco-loader"></div>
+<div id="page">
+    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="height:82px;" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+    </header>
+
+    <div class="gtco-section">
+        <div class="gtco-container" style="margin-top: -50px;">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                    <img src="@Model.ImageUrl" alt="Image" style="height: 250px; width: 250px;" />
+                    <h2 class="cursive-font primary-color">@Model.Title</h2>
+                    <hr />
+                    <small>@Model.ReleaseDate.ToString("dd/MM/yyyy")</small>
+                </div>
+                <div class="col-md-8 col-md-offset-2">
+                    @Html.DisplayFor(model => model.Description)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
