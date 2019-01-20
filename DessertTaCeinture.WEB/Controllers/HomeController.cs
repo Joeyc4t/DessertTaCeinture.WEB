@@ -7,7 +7,7 @@ namespace DessertTaCeinture.WEB.Controllers
     public class HomeController : Controller
     {
         #region Instances
-        private News NewsService = News.Instance;
+        private News NewsService = Services.News.Instance;
         #endregion
 
         public ActionResult Index()
@@ -21,6 +21,11 @@ namespace DessertTaCeinture.WEB.Controllers
         public ActionResult Recipes()
         {
             return View();
+        }
+
+        public ActionResult News()
+        {
+            return View(NewsService.GetAll());
         }
 
         public ActionResult Error()

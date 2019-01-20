@@ -1,0 +1,58 @@
+﻿@model IEnumerable<DessertTaCeinture.WEB.Models.News.NewsModel>
+
+@{
+    ViewBag.Title = "News";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="gtco-loader"></div>
+<div id="page">
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="height:300px;" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0">
+                    <div class="row row-mt-15em">
+                        <div style="margin-top:-75px;">
+                            <span class="intro-text-small">Restez informé ...</span>
+                            <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
+                                <h1 class="cursive-font">News</h1>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="gtco-section">
+        <div class="gtco-container" style="margin-top: -100px;">
+            <div class="row">
+                <div class="col-md-12 animate-box">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-lg-4 col-md-4 col-sm-6" style="height: 550px; margin-top: 50px;">
+                            <a href="@Url.Action("Details", "News", new { id = item.Id})" class="fh5co-card-item">
+                                <figure>
+                                    <img src="@item.ImageUrl" alt="Image" class="img-responsive">
+                                </figure>
+                                <div class="fh5co-text">
+                                    <h2>@item.Title</h2>
+                                    <p>@item.ReleaseDate.ToString("dd/MM/yyyy")</p>
+                                    <div style="height: 150px; overflow: hidden;">
+                                        <p>@item.Summary</p>
+                                    </div>                                    
+                                    <p><span class="price cursive-font">Voir</span></p>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
