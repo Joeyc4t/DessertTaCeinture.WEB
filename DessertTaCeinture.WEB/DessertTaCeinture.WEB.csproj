@@ -163,7 +163,6 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
-    <Compile Include="Controllers\PictureController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\Recipe_IngredientController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -226,6 +225,7 @@
     <Content Include="Content\images\pictures\img_1.jpg" />
     <Content Include="Content\images\keys\key-console.png" />
     <Content Include="Content\images\loader.gif" />
+    <Content Include="Content\images\recipes\default-image.png" />
     <Content Include="Content\images\social\facebook.png" />
     <Content Include="Content\images\social\google-plus.png" />
     <Content Include="Content\images\social\instagram.png" />
@@ -464,7 +464,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\images\recipes\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

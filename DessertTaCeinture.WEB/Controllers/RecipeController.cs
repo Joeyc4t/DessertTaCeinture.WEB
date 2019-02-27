@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Controllers
@@ -42,7 +45,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 return RedirectToAction("Error", "Home");
         }
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public async Task<ActionResult> Create(FormCollection collection, HttpPostedFileBase fileUpload)
         {
             CreateRecipeModel model = new CreateRecipeModel()
             {
@@ -81,7 +84,37 @@ namespace DessertTaCeinture.WEB.Controllers
                 if (!ModelState.IsValid)
                     return View(model);
 
-                return RedirectToAction("Create");
+                if (fileUpload != null && fileUpload.ContentLength > 0)
+                {
+                    model.Picture = "/Content/images/recipes/" + fileUpload.FileName;
+                    fileUpload.SaveAs(Server.MapPath("~/Content/images/recipes/" + fileUpload.FileName));
+                }
+                else model.Picture = "/Content/images/news/default-image.png";
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    // Create recipe
+                    RecipeModel recipeModel = AutoMapper<CreateRecipeModel, RecipeModel>.AutoMap(model);
+                    StringContent recipeInsert = new StringContent(JsonConvert.SerializeObject(recipeModel));
+                    recipeInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    HttpResponseMessage recipeRes = await client.PostAsync("api/Recipe", recipeInsert);
+                    if (recipeRes.IsSuccessStatusCode)
+                    {
+                        // Create links
+                        foreach (var item in model.RecipeIngredients)
+                        {
+                            StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
+                            itemInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                            HttpResponseMessage itemRes = await client.PostAsync("api/Recipe_Ingredients", itemInsert);
+                            if (itemRes.IsSuccessStatusCode) continue;
+                            else RedirectToAction("Error", "Home");
+                        }
+                        return RedirectToAction("Index");
+                    }
+                    else
+                        return RedirectToAction("Error", "Home");
+                }
             }
             catch
             {
@@ -161,7 +194,7 @@ namespace DessertTaCeinture.WEB.Controllers
                     {
                         var result = Res.Content.ReadAsStringAsync().Result;
                         wrapper = JsonConvert.DeserializeObject<DataWrapper<RecipeModel>>(result);
-                        if (wrapper != null)
+                        if (wrapper.container.entities.Count > 0)
                         {
                             foreach (RecipeModel recipe in wrapper.container.entities)
                             {

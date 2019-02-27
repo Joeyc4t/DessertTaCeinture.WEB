@@ -33,8 +33,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe
 
         public virtual List<OriginModel> Origins { get; set; }
 
-        [Required]
-        public int PictureId { get; set; }
+        public string Picture { get; set; }
 
         public IList<Recipe_IngredientModel> RecipeIngredients { get; set; }
 
