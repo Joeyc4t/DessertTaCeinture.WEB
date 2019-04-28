@@ -76,7 +76,7 @@ namespace DessertTaCeinture.WEB.Services
 
         public IEnumerable<NewsModel> GetLastPublished()
         {
-            return GetAll().Take(6);
+            return GetAll().OrderByDescending(n => n.ReleaseDate).Take(6);
         }
     }
 }

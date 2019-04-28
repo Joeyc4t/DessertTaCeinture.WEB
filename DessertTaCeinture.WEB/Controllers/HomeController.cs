@@ -33,9 +33,9 @@ namespace DessertTaCeinture.WEB.Controllers
             return View("~/Views/Shared/Errors/GenericError.cshtml");
         }
 
-        public ActionResult Contact()
+        public ActionResult NotAuthorized()
         {
-            return View();
+            return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
         }
     }
 }

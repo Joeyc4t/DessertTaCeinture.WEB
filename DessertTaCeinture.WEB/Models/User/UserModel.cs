@@ -15,7 +15,7 @@ namespace DessertTaCeinture.WEB.Models.User
         private string _FirstName;
         private bool? _Gender;
         private DateTime? _InscriptionDate;
-        private bool? _IsActive;
+        private bool _IsActive;
         private int? _RoleId;
         #endregion
 
@@ -134,7 +134,7 @@ namespace DessertTaCeinture.WEB.Models.User
 
         [Required]
         [DisplayName("Profil actif")]
-        public bool? IsActive
+        public bool IsActive
         {
             get
             {

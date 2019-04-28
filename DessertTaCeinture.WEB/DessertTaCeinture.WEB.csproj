@@ -165,6 +165,7 @@
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\Recipe_IngredientController.cs" />
+    <Compile Include="Controllers\Recipe_StepController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -178,6 +179,8 @@
     <Compile Include="Models\Recipe\CreateRecipeModel.cs" />
     <Compile Include="Models\Recipe\RecipeModel.cs" />
     <Compile Include="Models\Recipe_Ingredients\Recipe_IngredientModel.cs" />
+    <Compile Include="Models\Recipe_Step\Recipe_StepModel.cs" />
+    <Compile Include="Models\Step\StepModel.cs" />
     <Compile Include="Models\Theme\ThemeModel.cs" />
     <Compile Include="Models\User\DetailsModel.cs" />
     <Compile Include="Models\User\EditPwdModel.cs" />
@@ -212,19 +215,22 @@
     <Content Include="Content\images\backgrounds\Home.jpg" />
     <Content Include="Content\images\backgrounds\linear-gradient.png" />
     <Content Include="Content\images\backgrounds\orange-gradiant.jpg" />
+    <Content Include="Content\images\keys\activate.png" />
     <Content Include="Content\images\keys\edit.png" />
     <Content Include="Content\images\keys\email.png" />
     <Content Include="Content\images\keys\eye.png" />
     <Content Include="Content\images\keys\garbage.png" />
+    <Content Include="Content\images\keys\isactive.png" />
+    <Content Include="Content\images\keys\isnotactive.png" />
     <Content Include="Content\images\keys\magnifier.png" />
     <Content Include="Content\images\keys\placeholder.png" />
     <Content Include="Content\images\keys\plus.png" />
     <Content Include="Content\images\keys\reply.png" />
     <Content Include="Content\images\keys\whatsapp.png" />
+    <Content Include="Content\images\loader.gif" />
     <Content Include="Content\images\news\default-image.png" />
     <Content Include="Content\images\pictures\img_1.jpg" />
     <Content Include="Content\images\keys\key-console.png" />
-    <Content Include="Content\images\loader.gif" />
     <Content Include="Content\images\recipes\default-image.png" />
     <Content Include="Content\images\social\facebook.png" />
     <Content Include="Content\images\social\google-plus.png" />
@@ -443,7 +449,6 @@
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Picture\Create.cshtml" />
     <Content Include="Views\Home\Recipes.cshtml" />
     <Content Include="Views\Recipe\Index.cshtml" />
@@ -461,9 +466,14 @@
     <Content Include="Views\News\Delete.cshtml" />
     <Content Include="Views\News\Details.cshtml" />
     <Content Include="Views\Home\News.cshtml" />
+    <Content Include="Views\Shared\_NewsCard.cshtml" />
+    <Content Include="Views\Shared\_RecipeCard.cshtml" />
+    <Content Include="Views\Admin\DeleteUser.cshtml" />
+    <Content Include="Views\Admin\ActivateUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Recipe_Step\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

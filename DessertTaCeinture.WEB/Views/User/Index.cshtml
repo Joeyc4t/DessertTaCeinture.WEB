@@ -7,22 +7,22 @@
 <h3>Utilisateurs :</h3>
 <table class="table">
     <tr>
-        <th>
+        <th class="text-center">
             @Html.DisplayNameFor(model => model.Email)
         </th>
-        <th>
+        <th class="text-center">
             @Html.DisplayNameFor(model => model.LastName)
         </th>
-        <th>
+        <th class="text-center">
             @Html.DisplayNameFor(model => model.FirstName)
         </th>
-        <th>
+        <th class="text-center">
             @Html.DisplayNameFor(model => model.InscriptionDate)
         </th>
-        <th>
+        <th class="text-center">
             @Html.DisplayNameFor(model => model.IsActive)
         </th>
-        <th>
+        <th class="text-center">
             Actions
         </th>
     </tr>
@@ -30,24 +30,30 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.InscriptionDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
+            <td class="text-center">
+                @if (item.IsActive)
+                { <img src="~/Content/images/keys/isactive.png" /> }
+                else
+                { <img src="~/Content/images/keys/isnotactive.png" /> }
             </td>
-            <td>
-                <a href="@Url.Action("Delete","User")"><img src="~/Content/images/keys/garbage.png" /></a>
-            </td>
+            <td class="text-center">
+                @if(item.IsActive)
+                { <a href="@Url.Action("Delete","User", new { id = item.Id })"><img src="~/Content/images/keys/garbage.png" /></a> }
+                else
+                { <a href="@Url.Action("Activate","User", new { id = item.Id })"><img src="~/Content/images/keys/activate.png" /></a>}
+                </td>
         </tr>
     }
 

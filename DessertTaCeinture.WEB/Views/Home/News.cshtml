@@ -32,21 +32,7 @@
                 <div class="col-md-12 animate-box">
                     @foreach (var item in Model)
                     {
-                        <div class="col-lg-4 col-md-4 col-sm-6" style="height: 550px; margin-top: 50px;">
-                            <a href="@Url.Action("Details", "News", new { id = item.Id})" class="fh5co-card-item">
-                                <figure>
-                                    <img src="@item.ImageUrl" alt="Image" class="img-responsive">
-                                </figure>
-                                <div class="fh5co-text">
-                                    <h2>@item.Title</h2>
-                                    <p>@item.ReleaseDate.ToString("dd/MM/yyyy")</p>
-                                    <div style="height: 150px; overflow: hidden;">
-                                        <p>@item.Summary</p>
-                                    </div>                                    
-                                    <p><span class="price cursive-font">Voir</span></p>
-                                </div>
-                            </a>
-                        </div>
+                        @Html.Partial("_NewsCard", item)
                     }
                 </div>                
             </div>

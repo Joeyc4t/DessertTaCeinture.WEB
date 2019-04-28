@@ -269,7 +269,7 @@
 
 	// Loading page
 	var loaderPage = function() {
-		$(".gtco-loader").fadeOut("slow");
+		$(".gtco-loader").fadeOut(1250);
 	};
 
 	var counter = function() {

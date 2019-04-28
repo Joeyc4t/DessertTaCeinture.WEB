@@ -1,0 +1,15 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeModel
+
+<div class="col-lg-4 col-md-4 col-sm-6">
+    <a href="@Url.Action("Details", "Recipe", new { id = Model.Id})" class="fh5co-card-item">
+        <figure>
+            <img src="@Model.Picture" alt="Image" class="img-responsive">
+        </figure>
+        <div class="fh5co-text">
+            <h2>@Model.Title</h2>
+            <p>Par - @Model.CreatorId -</p>
+            <p>@Model.CreationDate.ToShortDateString()</p>
+            <p><span class="price cursive-font">Voir</span></p>
+        </div>
+    </a>
+</div>

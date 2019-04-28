@@ -46,6 +46,33 @@ namespace DessertTaCeinture.WEB.Services
             }
         }
 
+        public UserModel Get(string email)
+        {
+            UserModel globalModel = new UserModel();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/User?id={email}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        globalModel = JsonConvert.DeserializeObject<UserModel>(result);
+                    }
+                }
+                return globalModel;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public IEnumerable<UserModel> GetAll()
         {
             IEnumerable<UserModel> models = Enumerable.Empty<UserModel>();

@@ -15,20 +15,24 @@ namespace DessertTaCeinture.WEB.Services
 
         public void StoreUser(UserModel model)
         {
-            switch (model.RoleId)
+            if(model != null)
             {
-                case 1:
-                    HttpContext.Current.Session["loggedUser"] = model;
-                    break;
-                case 2:
-                    HttpContext.Current.Session["loggedUser"] = model;
-                    HttpContext.Current.Session["loggedModerator"] = model;
-                    break;
-                case 3:
-                    HttpContext.Current.Session["loggedUser"] = model;
-                    HttpContext.Current.Session["loggedAdmin"] = model;
-                    break;
-            } 
+                switch (model.RoleId)
+                {
+                    case 1:
+                        HttpContext.Current.Session["loggedUser"] = model;
+                        break;
+                    case 2:
+                        HttpContext.Current.Session["loggedUser"] = model;
+                        HttpContext.Current.Session["loggedModerator"] = model;
+                        break;
+                    case 3:
+                        HttpContext.Current.Session["loggedUser"] = model;
+                        HttpContext.Current.Session["loggedAdmin"] = model;
+                        break;
+                }
+                HttpContext.Current.Session["loggedUserName"] = $"{model.FirstName} {model.LastName}";
+            }            
         }
 
         public UserModel GetConnectedUser()
