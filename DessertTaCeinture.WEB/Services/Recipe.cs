@@ -58,11 +58,13 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return items;
             }
-            catch (Exception ex)
+            catch
             {
+                // LOG ERROR
                 return null;
             }
         }
+
         public List<IngredientModel> GetIngredients()
         {
             List<IngredientModel> ingredients = new List<IngredientModel>();
@@ -91,11 +93,13 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return ingredients.OrderBy(i => i.Name).ToList();
             }
-            catch (Exception ex)
+            catch
             {
+                // LOG ERROR
                 return null;
             }
         }
+
         public List<OriginModel> GetOrigins()
         {
             List<OriginModel> items = new List<OriginModel>();
@@ -124,11 +128,13 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return items.OrderBy(i => i.Country).ToList();
             }
-            catch (Exception ex)
+            catch
             {
+                // LOG ERROR
                 return null;
             }
         }
+
         public List<ThemeModel> GetThemes()
         {
             List<ThemeModel> items = new List<ThemeModel>();
@@ -157,11 +163,13 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return items;
             }
-            catch (Exception ex)
+            catch
             {
+                // LOG ERROR
                 return null;
             }
         }
+
         public List<RecipeModel> GetUserRecipes()
         {
             UserModel connectedUser = SessionService.GetConnectedUser();
@@ -193,8 +201,9 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return recipes;
             }
-            catch (Exception ex)
+            catch
             {
+                // LOG ERROR
                 return null;
             }
         }

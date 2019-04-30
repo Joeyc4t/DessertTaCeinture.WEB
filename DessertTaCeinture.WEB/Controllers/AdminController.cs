@@ -1,9 +1,5 @@
 ﻿using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Controllers
@@ -42,6 +38,21 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             AuthService.Logout();
             return RedirectToAction("Index", "Admin");
+        }
+
+        public ActionResult Users()
+        {
+            return RedirectToAction("Index", "User");
+        }
+
+        public ActionResult News()
+        {
+            return RedirectToAction("Index", "News");
+        }
+
+        public ActionResult Messages()
+        {
+            return RedirectToAction("Index", "Messages");
         }
 
         #region Private methods

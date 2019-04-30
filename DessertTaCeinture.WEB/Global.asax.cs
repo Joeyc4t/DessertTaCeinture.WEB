@@ -1,7 +1,5 @@
 ﻿using DessertTaCeinture.WEB.Controllers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -34,7 +32,7 @@ namespace DessertTaCeinture.WEB
                 Response.StatusCode = 404;
                 routeData.Values["action"] = "NotFound";
             }
-            Response.TrySkipIisCustomErrors = true; // If you are using IIS7, have this line
+            Response.TrySkipIisCustomErrors = true;
             IController errorsController = new ErrorsController();
             HttpContextWrapper wrapper = new HttpContextWrapper(Context);
             var rc = new System.Web.Routing.RequestContext(wrapper, routeData);

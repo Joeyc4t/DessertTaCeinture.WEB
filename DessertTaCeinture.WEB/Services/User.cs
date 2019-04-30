@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Services
 {
     public class User
     {
         #region Instances
+        private Session SessionService = Session.Instance;
         private static User _Instance;
         public static User Instance
         {
@@ -73,6 +76,11 @@ namespace DessertTaCeinture.WEB.Services
             }
         }
 
+        public UserModel GetConnectedUser()
+        {
+            return SessionService.GetConnectedUser();
+        }
+
         public IEnumerable<UserModel> GetAll()
         {
             IEnumerable<UserModel> models = Enumerable.Empty<UserModel>();
@@ -98,6 +106,18 @@ namespace DessertTaCeinture.WEB.Services
             {
                 return null;
             }
+        }
+
+        public bool IsConnectedUser()
+        {
+            if (SessionService.GetConnectedUser() != null) return true;
+            else return false;
+        }
+
+        public bool IsConnectedAdmin()
+        {
+            if (SessionService.GetConnectedAdmin() != null) return true;
+            else return false;
         }
     }
 }

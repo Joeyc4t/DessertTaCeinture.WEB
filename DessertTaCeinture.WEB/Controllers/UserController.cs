@@ -14,23 +14,19 @@ namespace DessertTaCeinture.WEB.Controllers
     {
         #region Instances
         private Authentification AuthService = Services.Authentification.Instance;
-        private Session SessionService = Services.Session.Instance;
         private User UserService = Services.User.Instance;
         #endregion Instances
 
         public ActionResult Create()
         {
-            if (!IsConnectedUser())
-                return View();
-            else
-                return RedirectToAction("Error", "Home");
+            if (!UserService.IsConnectedUser()) return View();
+            else return RedirectToAction("Error", "Home");
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            if (IsConnectedUser())
-                return View(UserService.GetAll());
+            if (UserService.IsConnectedUser()) return View(UserService.GetAll());
             else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
         }
 
@@ -57,10 +53,8 @@ namespace DessertTaCeinture.WEB.Controllers
                         toInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                         HttpResponseMessage Res = await client.PostAsync("api/User", toInsert);
-                        if (Res.IsSuccessStatusCode)
-                            return RedirectToAction("Index", "Home");
-                        else
-                            return RedirectToAction("Error", "Home");
+                        if (Res.IsSuccessStatusCode) return RedirectToAction("Index", "Home");
+                        else return RedirectToAction("Error", "Home");
                     }
                 }
                 catch
@@ -73,14 +67,11 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Activate(int? id)
         {
-            if (id == null || !IsConnectedUser())
-                return RedirectToAction("NotAuthorized", "Home");
+            if (id == null || !UserService.IsConnectedUser()) return RedirectToAction("NotAuthorized", "Home");
 
-            UserModel model = SessionService.GetConnectedUser();
-            if (model.Id != id && IsConnectedAdmin())
-                return View("~/Views/Admin/ActivateUser.cshtml", model);
-            else
-                return RedirectToAction("Error", "Home");
+            UserModel model = UserService.GetConnectedUser();
+            if (model.Id != id && UserService.IsConnectedAdmin()) return View("~/Views/Admin/ActivateUser.cshtml", model);
+            else return RedirectToAction("Error", "Home");
         }
 
         [HttpPost, ActionName("Activate")]
@@ -100,17 +91,16 @@ namespace DessertTaCeinture.WEB.Controllers
 
                     HttpResponseMessage Res = await client.PutAsync($"api/User?id={model.Id}", toUpdate);
 
-                    if (Res.IsSuccessStatusCode && !IsConnectedAdmin())
+                    if (Res.IsSuccessStatusCode && !UserService.IsConnectedAdmin())
                     {
                         Logout();
                         return RedirectToAction("Index", "Home");
                     }
-                    else if (Res.IsSuccessStatusCode && IsConnectedAdmin())
+                    else if (Res.IsSuccessStatusCode && UserService.IsConnectedAdmin())
                     {
                         return RedirectToAction("Index", "User");
                     }
-                    else
-                        return RedirectToAction("Error", "Home");
+                    else return RedirectToAction("Error", "Home");
                 }
             }
             catch
@@ -121,16 +111,12 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Delete(int? id)
         {
-            if (id == null || !IsConnectedUser())
-                return RedirectToAction("Error", "Home");
+            if (id == null || !UserService.IsConnectedUser()) return RedirectToAction("Error", "Home");
 
-            UserModel model = SessionService.GetConnectedUser();
-            if (model.Id != id && IsConnectedAdmin())
-                return View("~/Views/Admin/DeleteUser.cshtml", model);
-            if(model.Id == id)
-                return View(model);
-            else
-                return RedirectToAction("Error", "Home");
+            UserModel model = UserService.GetConnectedUser();
+            if (model.Id != id && UserService.IsConnectedAdmin()) return View("~/Views/Admin/DeleteUser.cshtml", model);
+            if(model.Id == id) return View(model);
+            else return RedirectToAction("Error", "Home");
 
         }
 
@@ -148,17 +134,16 @@ namespace DessertTaCeinture.WEB.Controllers
 
                     HttpResponseMessage Res = client.DeleteAsync($"api/User?id={id}").Result;
 
-                    if (Res.IsSuccessStatusCode && !IsConnectedAdmin())
+                    if (Res.IsSuccessStatusCode && !UserService.IsConnectedAdmin())
                     {
                         Logout();
                         return RedirectToAction("Index", "Home");
                     }
-                    else if(Res.IsSuccessStatusCode && IsConnectedAdmin())
+                    else if(Res.IsSuccessStatusCode && UserService.IsConnectedAdmin())
                     {
                         return RedirectToAction("Index", "User");
                     }
-                    else
-                        return RedirectToAction("Error", "Home");
+                    else return RedirectToAction("Error", "Home");
                 }
             }
             catch
@@ -169,17 +154,13 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Details()
         {
-            if (IsConnectedUser())
-                return View(AutoMapper<UserModel, DetailsModel>.AutoMap(SessionService.GetConnectedUser()));
-            else
-                return RedirectToAction("Error", "Home");
+            if (UserService.IsConnectedUser()) return View(AutoMapper<UserModel, DetailsModel>.AutoMap(UserService.GetConnectedUser()));
+            else return RedirectToAction("Error", "Home");
         }
 
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-                return RedirectToAction("Error", "Home");
-
+            if (id == null) return RedirectToAction("Error", "Home");
             return View();
         }
 
@@ -187,16 +168,13 @@ namespace DessertTaCeinture.WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditPwdModel model)
         {
-            if (model.NewPassword == model.OldPassword)
-                ModelState.AddModelError("NewPassword", "Le nouveau mot de passe doit être différent de l'ancien !");
+            if (model.NewPassword == model.OldPassword) ModelState.AddModelError("NewPassword", "Le nouveau mot de passe doit être différent de l'ancien !");
 
-            if (!ModelState.IsValid)
-                return View(model);
+            if (!ModelState.IsValid) return View(model);
 
-            UserModel localModel = SessionService.GetConnectedUser();
+            UserModel localModel = UserService.GetConnectedUser();
 
-            if (localModel == null)
-                return RedirectToAction("Error", "Home");
+            if (localModel == null) return RedirectToAction("Error", "Home");
 
             try
             {
@@ -210,10 +188,8 @@ namespace DessertTaCeinture.WEB.Controllers
                     toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                     HttpResponseMessage Res = await client.PutAsync($"api/User?id={localModel.Id}", toUpdate);
-                    if (Res.IsSuccessStatusCode)
-                        return RedirectToAction("Index", "Home");
-                    else
-                        return RedirectToAction("Error", "Home");
+                    if (Res.IsSuccessStatusCode) return RedirectToAction("Index", "Home");
+                    else return RedirectToAction("Error", "Home");
                 }
             }
             catch
@@ -225,21 +201,16 @@ namespace DessertTaCeinture.WEB.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            if (!IsConnectedUser())
-                return View();
+            if (!UserService.IsConnectedUser()) return View();
             else return RedirectToAction("Error", "Home");
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            if (!AuthService.LoginUser(model))
-                return View(model);
+            if (!ModelState.IsValid) return View(model);
+            if (!AuthService.LoginUser(model)) return View(model);
 
             return RedirectToAction("Index", "Home");
         }
@@ -254,19 +225,5 @@ namespace DessertTaCeinture.WEB.Controllers
             AuthService.Logout();
             return RedirectToAction("Index", "Home");
         }
-
-        #region Private methods
-        private bool IsConnectedUser()
-        {
-            if (SessionService.GetConnectedUser() != null) return true;
-            else return false;
-        }
-
-        private bool IsConnectedAdmin()
-        {
-            if (SessionService.GetConnectedAdmin() != null) return true;
-            else return false;
-        }
-        #endregion Private methods
     }
 }
