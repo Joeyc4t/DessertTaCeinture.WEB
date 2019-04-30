@@ -13,29 +13,16 @@ namespace DessertTaCeinture.WEB.Controllers
     public class NewsController : Controller
     {
         #region Instances
-        private Session SessionService = Services.Session.Instance;
         private News NewsService = News.Instance;
-        #endregion
+        private Session SessionService = Services.Session.Instance;
 
-        public ActionResult Index()
-        {
-            if (IsConnectedAdmin())
-                return View(NewsService.GetAll());
-            else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
-        }
-
-        public ActionResult Details(int id)
-        {
-            return View(NewsService.Get(id));
-        }
+        #endregion Instances
 
         public ActionResult Create()
         {
-            if (IsConnectedAdmin())
-                return View();
+            if (IsConnectedAdmin()) return View();
             else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(NewsModel model, HttpPostedFileBase fileUpload)
@@ -63,20 +50,47 @@ namespace DessertTaCeinture.WEB.Controllers
 
                         HttpResponseMessage Res = await client.PostAsync("api/News", toInsert);
 
-                        if (Res.IsSuccessStatusCode)
-                            return RedirectToAction("Index");
-                        else
-                            return RedirectToAction("Error", "Home");
+                        if (Res.IsSuccessStatusCode) return RedirectToAction("Index");
+                        else return RedirectToAction("Error", "Home");
                     }
                 }
-                else return View(model);                
+                else return View(model);
             }
             catch
             {
                 return View(model);
             }
         }
+        public ActionResult Delete(int id)
+        {
+            if (IsConnectedAdmin()) return View(NewsService.Get(id));
+            else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:50140/");
 
+                    HttpResponseMessage Res = await client.DeleteAsync($"api/News?id={id}");
+
+                    if (Res.IsSuccessStatusCode) return RedirectToAction("Index");
+                    else return RedirectToAction("Error", "Home");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("Error", "Home");
+            }
+        }
+        public ActionResult Details(int id)
+        {
+            return View(NewsService.Get(id));
+        }
         public ActionResult Edit(int id)
         {
             if (IsConnectedAdmin())
@@ -86,7 +100,6 @@ namespace DessertTaCeinture.WEB.Controllers
             }
             else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
         }
-
         [HttpPost]
         public async Task<ActionResult> Edit(int id, NewsModel model, HttpPostedFileBase fileUpload)
         {
@@ -114,10 +127,8 @@ namespace DessertTaCeinture.WEB.Controllers
                         toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                         HttpResponseMessage Res = await client.PutAsync($"api/News?id={id}", toUpdate);
-                        if (Res.IsSuccessStatusCode)
-                            return RedirectToAction("Index");
-                        else
-                            return RedirectToAction("Error", "Home");
+                        if (Res.IsSuccessStatusCode) return RedirectToAction("Index");
+                        else return RedirectToAction("Error", "Home");
                     }
                 }
                 catch
@@ -127,36 +138,10 @@ namespace DessertTaCeinture.WEB.Controllers
             }
             else return RedirectToAction("Error", "Home");
         }
-
-        public ActionResult Delete(int id)
+        public ActionResult Index()
         {
-            if (IsConnectedAdmin())
-                return View(NewsService.Get(id));
+            if (IsConnectedAdmin()) return View(NewsService.GetAll());
             else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
-
-                    HttpResponseMessage Res = await client.DeleteAsync($"api/News?id={id}");
-
-                    if (Res.IsSuccessStatusCode)
-                        return RedirectToAction("Index");
-                    else
-                        return RedirectToAction("Error", "Home");
-                }
-            }
-            catch
-            {
-                return RedirectToAction("Error", "Home");
-            }
         }
 
         #region Private methods

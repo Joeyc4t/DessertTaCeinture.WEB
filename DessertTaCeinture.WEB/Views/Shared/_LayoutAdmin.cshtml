@@ -53,14 +53,12 @@
                 <a href="@Url.Action("Index","User")">Utilisateurs</a>
                 <a href="@Url.Action("Index","News")">News</a>
                 <a href="@Url.Action("Index","Messages")">Messages</a>
-                <button class="dropdown-btn">Pages <i class="fa fa-caret-down" style="margin-top: 0.4em;"></i>
+                <button class="dropdown-btn">Live pages<i class="fa fa-caret-down" style="margin-top: 0.4em;"></i>
                 </button>
                 <div class="dropdown-container">
                     <a href="@Url.Action("Recipes","Home")" target="_blank">Recettes</a>
                     <a href="@Url.Action("News","Home")" target="_blank">News</a>
-                    <a href="@Url.Action("Contact","Home")" target="_blank">Contact</a>
                 </div>
-                <a href="@Url.Action("Index","Logs")">Logs</a>
                 <hr />
                 <a href="@Url.Action("Logout","Admin")">Se déconnecter</a>
             </div>
@@ -72,15 +70,6 @@
             </div>
         </div>
     </div>
-
-
-    <footer role="contentinfo" style="height:50px; padding-top: 10px; margin-top: 25px;">
-        <div class="col-md-12 text-center">
-            <div class="col-md-12 text-center copyright">
-                <h4 class="" style="color : black;">&copy; @DateTime.Now.Year Dessert Ta Ceinture.</h4>
-            </div>
-        </div>
-    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")

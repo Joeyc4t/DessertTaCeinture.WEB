@@ -5,18 +5,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="gtco-loader"></div>
 <div id="page">
-    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="height:82px;" data-stellar-background-ratio="0.5">
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="height:300px;" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0">
+                    <div class="row row-mt-15em">
+                        <div style="margin-top:-75px;">
+                            <span class="intro-text-small">Restez informé ...</span>
+                            <div class="mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
+                                <h1 class="cursive-font primary-color">@Model.Title</h1>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="gtco-section">
         <div class="gtco-container" style="margin-top: -50px;">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                    <img src="@Model.ImageUrl" alt="Image" style="height: 350px; width: 350px;" />
-                    <h2 class="cursive-font primary-color">@Model.Title</h2>
+                    <img src="@Model.ImageUrl" alt="Image" style="height: 350px; width: 350px;" />                    
                     <hr />
                     <small>@Model.ReleaseDate.ToString("dd/MM/yyyy")</small>
                 </div>

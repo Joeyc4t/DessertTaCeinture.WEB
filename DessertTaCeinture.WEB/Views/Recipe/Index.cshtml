@@ -16,44 +16,66 @@
                         <div class="col-md-12 animate-box">
                             <div class="form-wrap">
                                 <div class="tab">
-                                    <div class="tab-content">                                        
-                                        @if (Model != null)
-                                        {
-                                            <table class="table">
-                                                @foreach (var item in Model)
-                                                {
+                                    <div class="tab-content">
+                                        <nav class="gtco-nav animate-box">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <a href="@Url.Action("Index", "Home")" style="margin-left: 5px"><img src="~/Content/images/keys/reply.png" alt="Alternate Text" /></a>
+                                                </div>
+                                                <div class="col-sm-8 text-right menu-1">
+                                                    <ul>
+                                                        <li style="margin-right: 5px"><span>@Html.ActionLink("Nouvelle recette", "Create")</span></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </nav>
+                                        <div class="tab-content-inner active" style="margin-top: 6%;">
+                                            @if (Model != null)
+                                            {
+                                                <table class="table">
                                                     <tr>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.Title)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.CreationDate)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.OriginId)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.CategoryId)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.ThemeId)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.IsPublic)
-                                                        </td>
-                                                        <td>
-                                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                                                        </td>
+                                                        <th class="text-center" width="25%">
+                                                            Titre
+                                                        </th>
+                                                        <th class="text-center" width="25%">
+                                                            Date de publication
+                                                        </th>
+                                                        <th class="text-center" width="10%">
+                                                            Publiée
+                                                        </th>
+                                                        <th class="text-center" width="40%">
+                                                            Actions
+                                                        </th>
                                                     </tr>
-                                                }
-                                            </table>
-                                        }
-                                        else
-                                        {
-                                            <h3 class="cursive-font col-md-offset-3">Vous n'avez pas encore de recette ! Créez en une @Html.ActionLink("ici", "Create")</h3>
-                                        }
+                                                    @foreach (var item in Model)
+                                                    {
+                                                        <tr>
+                                                            <td class="text-center" width="25%">
+                                                                @Html.DisplayFor(modelItem => item.Title)
+                                                            </td>
+                                                            <td class="text-center" width="25%">
+                                                                @Html.DisplayFor(modelItem => item.CreationDate)
+                                                            </td>
+                                                            <td class="text-center" width="10%">
+                                                                @if (item.IsPublic)
+                                                                {<img src="~/Content/images/keys/isactive.png" /> }
+                                                                else
+                                                                { <img src="~/Content/images/keys/isnotactive.png" />}
+                                                            </td>
+                                                            <td class="text-center" width="40%">
+                                                                <a href="@Url.Action("Edit","Recipe", new { id = item.Id })">EDIT</a>&nbsp;
+                                                                <a href="@Url.Action("Details","Recipe", new { id = item.Id })" target="_blank">VIEW</a>&nbsp;
+                                                                <a href="@Url.Action("Delete","Recipe", new { id = item.Id })">DELETE</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <h3 class="cursive-font col-md-offset-3">Vous n'avez pas encore de recette ! Créez en une @Html.ActionLink("ici", "Create")</h3>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -50,16 +50,15 @@
 @using (Html.BeginForm("Create", "Recipe", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <div class="gtco-loader"></div>
     <div id="page">
-        <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="height:350px; margin-bottom: -300px;">
+        <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="height:300px;">
             <div class="overlay"></div>
             <div class="gtco-container">
                 <div class="row">
                     <div class="col-md-12 col-md-offset-0">
                         <div class="row row-mt-15em">
                             <div style="margin-top:-75px;">
-                                <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
+                                <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:0;">
                                     <h1 class="cursive-font">Nouvelle recette</h1>
                                 </div>
                             </div>
@@ -73,7 +72,7 @@
             <div class="gtco-container">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="row row-mt-15em">
+                        <div class="row">
                             <div class="col-md-12 animate-box">
                                 <div class="form-wrap">
                                     <div class="tab">
@@ -135,10 +134,10 @@
 
                                                 <div class="col-md-8 col-md-offset-4">
                                                     <div class="col-md-3">
-                                                        <input id="addIngredient" type="button" class="btn btn-primary btn-block" onclick="AddRow()" value="+" />
+                                                        <input id="addIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="AddRow()" value="+" />
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <input id="delIngredient" type="button" class="btn btn-primary btn-block" onclick="DelRow()" value="-" />
+                                                        <input id="delIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="DelRow()" value="-" />
                                                     </div>
                                                 </div>
                                                 <br />
@@ -153,10 +152,10 @@
                                                 <br />
                                                 <div class="col-md-8 col-md-offset-2">
                                                     <div class="col-md-6">
-                                                        <input id="addIngredient" type="button" class="btn btn-primary btn-block" onclick="AddStep()" value="Etape supplémentaire" />
+                                                        <input id="addIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="AddStep()" value="Ajouter une étape" />
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input id="delIngredient" type="button" class="btn btn-primary btn-block" onclick="DelStep()" value="Supprimer la dernière étape" />
+                                                        <input id="delIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="DelStep()" value="Supprimer la dernière étape" />
                                                     </div>
                                                 </div>
                                                 <br />
@@ -170,7 +169,7 @@
                                                         <input type="submit" class="btn btn-primary btn-block" value="Enregistrer">
                                                     </div>
                                                     <div class="col-md-3">
-                                                        @Html.ActionLink("Annuler", "Details", "User")
+                                                        @Html.ActionLink("Annuler", "Details", "User", new { @class= "btn btn-primary btn-block" })
                                                     </div>
                                                 </div>
                                             </div>

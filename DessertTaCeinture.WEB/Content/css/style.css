@@ -1338,9 +1338,15 @@ form label {
   outline: none !important;
 }
 
+.btn-primary-invert {
+    background: #fff;
+    color: #FBB448;
+    border: 2px solid #FBB448 !important;
+}
+
 .btn-primary {
   background: #FBB448;
-  color: #fff;
+  color: white;
   border: 2px solid #FBB448 !important;
 }
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {

@@ -13,20 +13,19 @@ namespace DessertTaCeinture.WEB.Controllers
         #region Instances
         private Authentification AuthService = Services.Authentification.Instance;
         private Session SessionService = Services.Session.Instance;
-        #endregion
+
+        #endregion Instances
 
         public ActionResult Index()
         {
-            if (!IsConnectedAdmin())
-                return RedirectToAction("Login");
+            if (!IsConnectedAdmin()) return RedirectToAction("Login");
             else return View();
         }
 
         [HttpGet]
         public ActionResult Login()
         {
-            if (!IsConnectedAdmin())
-                return View();
+            if (!IsConnectedAdmin()) return View();
             else return RedirectToAction("Index");
         }
 
@@ -34,12 +33,8 @@ namespace DessertTaCeinture.WEB.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            if (!AuthService.LoginUser(model))
-                return View(model);
-
+            if (!ModelState.IsValid) return View(model);
+            if (!AuthService.LoginUser(model)) return View(model);
             return RedirectToAction("Index", "Admin");
         }
 

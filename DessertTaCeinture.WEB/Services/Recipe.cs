@@ -1,7 +1,10 @@
 ﻿using DessertTaCeinture.WEB.Models.Category;
 using DessertTaCeinture.WEB.Models.Ingredient;
 using DessertTaCeinture.WEB.Models.Origin;
+using DessertTaCeinture.WEB.Models.Recipe;
 using DessertTaCeinture.WEB.Models.Theme;
+using DessertTaCeinture.WEB.Models.User;
+using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,12 +18,17 @@ namespace DessertTaCeinture.WEB.Services
     {
         #region Instances
         private static Recipe _Instance;
+        private Session SessionService = Services.Session.Instance;
+        private Recipe()
+        {
+        }
+
         public static Recipe Instance
         {
             get { return _Instance = _Instance ?? new Recipe(); }
         }
-        private Recipe() { }
-        #endregion       
+
+        #endregion Instances
 
         public List<CategoryModel> GetCategories()
         {
@@ -55,10 +63,9 @@ namespace DessertTaCeinture.WEB.Services
                 return null;
             }
         }
-
-        public List<ThemeModel> GetThemes()
+        public List<IngredientModel> GetIngredients()
         {
-            List<ThemeModel> items = new List<ThemeModel>();
+            List<IngredientModel> ingredients = new List<IngredientModel>();
 
             try
             {
@@ -68,28 +75,27 @@ namespace DessertTaCeinture.WEB.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage Res = client.GetAsync($"api/Theme").Result;
+                    HttpResponseMessage Res = client.GetAsync($"api/Ingredient").Result;
                     if (Res.IsSuccessStatusCode)
                     {
                         var result = Res.Content.ReadAsStringAsync().Result;
                         if (result != null)
                         {
-                            foreach (ThemeModel theme in JsonConvert.DeserializeObject<List<ThemeModel>>(result))
+                            foreach (IngredientModel category in JsonConvert.DeserializeObject<List<IngredientModel>>(result))
                             {
-                                items.Add(theme);
+                                ingredients.Add(category);
                             }
                         }
                         else return null;
                     }
                 }
-                return items;
+                return ingredients.OrderBy(i => i.Name).ToList();
             }
             catch (Exception ex)
             {
                 return null;
             }
         }
-
         public List<OriginModel> GetOrigins()
         {
             List<OriginModel> items = new List<OriginModel>();
@@ -123,10 +129,9 @@ namespace DessertTaCeinture.WEB.Services
                 return null;
             }
         }
-
-        public List<IngredientModel> GetIngredients()
+        public List<ThemeModel> GetThemes()
         {
-            List<IngredientModel> ingredients = new List<IngredientModel>();
+            List<ThemeModel> items = new List<ThemeModel>();
 
             try
             {
@@ -136,21 +141,57 @@ namespace DessertTaCeinture.WEB.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage Res = client.GetAsync($"api/Ingredient").Result;
+                    HttpResponseMessage Res = client.GetAsync($"api/Theme").Result;
                     if (Res.IsSuccessStatusCode)
                     {
                         var result = Res.Content.ReadAsStringAsync().Result;
                         if (result != null)
                         {
-                            foreach (IngredientModel category in JsonConvert.DeserializeObject<List<IngredientModel>>(result))
+                            foreach (ThemeModel theme in JsonConvert.DeserializeObject<List<ThemeModel>>(result))
                             {
-                                ingredients.Add(category);
+                                items.Add(theme);
                             }
                         }
                         else return null;
                     }
                 }
-                return ingredients.OrderBy(i => i.Name).ToList();
+                return items;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public List<RecipeModel> GetUserRecipes()
+        {
+            UserModel connectedUser = SessionService.GetConnectedUser();
+            List<RecipeModel> recipes = new List<RecipeModel>();
+            DataWrapper<RecipeModel> wrapper = new DataWrapper<RecipeModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetUserRecipes?id={connectedUser.Id}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        wrapper = JsonConvert.DeserializeObject<DataWrapper<RecipeModel>>(result);
+                        if (wrapper.container.entities.Count > 0)
+                        {
+                            foreach (RecipeModel recipe in wrapper.container.entities)
+                            {
+                                recipes.Add(recipe);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return recipes;
             }
             catch (Exception ex)
             {

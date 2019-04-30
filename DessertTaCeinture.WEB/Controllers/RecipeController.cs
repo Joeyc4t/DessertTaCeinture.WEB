@@ -41,8 +41,7 @@ namespace DessertTaCeinture.WEB.Controllers
 
                 return View(model);
             }
-            else
-                return RedirectToAction("Error", "Home");
+            else return RedirectToAction("Error", "Home");
         }
         [HttpPost]
         public async Task<ActionResult> Create(FormCollection collection, HttpPostedFileBase fileUpload)
@@ -81,8 +80,7 @@ namespace DessertTaCeinture.WEB.Controllers
 
             try
             {
-                if (!ModelState.IsValid)
-                    return View(model);
+                if (!ModelState.IsValid) return View(model);
 
                 if (fileUpload != null && fileUpload.ContentLength > 0)
                 {
@@ -112,8 +110,7 @@ namespace DessertTaCeinture.WEB.Controllers
                         }
                         return RedirectToAction("Index");
                     }
-                    else
-                        return RedirectToAction("Error", "Home");
+                    else return RedirectToAction("Error", "Home");
                 }
             }
             catch
@@ -123,10 +120,8 @@ namespace DessertTaCeinture.WEB.Controllers
         }
         public ActionResult Delete(int id)
         {
-            if (IsConnectedUser())
-                return View();
-            else
-                return RedirectToAction("Error", "Home");
+            if (IsConnectedUser()) return View();
+            else return RedirectToAction("Error", "Home");
         }
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
@@ -142,17 +137,13 @@ namespace DessertTaCeinture.WEB.Controllers
         }
         public ActionResult Details(int id)
         {
-            if (IsConnectedUser())
-                return View();
-            else
-                return RedirectToAction("Error", "Home");
+            if (IsConnectedUser()) return View();
+            else return RedirectToAction("Error", "Home");
         }
         public ActionResult Edit(int id)
         {
-            if (IsConnectedUser())
-                return View();
-            else
-                return RedirectToAction("Error", "Home");
+            if (IsConnectedUser()) return View();
+            else return RedirectToAction("Error", "Home");
         }
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
@@ -168,49 +159,11 @@ namespace DessertTaCeinture.WEB.Controllers
         }
         public ActionResult Index()
         {
-            if (IsConnectedUser())
-                return View(GetUserRecipes());
-            else
-                return RedirectToAction("Error", "Home");
+            if (IsConnectedUser()) return View(RecipeService.GetUserRecipes());
+            else return RedirectToAction("Error", "Home");
         }
 
         #region Private methods
-        private List<RecipeModel> GetUserRecipes()
-        {
-            UserModel connectedUser = SessionService.GetConnectedUser();
-            List<RecipeModel> recipes = new List<RecipeModel>();
-            DataWrapper<RecipeModel> wrapper = new DataWrapper<RecipeModel>();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetUserRecipes?id={connectedUser.Id}").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        wrapper = JsonConvert.DeserializeObject<DataWrapper<RecipeModel>>(result);
-                        if (wrapper.container.entities.Count > 0)
-                        {
-                            foreach (RecipeModel recipe in wrapper.container.entities)
-                            {
-                                recipes.Add(recipe);
-                            }
-                        }
-                        else return null;
-                    }
-                }
-                return recipes;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
         private bool IsConnectedUser()
         {
             if (SessionService.GetConnectedUser() != null) return true;
