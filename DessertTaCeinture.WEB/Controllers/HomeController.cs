@@ -30,11 +30,13 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Error()
         {
+            ViewBag.Title = "Une erreur est survenue";
             return View("~/Views/Shared/Errors/GenericError.cshtml");
         }
 
         public ActionResult NotAuthorized()
         {
+            ViewBag.Title = "Accès non autorisé";
             return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
         }
     }

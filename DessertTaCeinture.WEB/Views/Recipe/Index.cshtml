@@ -13,6 +13,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row row-mt-15em">
+                        <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
+                            <h1 class="cursive-font">@ViewBag.Title</h1>
+                        </div>
                         <div class="col-md-12 animate-box">
                             <div class="form-wrap">
                                 <div class="tab">
@@ -63,9 +66,9 @@
                                                                 { <img src="~/Content/images/keys/isnotactive.png" />}
                                                             </td>
                                                             <td class="text-center" width="40%">
-                                                                <a href="@Url.Action("Edit","Recipe", new { id = item.Id })">EDIT</a>&nbsp;
-                                                                <a href="@Url.Action("Details","Recipe", new { id = item.Id })" target="_blank">VIEW</a>&nbsp;
-                                                                <a href="@Url.Action("Delete","Recipe", new { id = item.Id })">DELETE</a>
+                                                                <a href="@Url.Action("Edit","Recipe", new { id = item.Id })"><img src="~/Content/images/keys/edit-yellow.png" /></a>&nbsp;
+                                                                <a href="@Url.Action("Details","Recipe", new { id = item.Id })" target="_blank"><img src="~/Content/images/keys/eye-yellow.png" /></a>&nbsp;
+                                                                <a href="@Url.Action("Delete","Recipe", new { id = item.Id })"><img src="~/Content/images/keys/delete-yellow.png" /></a>
                                                             </td>
                                                         </tr>
                                                     }
@@ -85,5 +88,18 @@
             </div>
         </div>
     </header>
+
+    <div class="gtco-section">
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 

@@ -161,6 +161,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
@@ -216,8 +217,11 @@
     <Content Include="Content\images\backgrounds\linear-gradient.png" />
     <Content Include="Content\images\backgrounds\orange-gradiant.jpg" />
     <Content Include="Content\images\keys\activate.png" />
+    <Content Include="Content\images\keys\delete-yellow.png" />
+    <Content Include="Content\images\keys\edit-yellow.png" />
     <Content Include="Content\images\keys\edit.png" />
     <Content Include="Content\images\keys\email.png" />
+    <Content Include="Content\images\keys\eye-yellow.png" />
     <Content Include="Content\images\keys\eye.png" />
     <Content Include="Content\images\keys\garbage.png" />
     <Content Include="Content\images\keys\isactive.png" />
@@ -470,6 +474,7 @@
     <Content Include="Views\Shared\_RecipeCard.cshtml" />
     <Content Include="Views\Admin\DeleteUser.cshtml" />
     <Content Include="Views\Admin\ActivateUser.cshtml" />
+    <Content Include="Views\Shared\Errors\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
