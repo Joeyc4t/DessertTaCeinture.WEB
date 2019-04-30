@@ -1,6 +1,7 @@
 ﻿using DessertTaCeinture.WEB.Models.Category;
 using DessertTaCeinture.WEB.Models.Origin;
 using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
+using DessertTaCeinture.WEB.Models.Step;
 using DessertTaCeinture.WEB.Models.Theme;
 
 using System;
@@ -36,6 +37,8 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         public string Picture { get; set; }
 
         public IList<Recipe_IngredientModel> RecipeIngredients { get; set; }
+
+        public IList<StepModel> RecipeSteps { get; set; }
 
         [Required]
         [DisplayName("Thématique")]

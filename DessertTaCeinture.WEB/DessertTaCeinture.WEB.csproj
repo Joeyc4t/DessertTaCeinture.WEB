@@ -166,7 +166,7 @@
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\Recipe_IngredientController.cs" />
-    <Compile Include="Controllers\Recipe_StepController.cs" />
+    <Compile Include="Controllers\StepController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -180,7 +180,6 @@
     <Compile Include="Models\Recipe\CreateRecipeModel.cs" />
     <Compile Include="Models\Recipe\RecipeModel.cs" />
     <Compile Include="Models\Recipe_Ingredients\Recipe_IngredientModel.cs" />
-    <Compile Include="Models\Recipe_Step\Recipe_StepModel.cs" />
     <Compile Include="Models\Step\StepModel.cs" />
     <Compile Include="Models\Theme\ThemeModel.cs" />
     <Compile Include="Models\User\DetailsModel.cs" />
@@ -475,10 +474,10 @@
     <Content Include="Views\Admin\DeleteUser.cshtml" />
     <Content Include="Views\Admin\ActivateUser.cshtml" />
     <Content Include="Views\Shared\Errors\NotFound.cshtml" />
+    <Content Include="Views\Step\CreateField.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Recipe_Step\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

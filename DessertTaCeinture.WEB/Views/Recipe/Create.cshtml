@@ -19,23 +19,54 @@
 
 <script type="text/javascript">
 
-    var currentIndex = 0;
+    var currentIngredientIndex = 0;
+    var currentStepIndex = 0;
 
-    function AddRow() {
-        currentIndex++;
-        $.ajax({
-            async: false,
-            type: "GET",
-            url: '/Recipe_Ingredient/CreateField?index=' + currentIndex
-        }).success(function (partialView) {
-            $('#RecipeIngredientsSection').append(partialView);
-        });
+    function AddRow(type) {
+        switch (type) {
+            case 'ingredient':
+                $.ajax({
+                    async: false,
+                    type: "GET",
+                    url: '/Recipe_Ingredient/CreateField?index=' + currentIngredientIndex
+                }).success(function (partialView) {
+                    $('#RecipeIngredientsSection').append(partialView);
+                    });
+                currentIngredientIndex++;
+                break;
+            case 'step':
+                $.ajax({
+                    async: false,
+                    type: "GET",
+                    url: '/Step/CreateField?index=' + currentStepIndex
+                }).success(function (partialView) {
+                    $('#RecipeStepsSection').append(partialView);
+                    });
+                currentStepIndex++;
+                break
+        }
+        
     }
 
-    function DelRow() {
-        var element = document.getElementById("RecipeIngredientsSection");
-        if (element.childElementCount > 1)
-            element.removeChild(RecipeIngredientsSection.lastChild);
+    function DelRow(type) {
+        var rows = null;
+        switch (type) {
+            case 'ingredient':
+                rows = document.querySelectorAll(".ingredientRow");
+                if (rows.length > 1 && currentIngredientIndex > 0) {
+                    rows[rows.length - 1].remove();
+                    currentIngredientIndex--;
+                }
+                break;
+            case 'step':
+                rows = document.querySelectorAll(".stepRow");
+                if (rows.length > 1 && currentIngredientIndex > 0) {
+                    rows[rows.length - 1].remove();
+                    currentStepIndex--;
+                }
+                break;
+        }
+        
     }
 
     function disallowNegativeNumber(e) {
@@ -134,10 +165,10 @@
 
                                                 <div class="col-md-8 col-md-offset-4">
                                                     <div class="col-md-3">
-                                                        <input id="addIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="AddRow()" value="+" />
+                                                        <input id="addIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="AddRow('ingredient')" value="+" />
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <input id="delIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="DelRow()" value="-" />
+                                                        <input id="delIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="DelRow('ingredient')" value="-" />
                                                     </div>
                                                 </div>
                                                 <br />
@@ -147,15 +178,15 @@
                                             <div class="form-horizontal">
                                                 <h3 class="cursive-font">Etapes</h3>
                                                 <hr />
-                                                <div class="row" id="RecipeIngredientsStep">
+                                                <div class="row" id="RecipeStepsSection">
                                                 </div>
                                                 <br />
                                                 <div class="col-md-8 col-md-offset-2">
                                                     <div class="col-md-6">
-                                                        <input id="addIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="AddStep()" value="Ajouter une étape" />
+                                                        <input id="addStep" type="button" class="btn btn-primary-invert btn-block" onclick="AddRow('step')" value="Ajouter une étape" />
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input id="delIngredient" type="button" class="btn btn-primary-invert btn-block" onclick="DelStep()" value="Supprimer la dernière étape" />
+                                                        <input id="delStep" type="button" class="btn btn-primary-invert btn-block" onclick="DelRow('step')" value="Supprimer la dernière étape" />
                                                     </div>
                                                 </div>
                                                 <br />

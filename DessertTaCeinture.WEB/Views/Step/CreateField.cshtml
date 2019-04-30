@@ -1,0 +1,13 @@
+﻿@using DessertTaCeinture.WEB.Services
+
+@model DessertTaCeinture.WEB.Models.Recipe.CreateRecipeModel
+
+@{
+    int i = ViewBag.StepIndex;
+}
+
+<div class="form-group stepRow">
+    <div class="col-md-10 col-md-offset-1">
+        @Html.TextAreaFor(model => model.RecipeSteps[i], new { @class = "form-control", placeholder = (i+1), style="resize:none;" })
+    </div>
+</div>
