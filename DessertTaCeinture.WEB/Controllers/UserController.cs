@@ -50,7 +50,7 @@ namespace DessertTaCeinture.WEB.Controllers
                         client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                         StringContent toInsert = new StringContent(JsonConvert.SerializeObject(localModel));
-                        toInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        toInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
 
                         HttpResponseMessage Res = await client.PostAsync("api/User", toInsert);
                         if (Res.IsSuccessStatusCode) return RedirectToAction("Index", "Home");
@@ -87,7 +87,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(model));
-                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
 
                     HttpResponseMessage Res = await client.PutAsync($"api/User?id={model.Id}", toUpdate);
 
@@ -130,7 +130,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.DeleteAsync($"api/User?id={id}").Result;
 
@@ -185,7 +185,7 @@ namespace DessertTaCeinture.WEB.Controllers
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                     StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(localModel));
-                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
 
                     HttpResponseMessage Res = await client.PutAsync($"api/User?id={localModel.Id}", toUpdate);
                     if (Res.IsSuccessStatusCode) return RedirectToAction("Index", "Home");

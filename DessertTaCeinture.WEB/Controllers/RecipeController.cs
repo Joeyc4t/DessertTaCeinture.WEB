@@ -39,64 +39,11 @@ namespace DessertTaCeinture.WEB.Controllers
             }
             else return RedirectToAction("Error", "Home");
         }
+
         [HttpPost]
         public async Task<ActionResult> Create(FormCollection collection, HttpPostedFileBase fileUpload)
         {
-            CreateRecipeModel model = new CreateRecipeModel()
-            {
-                CreationDate = DateTime.Now,
-                CreatorId = ((UserModel)Session["loggedUser"]).Id,
-                CategoryId = int.Parse(Request.Form["CategoryId"]),
-                OriginId = int.Parse(Request.Form["OriginId"]),
-                ThemeId = int.Parse(Request.Form["ThemeId"]),
-                Title = Request.Form["Title"],
-                IsPublic = bool.Parse(Request.Form["IsPublic"]),
-                RecipeIngredients = new List<Recipe_IngredientModel>(),
-                RecipeSteps = new List<StepModel>()
-            };
-
-            #region Catch ingredients result
-            List<string> requestIngredientResult = new List<string>();
-            int i = 0;
-
-            while (collection["RecipeIngredients[" + i + "]"] != null)
-            {
-                requestIngredientResult.Add(collection["RecipeIngredients[" + i + "]"]);
-                i++;
-            }
-
-            for (int index = 0; index < requestIngredientResult.Count; index++)
-            {
-                string[] ingredient = requestIngredientResult[index].Split(',');
-                model.RecipeIngredients.Add(new Recipe_IngredientModel()
-                {
-                    IngredientId = int.Parse(ingredient[0]),
-                    Quantity = int.Parse(ingredient[1]),
-                    Unit = ingredient[2]
-                });
-            }
-            #endregion
-
-            #region Catch steps result
-            List<string> requestStepResult = new List<string>();
-            int j = 0;
-
-            while (collection["RecipeSteps[" + j + "]"] != null)
-            {
-                requestStepResult.Add(collection["RecipeSteps[" + j + "]"]);
-                j++;
-            }
-
-            for (int index = 0; index < requestStepResult.Count; index++)
-            {
-                string[] steps = requestStepResult[index].Split(',');
-                model.RecipeSteps.Add(new StepModel()
-                {
-                    StepOrder = (index + 1),
-                    Description = steps[0]
-                });
-            }
-            #endregion
+            CreateRecipeModel model = RecipeService.MapCollectionToRecipeModel(Request, collection, ((UserModel)Session["loggedUser"]).Id);
 
             try
             {
@@ -115,7 +62,7 @@ namespace DessertTaCeinture.WEB.Controllers
                     // Create recipe
                     RecipeModel recipeModel = AutoMapper<CreateRecipeModel, RecipeModel>.AutoMap(model);
                     StringContent recipeInsert = new StringContent(JsonConvert.SerializeObject(recipeModel));
-                    recipeInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    recipeInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
                     HttpResponseMessage recipeRes = await client.PostAsync("api/Recipe", recipeInsert);
                     // Get inserted id
                     int recipeId = 0;
@@ -136,11 +83,13 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View(model);
             }
         }
+
         public ActionResult Delete(int id)
         {
             if (IsConnectedUser()) return View();
             else return RedirectToAction("Error", "Home");
         }
+
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
@@ -153,17 +102,20 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View();
             }
         }
+
         public ActionResult Details(int id)
         {
             if (IsConnectedUser()) return View();
             else return RedirectToAction("Error", "Home");
         }
+
         public ActionResult Edit(int id)
         {
             if (IsConnectedUser()) return View();
             else return RedirectToAction("Error", "Home");
         }
-        [HttpPost]
+
+        [HttpPut]
         public ActionResult Edit(int id, FormCollection collection)
         {
             try
@@ -175,6 +127,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 return View();
             }
         }
+
         public ActionResult Index()
         {
             if (IsConnectedUser()) return View(RecipeService.GetUserRecipes());

@@ -16,6 +16,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Services
 {
@@ -24,9 +26,7 @@ namespace DessertTaCeinture.WEB.Services
         #region Instances
         private static Recipe _Instance;
         private Session SessionService = Services.Session.Instance;
-        private Recipe()
-        {
-        }
+        private Recipe() { }
 
         public static Recipe Instance
         {
@@ -45,7 +45,7 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.GetAsync($"api/Category").Result;
                     if (Res.IsSuccessStatusCode)
@@ -80,7 +80,7 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.GetAsync($"api/Ingredient").Result;
                     if (Res.IsSuccessStatusCode)
@@ -115,7 +115,7 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.GetAsync($"api/Origin").Result;
                     if (Res.IsSuccessStatusCode)
@@ -150,7 +150,7 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.GetAsync($"api/Theme").Result;
                     if (Res.IsSuccessStatusCode)
@@ -187,7 +187,7 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetUserRecipes?id={connectedUser.Id}").Result;
                     if (Res.IsSuccessStatusCode)
@@ -213,6 +213,67 @@ namespace DessertTaCeinture.WEB.Services
             }
         }
 
+        public CreateRecipeModel MapCollectionToRecipeModel(HttpRequestBase request, FormCollection collection, int creatorId)
+        {
+            CreateRecipeModel model = new CreateRecipeModel()
+            {
+                CreationDate = DateTime.Now,
+                CreatorId = creatorId,
+                CategoryId = int.Parse(request.Form["CategoryId"]),
+                OriginId = int.Parse(request.Form["OriginId"]),
+                ThemeId = int.Parse(request.Form["ThemeId"]),
+                Title = request.Form["Title"],
+                IsPublic = bool.Parse(request.Form["IsPublic"]),
+                RecipeIngredients = new List<Recipe_IngredientModel>(),
+                RecipeSteps = new List<StepModel>()
+            };
+
+            #region Catch ingredients result
+            List<string> requestIngredientResult = new List<string>();
+
+            int i = 0;
+            while (collection["RecipeIngredients[" + i + "]"] != null)
+            {
+                requestIngredientResult.Add(collection["RecipeIngredients[" + i + "]"]);
+                i++;
+            }
+
+            for (int index = 0; index < requestIngredientResult.Count; index++)
+            {
+                string[] ingredient = requestIngredientResult[index].Split(',');
+                model.RecipeIngredients.Add(new Recipe_IngredientModel()
+                {
+                    IngredientId = int.Parse(ingredient[0]),
+                    Quantity = int.Parse(ingredient[1]),
+                    Unit = ingredient[2]
+                });
+            }
+            #endregion
+
+            #region Catch steps result
+            List<string> requestStepResult = new List<string>();
+            int j = 0;
+
+            while (collection["RecipeSteps[" + j + "]"] != null)
+            {
+                requestStepResult.Add(collection["RecipeSteps[" + j + "]"]);
+                j++;
+            }
+
+            for (int index = 0; index < requestStepResult.Count; index++)
+            {
+                string[] steps = requestStepResult[index].Split(',');
+                model.RecipeSteps.Add(new StepModel()
+                {
+                    StepOrder = (index + 1),
+                    Description = steps[0]
+                });
+            }
+            #endregion
+
+            return model;
+        }
+
         public async Task<bool> RegisterIngredientsLinks(HttpClient client, int recipeId, IList<Recipe_IngredientModel> items)
         {
             bool isComplete = true;
@@ -222,7 +283,7 @@ namespace DessertTaCeinture.WEB.Services
                 item.RecipeId = recipeId;
 
                 StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
-                itemInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
                 HttpResponseMessage itemRes = await client.PostAsync("api/Recipe_Ingredients", itemInsert);
 
                 if (itemRes.IsSuccessStatusCode) continue;
@@ -240,7 +301,7 @@ namespace DessertTaCeinture.WEB.Services
                 item.RecipeId = recipeId;
 
                 StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
-                itemInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
                 HttpResponseMessage itemRes = await client.PostAsync("api/Step", itemInsert);
 
                 if (itemRes.IsSuccessStatusCode) continue;

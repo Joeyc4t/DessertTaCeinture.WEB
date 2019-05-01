@@ -47,7 +47,7 @@ namespace DessertTaCeinture.WEB.Controllers
                         client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                         StringContent toInsert = new StringContent(JsonConvert.SerializeObject(model));
-                        toInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        toInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
 
                         HttpResponseMessage Res = await client.PostAsync("api/News", toInsert);
 
@@ -125,7 +125,7 @@ namespace DessertTaCeinture.WEB.Controllers
                         client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                         StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(model));
-                        toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
 
                         HttpResponseMessage Res = await client.PutAsync($"api/News?id={id}", toUpdate);
                         if (Res.IsSuccessStatusCode) return RedirectToAction("Index");

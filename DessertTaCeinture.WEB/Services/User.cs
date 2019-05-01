@@ -33,7 +33,7 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.GetAsync($"api/User?id={model.Email}").Result;
                     if (Res.IsSuccessStatusCode)
@@ -60,7 +60,7 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.GetAsync($"api/User?id={email}").Result;
                     if (Res.IsSuccessStatusCode)
@@ -92,7 +92,7 @@ namespace DessertTaCeinture.WEB.Services
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
                     HttpResponseMessage Res = client.GetAsync($"api/User").Result;
                     if (Res.IsSuccessStatusCode)
