@@ -179,6 +179,7 @@
     <Compile Include="Models\Picture\PictureModel.cs" />
     <Compile Include="Models\Recipe\CreateRecipeModel.cs" />
     <Compile Include="Models\Recipe\RecipeModel.cs" />
+    <Compile Include="Models\Recipe\RecipeViewModel.cs" />
     <Compile Include="Models\Recipe_Ingredients\Recipe_IngredientModel.cs" />
     <Compile Include="Models\Step\StepModel.cs" />
     <Compile Include="Models\Theme\ThemeModel.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Tools\AutoMapper.cs" />
     <Compile Include="Tools\DataContainer.cs" />
     <Compile Include="Tools\DataWrapper.cs" />
+    <Compile Include="Tools\StaticValues.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\animate.css" />
@@ -478,6 +480,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

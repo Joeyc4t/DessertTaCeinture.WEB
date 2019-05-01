@@ -47,7 +47,7 @@ namespace DessertTaCeinture.WEB.Controllers
 
                     using (var client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri("http://localhost:50140/");
+                        client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                         StringContent toInsert = new StringContent(JsonConvert.SerializeObject(localModel));
                         toInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -85,7 +85,7 @@ namespace DessertTaCeinture.WEB.Controllers
 
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(model));
                     toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
@@ -128,7 +128,7 @@ namespace DessertTaCeinture.WEB.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -182,7 +182,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 {
                     localModel.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, localModel.Salt);
 
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                     StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(localModel));
                     toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");

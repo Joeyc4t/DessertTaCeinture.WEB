@@ -1,4 +1,5 @@
 ﻿using DessertTaCeinture.WEB.Models.User;
+using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace DessertTaCeinture.WEB.Services
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -57,7 +58,7 @@ namespace DessertTaCeinture.WEB.Services
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -89,7 +90,7 @@ namespace DessertTaCeinture.WEB.Services
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

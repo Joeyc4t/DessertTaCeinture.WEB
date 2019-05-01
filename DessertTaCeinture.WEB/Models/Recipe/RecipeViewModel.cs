@@ -11,9 +11,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DessertTaCeinture.WEB.Models.Recipe
 {
-    public class CreateRecipeModel
+    public class RecipeViewModel
     {
         [Required]
+        [DisplayName("Catégorie")]
         public int CategoryId { get; set; }
 
         [Required]
@@ -23,27 +24,31 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         public int CreatorId { get; set; }
 
         [Required]
+        [DisplayName("Partager")]
         public bool IsPublic { get; set; }
 
+        [DisplayName("Provenance")]
+        public int OriginId { get; set; }
+
         [Required]
+        [DisplayName("Thématique")]
         public int ThemeId { get; set; }
 
-        [Required]
-        public string Title { get; set; }
 
-        public int OriginId { get; set; }
+        [Required]
+        [DisplayName("Intitulé")]
+        public string Title { get; set; }
 
         public string Picture { get; set; }
 
-        public OriginModel Origins { get; set; }
+        public virtual List<OriginModel> Origins { get; set; }
 
-        public CategoryModel Categories { get; set; }
+        public virtual List<CategoryModel> Categories { get; set; }
 
-        public ThemeModel Themes { get; set; }
+        public virtual List<ThemeModel> Themes { get; set; }
 
         public IList<Recipe_IngredientModel> RecipeIngredients { get; set; }
 
         public IList<StepModel> RecipeSteps { get; set; }
-
     }
 }

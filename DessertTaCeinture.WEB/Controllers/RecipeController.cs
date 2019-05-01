@@ -1,5 +1,6 @@
 ﻿using DessertTaCeinture.WEB.Models.Recipe;
 using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
+using DessertTaCeinture.WEB.Models.Step;
 using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Services;
 using DessertTaCeinture.WEB.Tools;
@@ -10,7 +11,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Controllers
@@ -29,17 +29,13 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             if (IsConnectedUser())
             {
-                CreateRecipeModel model = new CreateRecipeModel()
+                RecipeViewModel viewModel = new RecipeViewModel()
                 {
                     Categories = RecipeService.GetCategories(),
                     Origins = RecipeService.GetOrigins(),
-                    Themes = RecipeService.GetThemes(),
-                    RecipeIngredients = new List<Recipe_IngredientModel>()
+                    Themes = RecipeService.GetThemes()
                 };
-
-                model.RecipeIngredients.Add(new Recipe_IngredientModel() { Index = 1 });
-
-                return View(model);
+                return View(viewModel);
             }
             else return RedirectToAction("Error", "Home");
         }
@@ -54,29 +50,53 @@ namespace DessertTaCeinture.WEB.Controllers
                 OriginId = int.Parse(Request.Form["OriginId"]),
                 ThemeId = int.Parse(Request.Form["ThemeId"]),
                 Title = Request.Form["Title"],
-                RecipeIngredients = new List<Recipe_IngredientModel>()
+                IsPublic = bool.Parse(Request.Form["IsPublic"]),
+                RecipeIngredients = new List<Recipe_IngredientModel>(),
+                RecipeSteps = new List<StepModel>()
             };
 
-            List<string> requestResult = new List<string>();
-            int i = 1;
+            #region Catch ingredients result
+            List<string> requestIngredientResult = new List<string>();
+            int i = 0;
 
             while (collection["RecipeIngredients[" + i + "]"] != null)
             {
-                requestResult.Add(collection["RecipeIngredients[" + i + "]"]);
+                requestIngredientResult.Add(collection["RecipeIngredients[" + i + "]"]);
                 i++;
             }
 
-            for (int j = 0; j < requestResult.Count; j++)
+            for (int index = 0; index < requestIngredientResult.Count; index++)
             {
-                string[] ingredient = requestResult[j].Split(',');
+                string[] ingredient = requestIngredientResult[index].Split(',');
                 model.RecipeIngredients.Add(new Recipe_IngredientModel()
                 {
-                    Index = j,
                     IngredientId = int.Parse(ingredient[0]),
                     Quantity = int.Parse(ingredient[1]),
                     Unit = ingredient[2]
                 });
             }
+            #endregion
+
+            #region Catch steps result
+            List<string> requestStepResult = new List<string>();
+            int j = 0;
+
+            while (collection["RecipeSteps[" + j + "]"] != null)
+            {
+                requestStepResult.Add(collection["RecipeSteps[" + j + "]"]);
+                j++;
+            }
+
+            for (int index = 0; index < requestStepResult.Count; index++)
+            {
+                string[] steps = requestStepResult[index].Split(',');
+                model.RecipeSteps.Add(new StepModel()
+                {
+                    StepOrder = (index + 1),
+                    Description = steps[0]
+                });
+            }
+            #endregion
 
             try
             {
@@ -91,24 +111,22 @@ namespace DessertTaCeinture.WEB.Controllers
 
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     // Create recipe
                     RecipeModel recipeModel = AutoMapper<CreateRecipeModel, RecipeModel>.AutoMap(model);
                     StringContent recipeInsert = new StringContent(JsonConvert.SerializeObject(recipeModel));
                     recipeInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     HttpResponseMessage recipeRes = await client.PostAsync("api/Recipe", recipeInsert);
-                    if (recipeRes.IsSuccessStatusCode)
+                    // Get inserted id
+                    int recipeId = 0;
+                    Int32.TryParse(recipeRes.Headers.Location.Query.Split('=')[1], out recipeId);
+                    if (recipeRes.IsSuccessStatusCode && recipeId > 0)
                     {
-                        // Create links
-                        foreach (var item in model.RecipeIngredients)
-                        {
-                            StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
-                            itemInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                            HttpResponseMessage itemRes = await client.PostAsync("api/Recipe_Ingredients", itemInsert);
-                            if (itemRes.IsSuccessStatusCode) continue;
-                            else RedirectToAction("Error", "Home");
-                        }
-                        return RedirectToAction("Index");
+                        bool ingredientsComplete = await RecipeService.RegisterIngredientsLinks(client, recipeId, model.RecipeIngredients);
+                        bool stepsComplete = await RecipeService.RegisterStepsLinks(client, recipeId, model.RecipeSteps);
+                        
+                        if(ingredientsComplete && stepsComplete) return RedirectToAction("Index");
+                        else return RedirectToAction("Error", "Home");
                     }
                     else return RedirectToAction("Error", "Home");
                 }

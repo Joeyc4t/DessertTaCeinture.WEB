@@ -2,15 +2,20 @@
 using DessertTaCeinture.WEB.Models.Ingredient;
 using DessertTaCeinture.WEB.Models.Origin;
 using DessertTaCeinture.WEB.Models.Recipe;
+using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
+using DessertTaCeinture.WEB.Models.Step;
 using DessertTaCeinture.WEB.Models.Theme;
 using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Tools;
+
 using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace DessertTaCeinture.WEB.Services
 {
@@ -38,7 +43,7 @@ namespace DessertTaCeinture.WEB.Services
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -73,7 +78,7 @@ namespace DessertTaCeinture.WEB.Services
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -108,7 +113,7 @@ namespace DessertTaCeinture.WEB.Services
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -143,7 +148,7 @@ namespace DessertTaCeinture.WEB.Services
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -180,7 +185,7 @@ namespace DessertTaCeinture.WEB.Services
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -206,6 +211,42 @@ namespace DessertTaCeinture.WEB.Services
                 // LOG ERROR
                 return null;
             }
+        }
+
+        public async Task<bool> RegisterIngredientsLinks(HttpClient client, int recipeId, IList<Recipe_IngredientModel> items)
+        {
+            bool isComplete = true;
+            // Create ingredients links
+            foreach (var item in items)
+            {
+                item.RecipeId = recipeId;
+
+                StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
+                itemInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpResponseMessage itemRes = await client.PostAsync("api/Recipe_Ingredients", itemInsert);
+
+                if (itemRes.IsSuccessStatusCode) continue;
+                else isComplete = false;
+            }
+            return isComplete;
+        }
+
+        public async Task<bool> RegisterStepsLinks(HttpClient client, int recipeId, IList<StepModel> items)
+        {
+            bool isComplete = true;
+            // Create steps links
+            foreach (var item in items)
+            {
+                item.RecipeId = recipeId;
+
+                StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
+                itemInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpResponseMessage itemRes = await client.PostAsync("api/Step", itemInsert);
+
+                if (itemRes.IsSuccessStatusCode) continue;
+                else isComplete = false;
+            }
+            return isComplete;
         }
     }
 }

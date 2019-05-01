@@ -1,5 +1,6 @@
 ﻿using DessertTaCeinture.WEB.Models.News;
 using DessertTaCeinture.WEB.Services;
+using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -43,7 +44,7 @@ namespace DessertTaCeinture.WEB.Controllers
 
                     using (var client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri("http://localhost:50140/");
+                        client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                         StringContent toInsert = new StringContent(JsonConvert.SerializeObject(model));
                         toInsert.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -74,7 +75,7 @@ namespace DessertTaCeinture.WEB.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50140/");
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                     HttpResponseMessage Res = await client.DeleteAsync($"api/News?id={id}");
 
@@ -121,7 +122,7 @@ namespace DessertTaCeinture.WEB.Controllers
 
                     using (var client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri("http://localhost:50140/");
+                        client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
                         StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(model));
                         toUpdate.Headers.ContentType = new MediaTypeHeaderValue("application/json");

@@ -9,8 +9,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
     public class Recipe_IngredientModel
     {
         #region Fields
-        private int _ConcatId;
-        private int _Index;
+        private int _Id;
         private int _IngredientId;
         private int _Quantity;
         private int _RecipeId;
@@ -25,24 +24,11 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
         {
             get
             {
-                return _ConcatId;
+                return _Id;
             }
             set
             {
-                _ConcatId = Convert.ToInt32((RecipeId.ToString()) + (IngredientId.ToString()));
-            }
-        }
-
-        [Required]
-        public int Index
-        {
-            get
-            {
-                return _Index;
-            }
-            set
-            {
-                _Index = value;
+                _Id = Convert.ToInt32((RecipeId.ToString()) + (IngredientId.ToString()));
             }
         }
 
