@@ -174,10 +174,12 @@
     <Compile Include="Models\Category\CategoryModel.cs" />
     <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Models\Ingredient\IngredientModel.cs" />
+    <Compile Include="Models\Ingredient\IngredientViewModel.cs" />
     <Compile Include="Models\News\NewsModel.cs" />
     <Compile Include="Models\Origin\OriginModel.cs" />
     <Compile Include="Models\Picture\PictureModel.cs" />
     <Compile Include="Models\Recipe\CreateRecipeModel.cs" />
+    <Compile Include="Models\Recipe\RecipeDetailViewModel.cs" />
     <Compile Include="Models\Recipe\RecipeModel.cs" />
     <Compile Include="Models\Recipe\RecipeViewModel.cs" />
     <Compile Include="Models\Recipe_Ingredients\Recipe_IngredientModel.cs" />
@@ -227,6 +229,7 @@
     <Content Include="Content\images\keys\garbage.png" />
     <Content Include="Content\images\keys\isactive.png" />
     <Content Include="Content\images\keys\isnotactive.png" />
+    <Content Include="Content\images\keys\list-style-16.png" />
     <Content Include="Content\images\keys\magnifier.png" />
     <Content Include="Content\images\keys\placeholder.png" />
     <Content Include="Content\images\keys\plus.png" />
@@ -477,6 +480,14 @@
     <Content Include="Views\Admin\ActivateUser.cshtml" />
     <Content Include="Views\Shared\Errors\NotFound.cshtml" />
     <Content Include="Views\Step\CreateField.cshtml" />
+    <Content Include="Views\Recipe\Details.cshtml" />
+    <Content Include="Views\Shared\_TagsBanner.cshtml" />
+    <Content Include="Views\Shared\_RecipeDescriptivePart.cshtml" />
+    <Content Include="Views\Shared\_RecipeHeaderPart.cshtml" />
+    <Content Include="Views\Shared\_RecipeCreationIngredientsPart.cshtml" />
+    <Content Include="Views\Shared\_RecipeCreationStepsPart.cshtml" />
+    <Content Include="Views\Shared\_RecipeCreationDetailsPart.cshtml" />
+    <Content Include="Views\Recipe\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

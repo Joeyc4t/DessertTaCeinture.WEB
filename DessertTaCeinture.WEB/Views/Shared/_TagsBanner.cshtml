@@ -1,0 +1,16 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeDetailViewModel
+
+<div class="col-md-12">
+    @if (Model.Theme != null)
+    {
+        <a href="#" class="badge orangeBadge pull-right">@Model.Theme.Name</a>
+    }
+    @if (Model.Category != null)
+    {
+        <a href="#" class="badge orangeBadge pull-right">@Model.Category.Name</a>
+    }    
+    @if (Model.Origin != null)
+    {
+        <a href="#" class="badge orangeBadge pull-right">@Model.Origin.Country</a>
+    }
+</div>

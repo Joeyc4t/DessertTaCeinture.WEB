@@ -1,0 +1,41 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeDetailViewModel
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="page">
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="height:300px;" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0">
+                    <div class="row row-mt-15em">
+                        <div style="margin-top:-75px;">
+                            @if (Model.Origin != null)
+                            {
+                            <span class="intro-text-small">Par @Model.Creator.FirstName @Model.Creator.LastName :</span>
+                            }
+                            <div class="mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
+                                <h1 class="cursive-font primary-color">@Model.Title</h1>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="gtco-section">
+        <div class="gtco-container" style="margin-top: -75px;">
+            <div class="row">
+                @Html.Partial("_RecipeHeaderPart", Model)
+                
+                @Html.Partial("_TagsBanner", Model)
+                
+                @Html.Partial("_RecipeDescriptivePart", Model)
+            </div>
+        </div>
+    </div>
+</div>

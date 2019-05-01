@@ -2027,3 +2027,28 @@ form label {
     color: black;
     border-bottom: 1px solid orange;
 }
+
+.orangeDashed {
+    border: 2px dashed #FBB448;
+    padding: 25px 25px 50px 25px;
+}
+
+.noListStyle {
+    list-style-type: none;
+}
+
+.customListStyle {
+    list-style-type:none;
+    list-style-image:url("../images/keys/list-style-16.png");
+}
+
+.orangeBadge {
+    background-color: orange;
+    margin:5px;
+}
+
+.stepOrder {
+    font-size:large;
+    text-decoration:underline;
+    font-weight:bold;
+}

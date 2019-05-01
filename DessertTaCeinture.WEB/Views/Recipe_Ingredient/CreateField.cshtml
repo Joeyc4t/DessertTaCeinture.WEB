@@ -9,13 +9,14 @@
     foreach (var ingredient in Recipe.Instance.GetIngredients()) { ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() }); }
 
     List<SelectListItem> units = new List<SelectListItem>();
-    units.Add(new SelectListItem { Text = "pc(s)", Value = "pc" });
     units.Add(new SelectListItem { Text = "mg", Value = "mg" });
-    units.Add(new SelectListItem { Text = "g", Value = "g" });
+    units.Add(new SelectListItem { Text = "gr", Value = "gr" });
     units.Add(new SelectListItem { Text = "kg", Value = "kg" });
     units.Add(new SelectListItem { Text = "ml", Value = "ml" });
     units.Add(new SelectListItem { Text = "cl", Value = "cl" });
     units.Add(new SelectListItem { Text = "l", Value = "l" });
+    units.Add(new SelectListItem { Text = "c-à-c", Value = "c-à-c" });
+    units.Add(new SelectListItem { Text = "c-à-s", Value = "c-à-s" });
 }
 
 <div class="form-group ingredientRow">

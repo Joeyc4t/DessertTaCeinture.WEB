@@ -1,13 +1,13 @@
 ﻿using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Tools;
+
 using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Services
 {
@@ -43,6 +43,33 @@ namespace DessertTaCeinture.WEB.Services
                     }
                 }
                 return globalModel;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public UserModel GetUserById(int id)
+        {
+            UserModel model = new UserModel();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/User/GetUser?id={id}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        model = JsonConvert.DeserializeObject<UserModel>(result);
+                    }
+                }
+                return model;
             }
             catch
             {

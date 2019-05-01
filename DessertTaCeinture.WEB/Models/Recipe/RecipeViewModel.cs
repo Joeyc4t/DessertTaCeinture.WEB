@@ -24,14 +24,14 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         public int CreatorId { get; set; }
 
         [Required]
-        [DisplayName("Partager")]
+        [DisplayName("Rendre publique")]
         public bool IsPublic { get; set; }
-
-        [DisplayName("Provenance")]
-        public int OriginId { get; set; }
+        
+        [DisplayName("Origine")]
+        public int? OriginId { get; set; }
 
         [Required]
-        [DisplayName("Thématique")]
+        [DisplayName("Thème")]
         public int ThemeId { get; set; }
 
 

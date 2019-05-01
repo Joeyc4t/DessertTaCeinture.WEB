@@ -6,7 +6,6 @@ using DessertTaCeinture.WEB.Models.Theme;
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DessertTaCeinture.WEB.Models.Recipe
@@ -31,7 +30,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         [Required]
         public string Title { get; set; }
 
-        public int OriginId { get; set; }
+        public int? OriginId { get; set; }
 
         public string Picture { get; set; }
 

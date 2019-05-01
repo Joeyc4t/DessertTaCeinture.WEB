@@ -1,0 +1,25 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeDetailViewModel
+
+@if(Model.RecipeIngredients != null && Model.RecipeSteps != null)
+{
+    <div class="col-md-12 orangeDashed">
+        <div class="col-md-4">
+            <h3 class="cursive-font">Ingrédients :</h3>
+            <ul>
+                @foreach (var item in Model.RecipeIngredients)
+                {
+                    var unit = item.Unit != string.Empty ? item.Unit : "x";
+                    <li class="customListStyle">@(item.Quantity.ToString() + " " + unit + " " + item.Name)</li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <h3 class="cursive-font">Préparation :</h3>
+            @foreach (var item in Model.RecipeSteps)
+            {
+                <span class="primary-color stepOrder">Etape @item.StepOrder</span>
+                <p>@item.Description</p>
+            }
+        </div>
+    </div>
+}

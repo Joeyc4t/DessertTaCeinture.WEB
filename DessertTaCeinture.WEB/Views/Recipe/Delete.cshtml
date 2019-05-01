@@ -1,7 +1,7 @@
-﻿@model DessertTaCeinture.WEB.Models.User.UserModel
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeModel
 
 @{
-    ViewBag.Title = "Désactivation de compte";
+    ViewBag.Title = "Suppression de recette";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -18,8 +18,8 @@
                                     <div class="tab-content-inner active" data-content="signup">
                                         <h3 class="cursive-font text-center">Désactivation</h3>
                                         <div class="row form-horizontal">
-                                            <p class="text-center  animate-box">Êtes-vous certain de vouloir suspendre votre compte ?</p>
-                                            @using (Html.BeginForm("Delete", "User"))
+                                            <p class="text-center  animate-box">Êtes-vous certain de vouloir supprimer "@Model.Title" ?</p>
+                                            @using (Html.BeginForm("Delete", "Recipe"))
                                             {
                                                 @Html.AntiForgeryToken()
                                                 <div class="row form-group">
@@ -27,7 +27,7 @@
                                                         <input type="submit" class="btn btn-primary btn-block" value="Valider">
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <p>@Html.ActionLink("Annuler", "Details", "User")</p>
+                                                        <p>@Html.ActionLink("Annuler", "Index", "Recipe")</p>
                                                     </div>
                                                 </div>
                                             }
@@ -42,3 +42,4 @@
         </div>
     </header>
 </div>
+

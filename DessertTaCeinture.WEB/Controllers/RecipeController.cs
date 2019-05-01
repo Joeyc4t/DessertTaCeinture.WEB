@@ -1,10 +1,11 @@
 ﻿using DessertTaCeinture.WEB.Models.Recipe;
 using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
-using DessertTaCeinture.WEB.Models.Step;
 using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Services;
 using DessertTaCeinture.WEB.Tools;
+
 using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -21,6 +22,7 @@ namespace DessertTaCeinture.WEB.Controllers
         public List<Recipe_IngredientModel> ingredients = new List<Recipe_IngredientModel>();
         private Recipe RecipeService = Services.Recipe.Instance;
         private Session SessionService = Services.Session.Instance;
+        private User UserService = Services.User.Instance;
 
         #endregion Instances
 
@@ -86,16 +88,34 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Delete(int id)
         {
-            if (IsConnectedUser()) return View();
+            if (IsConnectedUser())
+            {
+                RecipeModel model = RecipeService.GetRecipe(id);
+                return View(model);
+            } 
             else return RedirectToAction("Error", "Home");
         }
 
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async  Task<ActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                return RedirectToAction("Index");
+                using(var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+
+                    bool ingredientsComplete = await RecipeService.DeleteIngredientsLinks(client, id);
+                    bool stepsComplete = await RecipeService.DeleteStepsLinks(client, id);
+
+                    if (ingredientsComplete && stepsComplete)
+                    {
+                        if (await RecipeService.DeleteRecipe(client, id)) return RedirectToAction("Index");
+                        else return RedirectToAction("Error", "Home");
+                    }
+                    else return RedirectToAction("Error", "Home");
+                }
             }
             catch
             {
@@ -105,7 +125,24 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Details(int id)
         {
-            if (IsConnectedUser()) return View();
+            RecipeModel item = RecipeService.GetRecipe(id);
+
+            if (IsConnectedUser())
+            {
+                RecipeDetailViewModel viewModel = new RecipeDetailViewModel()
+                {
+                    Title = item.Title,
+                    CreationDate = item.CreationDate,
+                    Picture = item.Picture,
+                    Creator = UserService.GetUserById(item.CreatorId),
+                    Category = RecipeService.GetCategory(item.CategoryId),
+                    Origin = RecipeService.GetOrigin(item.OriginId),
+                    Theme = RecipeService.GetTheme(item.ThemeId),
+                    RecipeIngredients = RecipeService.GetLinkedIngredients(id),
+                    RecipeSteps = RecipeService.GetLinkedSteps(id)
+                };
+                return View(viewModel);
+            }
             else return RedirectToAction("Error", "Home");
         }
 

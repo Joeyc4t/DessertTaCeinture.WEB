@@ -20,7 +20,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
         #region Properties
 
         [Key]
-        public int ConcatId
+        public int Id
         {
             get
             {
@@ -28,7 +28,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe_Ingredients
             }
             set
             {
-                _Id = Convert.ToInt32((RecipeId.ToString()) + (IngredientId.ToString()));
+                _Id = value;
             }
         }
 
