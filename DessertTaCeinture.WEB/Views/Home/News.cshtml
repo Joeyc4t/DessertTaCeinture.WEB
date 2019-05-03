@@ -18,30 +18,7 @@
                             <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
                                 <h1 class="cursive-font">@ViewBag.Title</h1>
                             </div>
-                            <div class="col-md-12 mt-text animate-box" data-animate-effect="fadeInRight" style="margin-top:-30px; display:none;">
-                                <div class="form-wrap">
-                                    <div class="tab">
-                                        <div class="tab-content">
-                                            <div class="tab-content-inner active">
-                                                <div class="row form-group">
-                                                    <div class="col-md-3 col-sm-6">
-                                                        <input type="text" id="title" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-3 col-sm-6">
-                                                        <input type="text" id="title" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-3 col-sm-6">
-                                                        <input type="text" id="title" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-3 col-sm-6">
-                                                        <input type="text" id="title" class="form-control">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @Html.Partial("_NewsFilter")
                         </div>                        
                     </div>
                 </div>
@@ -51,14 +28,7 @@
 
     <div class="gtco-section">
         <div class="gtco-container" style="margin-top: -100px;">
-            <div class="row">
-                <div class="col-md-12 animate-box">
-                    @foreach (var item in Model)
-                    {
-                        @Html.Partial("_NewsCard", item)
-                    }
-                </div>                
-            </div>
+            @Html.Partial("_LastNewsList", Model)
         </div>
     </div>
 </div>

@@ -488,6 +488,11 @@
     <Content Include="Views\Shared\_RecipeCreationStepsPart.cshtml" />
     <Content Include="Views\Shared\_RecipeCreationDetailsPart.cshtml" />
     <Content Include="Views\Recipe\Delete.cshtml" />
+    <Content Include="Views\Shared\_RecipeICanDo.cshtml" />
+    <Content Include="Views\Shared\_RecipeWithout.cshtml" />
+    <Content Include="Views\Shared\_LastRecipesList.cshtml" />
+    <Content Include="Views\Shared\_NewsFilter.cshtml" />
+    <Content Include="Views\Shared\_LastNewsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

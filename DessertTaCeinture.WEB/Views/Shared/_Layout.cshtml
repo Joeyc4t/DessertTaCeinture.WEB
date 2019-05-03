@@ -27,18 +27,18 @@
                         <li class="link"><a href="@Url.Action("Index","Home")">Accueil</a></li>
                         <li class="link"><a href="@Url.Action("Recipes","Home")">Recettes</a></li>
                         <li class="link"><a href="@Url.Action("News","Home")">News</a></li>
-                        <li class="link"><a href="#">Desserts au top</a></li>
-                        <li class="link"><a href="#">Recette au hasard</a></li>
+                        <li class="link"><a href="@Url.Action("TopRecipes","Home")">Desserts au top</a></li>
+                        <li class="link"><a href="@Url.Action("RandomRecipe","Home")">Recette au hasard</a></li>
                         @if (Session["loggedUser"] != null || Session["loggedAdmin"] != null)
                         {
-                        <li class="has-dropdown">
-                            <a href="#">@Session["loggedUserName"]</a>
-                            <ul class="dropdown">
-                                <li><a href="@Url.Action("Details","User")">Mon profil</a></li>
-                                <li><a href="@Url.Action("Index","Recipe")">Mes recettes</a></li>
-                                <li><a href="@Url.Action("Logout","User")">Se déconnecter</a></li>
-                            </ul>
-                        </li>                            
+                            <li class="has-dropdown">
+                                <a href="#">@Session["loggedUserName"]</a>
+                                <ul class="dropdown">
+                                    <li><a href="@Url.Action("Details","User")">Mon profil</a></li>
+                                    <li><a href="@Url.Action("Index","Recipe")">Mes recettes</a></li>
+                                    <li><a href="@Url.Action("Logout","User")">Se déconnecter</a></li>
+                                </ul>
+                            </li>
                         }
                         else
                         {
@@ -75,7 +75,7 @@
                                 <li><a target="_blank" href="https://plus.google.com/discover"><img src="~/Content/images/social/google-plus.png" /></a></li>
                                 <li><a target="_blank" href="https://fr.linkedin.com/"><img src="~/Content/images/social/linkedin.png" /></a></li>
                             </ul>
-                        </div>                        
+                        </div>
                         <div class="col-md-12 text-center copyright">
                             <h4 class="" style="color : white;">&copy; @DateTime.Now.Year Dessert Ta Ceinture.</h4>
                         </div>
@@ -83,11 +83,10 @@
                 </div>
             </div>
         </div>
-    </footer> 
-
+    </footer>
 
     <div class="gototop js-top">
-        <a href="#" class="js-gotop"><img src="~/Content/images/keys/key-console.png" style="margin-top:0.7em;"/></a>
+        <a href="#" class="js-gotop"><img src="~/Content/images/keys/key-console.png" style="margin-top:0.7em;" /></a>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
