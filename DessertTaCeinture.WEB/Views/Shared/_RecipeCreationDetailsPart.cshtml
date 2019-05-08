@@ -6,13 +6,13 @@
     share.Add(new SelectListItem { Text = "Non", Value = false.ToString() });
 
     List<SelectListItem> origins = new List<SelectListItem>();
-    foreach (var origin in Model.Origins) { origins.Add(new SelectListItem { Text = origin.Country, Value = origin.Id.ToString() }); }
+    foreach (var origin in Model.Origins.OrderBy(o => o.Country)) { origins.Add(new SelectListItem { Text = origin.Country, Value = origin.Id.ToString() }); }
 
     List<SelectListItem> themes = new List<SelectListItem>();
-    foreach (var theme in Model.Themes) { themes.Add(new SelectListItem { Text = theme.Name, Value = theme.Id.ToString() }); }
+    foreach (var theme in Model.Themes.OrderBy(t => t.Name)) { themes.Add(new SelectListItem { Text = theme.Name, Value = theme.Id.ToString() }); }
 
     List<SelectListItem> categories = new List<SelectListItem>();
-    foreach (var cat in Model.Categories) { categories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString() }); }
+    foreach (var cat in Model.Categories.OrderBy(c => c.Name)) { categories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString() }); }
 }
 
 <div class="form-horizontal">
