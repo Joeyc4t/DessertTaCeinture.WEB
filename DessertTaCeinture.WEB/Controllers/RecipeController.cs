@@ -73,8 +73,8 @@ namespace DessertTaCeinture.WEB.Controllers
                     {
                         bool ingredientsComplete = await RecipeService.RegisterIngredientsLinks(client, recipeId, model.RecipeIngredients);
                         bool stepsComplete = await RecipeService.RegisterStepsLinks(client, recipeId, model.RecipeSteps);
-                        
-                        if(ingredientsComplete && stepsComplete) return RedirectToAction("Index");
+
+                        if (ingredientsComplete && stepsComplete) return RedirectToAction("Index");
                         else return RedirectToAction("Error", "Home");
                     }
                     else return RedirectToAction("Error", "Home");
@@ -92,17 +92,17 @@ namespace DessertTaCeinture.WEB.Controllers
             {
                 RecipeModel model = RecipeService.GetRecipe(id);
                 return View(model);
-            } 
+            }
             else return RedirectToAction("Error", "Home");
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async  Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                using(var client = new HttpClient())
+                using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
@@ -127,7 +127,7 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             RecipeModel item = RecipeService.GetRecipe(id);
 
-            if (IsConnectedUser())
+            if (item != null)
             {
                 RecipeDetailViewModel viewModel = new RecipeDetailViewModel()
                 {

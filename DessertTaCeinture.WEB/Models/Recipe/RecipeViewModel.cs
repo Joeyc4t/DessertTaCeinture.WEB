@@ -13,6 +13,8 @@ namespace DessertTaCeinture.WEB.Models.Recipe
 {
     public class RecipeViewModel
     {
+        public virtual IEnumerable<CategoryModel> Categories { get; set; }
+
         [Required]
         [DisplayName("Catégorie")]
         public int CategoryId { get; set; }
@@ -26,29 +28,26 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         [Required]
         [DisplayName("Rendre publique")]
         public bool IsPublic { get; set; }
-        
+
         [DisplayName("Origine")]
         public int? OriginId { get; set; }
+
+        public virtual IEnumerable<OriginModel> Origins { get; set; }
+
+        public string Picture { get; set; }
+
+        public IList<Recipe_IngredientModel> RecipeIngredients { get; set; }
+
+        public IList<StepModel> RecipeSteps { get; set; }
 
         [Required]
         [DisplayName("Thème")]
         public int ThemeId { get; set; }
 
+        public virtual IEnumerable<ThemeModel> Themes { get; set; }
 
         [Required]
         [DisplayName("Intitulé")]
         public string Title { get; set; }
-
-        public string Picture { get; set; }
-
-        public virtual List<OriginModel> Origins { get; set; }
-
-        public virtual List<CategoryModel> Categories { get; set; }
-
-        public virtual List<ThemeModel> Themes { get; set; }
-
-        public IList<Recipe_IngredientModel> RecipeIngredients { get; set; }
-
-        public IList<StepModel> RecipeSteps { get; set; }
     }
 }

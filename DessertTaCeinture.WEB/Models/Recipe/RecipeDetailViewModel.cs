@@ -12,22 +12,22 @@ namespace DessertTaCeinture.WEB.Models.Recipe
 {
     public class RecipeDetailViewModel
     {
+        public CategoryModel Category { get; set; }
+
         public DateTime CreationDate { get; set; }
-
-        public string Title { get; set; }
-
-        public string Picture { get; set; }
 
         public UserModel Creator { get; set; }
 
         public OriginModel Origin { get; set; }
 
-        public CategoryModel Category { get; set; }
+        public string Picture { get; set; }
+
+        public IEnumerable<IngredientViewModel> RecipeIngredients { get; set; }
+
+        public IEnumerable<StepModel> RecipeSteps { get; set; }
 
         public ThemeModel Theme { get; set; }
 
-        public IList<IngredientViewModel> RecipeIngredients { get; set; }
-
-        public IList<StepModel> RecipeSteps { get; set; }
+        public string Title { get; set; }
     }
 }

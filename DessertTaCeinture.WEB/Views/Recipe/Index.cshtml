@@ -1,4 +1,4 @@
-﻿@model List<DessertTaCeinture.WEB.Models.Recipe.RecipeModel>
+﻿@model IEnumerable<DessertTaCeinture.WEB.Models.Recipe.RecipeModel>
 
 @{
     ViewBag.Title = "Mes recettes";
@@ -76,7 +76,7 @@
                                             }
                                             else
                                             {
-                                                <h3 class="cursive-font col-md-offset-3">Vous n'avez pas encore de recette ! Créez en une @Html.ActionLink("ici", "Create")</h3>
+                                                <h3 class="cursive-font text-center">Vous n'avez pas encore de recette !</h3>
                                             }
                                         </div>
                                     </div>
@@ -94,7 +94,6 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
-                        
                     </div>
                 </div>
             </div>

@@ -1,0 +1,10 @@
+﻿@model IEnumerable<DessertTaCeinture.WEB.Models.News.NewsModel>
+
+<div class="row">
+    <div class="col-md-12 animate-box">
+        @foreach (var item in Model)
+        {
+            @Html.Partial("_NewsCard", item)
+        }
+    </div>
+</div>
