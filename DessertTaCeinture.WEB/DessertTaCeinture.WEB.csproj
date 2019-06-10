@@ -493,6 +493,12 @@
     <Content Include="Views\Shared\_LastRecipesList.cshtml" />
     <Content Include="Views\Shared\_NewsFilter.cshtml" />
     <Content Include="Views\Shared\_LastNewsList.cshtml" />
+    <Content Include="Views\Recipe\Edit.cshtml" />
+    <Content Include="Views\Shared\_RecipeEditDetailsPart.cshtml" />
+    <Content Include="Views\Shared\_RecipeEditIngredientsPart.cshtml" />
+    <Content Include="Views\Recipe_Ingredient\EditField.cshtml" />
+    <Content Include="Views\Step\EditField.cshtml" />
+    <Content Include="Views\Shared\_RecipeEditStepsPart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

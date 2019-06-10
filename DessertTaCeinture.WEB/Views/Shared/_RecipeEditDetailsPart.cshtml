@@ -1,0 +1,68 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeViewModel
+
+@{
+    List<SelectListItem> share = new List<SelectListItem>();
+    share.Add(new SelectListItem { Text = "Oui", Value = true.ToString() });
+    share.Add(new SelectListItem { Text = "Non", Value = false.ToString() });
+
+    List<SelectListItem> origins = new List<SelectListItem>();
+    foreach (var origin in Model.Origins.OrderBy(o => o.Country)) { origins.Add(new SelectListItem { Text = origin.Country, Value = origin.Id.ToString() }); }
+
+    List<SelectListItem> themes = new List<SelectListItem>();
+    foreach (var theme in Model.Themes.OrderBy(t => t.Name)) { themes.Add(new SelectListItem { Text = theme.Name, Value = theme.Id.ToString() }); }
+
+    List<SelectListItem> categories = new List<SelectListItem>();
+    foreach (var cat in Model.Categories.OrderBy(c => c.Name)) { categories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString() }); }
+}
+
+<div class="form-horizontal">
+    <h3 class="cursive-font">Détails</h3>
+    <hr />
+
+    <div class="form-group" style="width:50%;margin:0 auto;">
+        <img src="@Model.Picture" class="img-rounded img-responsive" alt="Image"/>
+        <input type="file" id="fileUpload" name="fileUpload" size="25" />
+        <br />
+    </div>
+
+    @Html.HiddenFor(model => model.CreatorId)
+    @Html.HiddenFor(model => model.Picture)
+    @Html.HiddenFor(model => model.CreationDate)
+
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group" id="formDetail">
+        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.OriginId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.OriginId, origins, string.Empty, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.CategoryId, categories, string.Empty, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ThemeId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.ThemeId, themes, string.Empty, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ThemeId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsPublic, "Publier", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.IsPublic, share, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.IsPublic, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>

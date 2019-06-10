@@ -79,7 +79,7 @@ namespace DessertTaCeinture.WEB.Models.News
             }
         }
 
-        [DisplayName("Date de publication")]
+        [DisplayName("Publier à partir du")]
         public DateTime ReleaseDate
         {
             get

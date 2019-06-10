@@ -123,6 +123,7 @@ namespace DessertTaCeinture.WEB.Controllers
             }
         }
 
+        [HttpGet]
         public ActionResult Details(int id)
         {
             RecipeModel item = RecipeService.GetRecipe(id);
@@ -148,20 +149,46 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Edit(int id)
         {
-            if (IsConnectedUser()) return View();
+            if (IsConnectedUser())
+            {
+                RecipeViewModel model = RecipeService.GetRecipeFull(id);
+                return View(model);
+            } 
             else return RedirectToAction("Error", "Home");
         }
 
-        [HttpPut]
-        public ActionResult Edit(int id, FormCollection collection)
+        [HttpPost]
+        public async Task<ActionResult> Edit(int id, RecipeViewModel recipeViewModel, HttpPostedFileBase fileUpload)
         {
+            RecipeModel recipeModel = AutoMapper<RecipeViewModel, RecipeModel>.AutoMap(recipeViewModel) ;
+
+            bool recipeUpdated;
+            bool ingredientsUpdated;
+            bool stepsUpdated;
+
             try
             {
-                return RedirectToAction("Index");
+                if (!ModelState.IsValid) return View(recipeViewModel);
+
+                if (fileUpload != null && fileUpload.ContentLength > 0)
+                {
+                    recipeModel.Picture = "/Content/images/recipes/" + fileUpload.FileName;
+                    fileUpload.SaveAs(Server.MapPath("~/Content/images/recipes/" + fileUpload.FileName));
+                }
+
+                using (var client = new HttpClient())
+                {
+                    recipeUpdated = await RecipeService.UpdateRecipe(client, recipeModel);
+                    ingredientsUpdated = await RecipeService.UpdateIngredientsLinks(client, recipeViewModel.RecipeIngredients);
+                    stepsUpdated = await RecipeService.UpdateStepsLinks(client, recipeViewModel.RecipeSteps);
+                }
+
+                if(recipeUpdated && ingredientsUpdated && stepsUpdated) return RedirectToAction("Index");
+                else return RedirectToAction("Error", "Home");
             }
             catch
             {
-                return View();
+                return View(recipeViewModel);
             }
         }
 

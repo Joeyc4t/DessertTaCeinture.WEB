@@ -49,10 +49,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ReleaseDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ReleaseDate, new { htmlAttributes = new { @Value = Model.ReleaseDate.ToString("yyyy/MM/dd"), @class = "form-control", id = "datepicker", width = "276" } })
+                @Html.EditorFor(model => model.ReleaseDate, new { htmlAttributes = new { @Value = Model.ReleaseDate.ToString("yyyy/MM/dd"), @class = "form-control", id = "datepicker", width = "115" } })
                 <script>
                     $('#datepicker').datepicker({
-                        format: 'yyyy-mm-dd'
+                        format: 'yyyy-mm-dd',
+                        todayHighlight: true,
+                        autoclose: true,
+                        clearBtn: true
                     });
                 </script>
             </div>

@@ -14,6 +14,10 @@ namespace DessertTaCeinture.WEB.Models.Recipe
     public class RecipeViewModel
     {
         public virtual IEnumerable<CategoryModel> Categories { get; set; }
+        public virtual IEnumerable<ThemeModel> Themes { get; set; }
+        public virtual IEnumerable<OriginModel> Origins { get; set; }
+
+        public int Id { get; set; }
 
         [Required]
         [DisplayName("Catégorie")]
@@ -32,7 +36,6 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         [DisplayName("Origine")]
         public int? OriginId { get; set; }
 
-        public virtual IEnumerable<OriginModel> Origins { get; set; }
 
         public string Picture { get; set; }
 
@@ -44,7 +47,6 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         [DisplayName("Thème")]
         public int ThemeId { get; set; }
 
-        public virtual IEnumerable<ThemeModel> Themes { get; set; }
 
         [Required]
         [DisplayName("Intitulé")]

@@ -1,0 +1,27 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeViewModel
+
+@{
+    int i = 0;
+}
+
+<div class="form-horizontal">
+    <h3 class="cursive-font">Etapes</h3>
+    <hr />
+    <div class="row" id="RecipeStepsSection">
+
+        @foreach (var item in Model.RecipeSteps)
+        {
+            <div class="form-group stepRow">
+                <div class="col-md-10 col-md-offset-1">
+                    @Html.TextAreaFor(model => model.RecipeSteps[i].Description, new { @class = "form-control", style = "resize:none;" })
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.RecipeSteps[i].StepOrder)
+            @Html.HiddenFor(model => model.RecipeSteps[i].Id)
+            @Html.HiddenFor(model => model.RecipeSteps[i].RecipeId)
+
+            i++;
+        }
+    </div>
+</div>

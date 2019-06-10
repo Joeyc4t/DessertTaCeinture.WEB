@@ -1,0 +1,103 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeViewModel
+
+@{
+    ViewBag.Title = "Edition : " + Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+
+@*window.onload = function () {
+    LoadIngredients(@Model.Id);
+    LoadSteps(@Model.Id);
+};*@
+
+function LoadIngredients(recipeId) {
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: '/Recipe_Ingredient/EditField?recipeId=' + recipeId
+    }).success(function (partialView) {
+        $('#RecipeIngredientsSection').append(partialView);
+    });
+}
+
+function LoadSteps(recipeId) {
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: '/Step/EditField?recipeId=' + recipeId
+    }).success(function (partialView) {
+        $('#RecipeStepsSection').append(partialView);
+    });
+}
+
+function disallowNegativeNumber(e) {
+    var charCode = (e.which) ? e.which : event.keyCode
+    if (charCode == 45) {
+        return false;
+    }
+    return true;
+}
+</script>
+
+@using (Html.BeginForm("Edit", "Recipe", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="page">
+        <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="height:300px;">
+            <div class="overlay"></div>
+            <div class="gtco-container">
+                <div class="row">
+                    <div class="col-md-12 col-md-offset-0">
+                        <div class="row row-mt-15em">
+                            <div style="margin-top:-75px;">
+                                <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:0;">
+                                    <h1 class="cursive-font">@Model.Title</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="gtco-section">
+            <div class="gtco-container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 animate-box">
+                                <div class="form-wrap">
+                                    <div class="tab">
+                                        <div class="tab-content orangeDashed">
+                                            @Html.AntiForgeryToken()
+
+                                            @Html.Partial("_RecipeEditDetailsPart", Model)
+
+                                            @Html.Partial("_RecipeEditIngredientsPart", Model)
+
+                                            @Html.Partial("_RecipeEditStepsPart", Model)
+
+                                            <div class="form-horizontal">
+                                                <div class="col-md-8 col-md-offset-8">
+                                                    <div class="col-md-3">
+                                                        <input type="submit" value="Valider" class="btn btn-primary btn-block" />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        @Html.ActionLink("Annuler", "Index", "Recipe", null, new { @class = "btn btn-primary btn-block" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

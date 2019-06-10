@@ -1,0 +1,48 @@
+﻿@using DessertTaCeinture.WEB.Services
+
+@model DessertTaCeinture.WEB.Models.Recipe.RecipeViewModel
+
+@{
+    int i = 0;
+
+    List<SelectListItem> ingredients = new List<SelectListItem>();
+    foreach (var ingredient in Recipe.Instance.GetIngredients())
+    {
+        ingredients.Add(new SelectListItem
+        {
+            Text = ingredient.Name,
+            Value = ingredient.Id.ToString()
+        });
+    }
+
+    List<SelectListItem> units = new List<SelectListItem>();
+    units.Add(new SelectListItem { Text = string.Empty, Value = string.Empty });
+    units.Add(new SelectListItem { Text = "mg", Value = "mg" });
+    units.Add(new SelectListItem { Text = "gr", Value = "gr" });
+    units.Add(new SelectListItem { Text = "kg", Value = "kg" });
+    units.Add(new SelectListItem { Text = "ml", Value = "ml" });
+    units.Add(new SelectListItem { Text = "cl", Value = "cl" });
+    units.Add(new SelectListItem { Text = "l", Value = "l" });
+    units.Add(new SelectListItem { Text = "c-à-c", Value = "c-à-c" });
+    units.Add(new SelectListItem { Text = "c-à-s", Value = "c-à-s" });
+}
+
+@foreach (var item in Model.RecipeIngredients)
+{
+    var selectedIngredient = new SelectList(ingredients, "Value", "Text", item.IngredientId);
+    var selectedUnit = new SelectList(units, "Value", "Text", item.Unit);
+
+    <div class="form-group ingredientRow">
+        <div class="col-md-3 col-md-offset-2">
+            @Html.DropDownList("RecipeIngredients[" + i + "]", selectedIngredient, htmlAttributes: new { @class = "form-control", id = i + "-selectedIngredient", name = "RecipeIngredients[" + i + "]" })
+        </div>
+        <div class="col-md-2">
+            <input type="number" value="@item.Quantity" name="RecipeIngredients[@i]" class="form-control" min=0 max=9999 onkeypress="return disallowNegativeNumber(event)" />
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownList("RecipeIngredients[" + i + "]", selectedUnit, htmlAttributes: new { @class = "form-control", id = i + "-selectedUnit", name = "RecipeIngredients[" + i + "]" })
+        </div>
+    </div>
+
+    i++;
+}

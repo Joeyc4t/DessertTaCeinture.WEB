@@ -74,6 +74,78 @@ namespace DessertTaCeinture.WEB.Services
             }
             return isComplete;
         }
+        public async Task<bool> RegisterIngredientsLinks(HttpClient client, int recipeId, IList<Recipe_IngredientModel> items)
+        {
+            bool isComplete = true;
+            foreach (var item in items)
+            {
+                item.RecipeId = recipeId;
+
+                StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
+                itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+                HttpResponseMessage itemRes = await client.PostAsync("api/Recipe_Ingredients", itemInsert);
+
+                if (itemRes.IsSuccessStatusCode) continue;
+                else isComplete = false;
+            }
+            return isComplete;
+        }
+        public async Task<bool> RegisterStepsLinks(HttpClient client, int recipeId, IList<StepModel> items)
+        {
+            bool isComplete = true;
+            foreach (var item in items)
+            {
+                item.RecipeId = recipeId;
+
+                StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
+                itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+                HttpResponseMessage itemRes = await client.PostAsync("api/Step", itemInsert);
+
+                if (itemRes.IsSuccessStatusCode) continue;
+                else isComplete = false;
+            }
+            return isComplete;
+        }
+        public async Task<bool> UpdateRecipe(HttpClient client, RecipeModel model)
+        {
+            client.BaseAddress = new Uri(StaticValues.BASE_URI);
+
+            StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(model));
+            toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+
+            HttpResponseMessage Res = await client.PutAsync($"api/Recipe?id={model.Id}", toUpdate);
+            if (Res.IsSuccessStatusCode) return true;
+            else return false;
+        }
+        public async Task<bool> UpdateIngredientsLinks(HttpClient client, IList<Recipe_IngredientModel> items)
+        {
+            bool isComplete = true;
+            foreach (var item in items)
+            {
+                StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(item));
+                toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+                HttpResponseMessage itemRes = await client.PutAsync($"api/Recipe_Ingredients?id={item.Id}", toUpdate);
+
+                if (itemRes.IsSuccessStatusCode) continue;
+                else isComplete = false;
+            }
+            return isComplete;
+        }
+        public async Task<bool> UpdateStepsLinks(HttpClient client, IList<StepModel> items)
+        {
+            bool isComplete = true;
+            foreach (var item in items)
+            {
+                StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(item));
+                toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+                HttpResponseMessage itemRes = await client.PutAsync($"api/Step?id={item.Id}", toUpdate);
+
+                if (itemRes.IsSuccessStatusCode) continue;
+                else isComplete = false;
+            }
+            return isComplete;
+        }
+
         public IEnumerable<CategoryModel> GetCategories()
         {
             List<CategoryModel> items = new List<CategoryModel>();
@@ -107,26 +179,6 @@ namespace DessertTaCeinture.WEB.Services
                 // LOG ERROR
                 return null;
             }
-        }
-        public CategoryModel GetCategory(int categoryId)
-        {
-            CategoryModel item = new CategoryModel();
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                HttpResponseMessage Res = client.GetAsync($"api/Category/{categoryId}").Result;
-                if (Res.IsSuccessStatusCode)
-                {
-                    var result = Res.Content.ReadAsStringAsync().Result;
-                    if (result != null) item = JsonConvert.DeserializeObject<CategoryModel>(result);
-                    else return null;
-                }
-            }
-            return item;
         }
         public IEnumerable<IngredientModel> GetIngredients()
         {
@@ -265,131 +317,13 @@ namespace DessertTaCeinture.WEB.Services
                         else return null;
                     }
                 }
-                return items;
+                return items.OrderBy(s => s.StepOrder);
             }
             catch
             {
                 // LOG ERROR
                 return null;
             }
-        }
-        public OriginModel GetOrigin(int? originId)
-        {
-            if (originId != null)
-            {
-                OriginModel item = new OriginModel();
-
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Origin/{originId}").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null) item = JsonConvert.DeserializeObject<OriginModel>(result);
-                        else return null;
-                    }
-                }
-                return item;
-            }
-            else return null;
-        }
-        public IEnumerable<OriginModel> GetOrigins()
-        {
-            List<OriginModel> items = new List<OriginModel>();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Origin").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null)
-                        {
-                            foreach (OriginModel origin in JsonConvert.DeserializeObject<List<OriginModel>>(result))
-                            {
-                                items.Add(origin);
-                            }
-                        }
-                        else return null;
-                    }
-                }
-                return items.OrderBy(i => i.Country).ToList();
-            }
-            catch
-            {
-                // LOG ERROR
-                return null;
-            }
-        }
-        public RecipeModel GetRecipe(int recipeId)
-        {
-            RecipeModel item = new RecipeModel();
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                HttpResponseMessage Res = client.GetAsync($"api/Recipe/{recipeId}").Result;
-                if (Res.IsSuccessStatusCode)
-                {
-                    var result = Res.Content.ReadAsStringAsync().Result;
-                    if (result != null) item = JsonConvert.DeserializeObject<RecipeModel>(result);
-                    else return null;
-                }
-            }
-            return item;
-        }
-        public Recipe_IngredientModel GetRecipeIngredientLink(int ingredientId, int recipeId)
-        {
-            Recipe_IngredientModel item = new Recipe_IngredientModel();
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients/GetLink?ingredientId={ingredientId}&recipeId={recipeId}").Result;
-                if (Res.IsSuccessStatusCode)
-                {
-                    var result = Res.Content.ReadAsStringAsync().Result;
-                    if (result != null) item = JsonConvert.DeserializeObject<Recipe_IngredientModel>(result);
-                    else return null;
-                }
-            }
-            return item;
-        }
-        public ThemeModel GetTheme(int themeId)
-        {
-            ThemeModel item = new ThemeModel();
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                HttpResponseMessage Res = client.GetAsync($"api/Theme/{themeId}").Result;
-                if (Res.IsSuccessStatusCode)
-                {
-                    var result = Res.Content.ReadAsStringAsync().Result;
-                    if (result != null) item = JsonConvert.DeserializeObject<ThemeModel>(result);
-                    else return null;
-                }
-            }
-            return item;
         }
         public IEnumerable<ThemeModel> GetThemes()
         {
@@ -462,6 +396,180 @@ namespace DessertTaCeinture.WEB.Services
                 return null;
             }
         }
+        public IEnumerable<OriginModel> GetOrigins()
+        {
+            List<OriginModel> items = new List<OriginModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Origin").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (OriginModel origin in JsonConvert.DeserializeObject<List<OriginModel>>(result))
+                            {
+                                items.Add(origin);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return items.OrderBy(i => i.Country).ToList();
+            }
+            catch
+            {
+                // LOG ERROR
+                return null;
+            }
+        }
+
+        public List<Recipe_IngredientModel> GetIngredientsLinks(int recipeId)
+        {
+            List<Recipe_IngredientModel> items = new List<Recipe_IngredientModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients?recipeId={recipeId}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (Recipe_IngredientModel model in JsonConvert.DeserializeObject<List<Recipe_IngredientModel>>(result))
+                            {
+                                items.Add(model);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return items;
+            }
+            catch
+            {
+                // LOG ERROR
+                return null;
+            }
+        }
+
+        public CategoryModel GetCategory(int categoryId)
+        {
+            CategoryModel item = new CategoryModel();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                HttpResponseMessage Res = client.GetAsync($"api/Category/{categoryId}").Result;
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = Res.Content.ReadAsStringAsync().Result;
+                    if (result != null) item = JsonConvert.DeserializeObject<CategoryModel>(result);
+                    else return null;
+                }
+            }
+            return item;
+        }
+        public OriginModel GetOrigin(int? originId)
+        {
+            if (originId != null)
+            {
+                OriginModel item = new OriginModel();
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Origin/{originId}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null) item = JsonConvert.DeserializeObject<OriginModel>(result);
+                        else return null;
+                    }
+                }
+                return item;
+            }
+            else return null;
+        }
+        public RecipeModel GetRecipe(int recipeId)
+        {
+            RecipeModel item = new RecipeModel();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                HttpResponseMessage Res = client.GetAsync($"api/Recipe/{recipeId}").Result;
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = Res.Content.ReadAsStringAsync().Result;
+                    if (result != null) item = JsonConvert.DeserializeObject<RecipeModel>(result);
+                    else return null;
+                }
+            }
+            return item;
+        }
+        public Recipe_IngredientModel GetRecipeIngredientLink(int ingredientId, int recipeId)
+        {
+            Recipe_IngredientModel item = new Recipe_IngredientModel();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients/GetLink?ingredientId={ingredientId}&recipeId={recipeId}").Result;
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = Res.Content.ReadAsStringAsync().Result;
+                    if (result != null) item = JsonConvert.DeserializeObject<Recipe_IngredientModel>(result);
+                    else return null;
+                }
+            }
+            return item;
+        }
+        public ThemeModel GetTheme(int themeId)
+        {
+            ThemeModel item = new ThemeModel();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                HttpResponseMessage Res = client.GetAsync($"api/Theme/{themeId}").Result;
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = Res.Content.ReadAsStringAsync().Result;
+                    if (result != null) item = JsonConvert.DeserializeObject<ThemeModel>(result);
+                    else return null;
+                }
+            }
+            return item;
+        }
         public CreateRecipeModel MapCollectionToRecipeModel(HttpRequestBase request, FormCollection collection, int creatorId)
         {
             CreateRecipeModel model = new CreateRecipeModel()
@@ -524,37 +632,47 @@ namespace DessertTaCeinture.WEB.Services
 
             return model;
         }
-        public async Task<bool> RegisterIngredientsLinks(HttpClient client, int recipeId, IList<Recipe_IngredientModel> items)
+        public RecipeViewModel GetRecipeFull(int recipeId)
         {
-            bool isComplete = true;
-            foreach (var item in items)
+            RecipeModel recipeModel = GetRecipe(recipeId);
+
+            RecipeViewModel recipeVM = new RecipeViewModel()
             {
-                item.RecipeId = recipeId;
+                Id = recipeId,
+                CategoryId = recipeModel.CategoryId,
+                CreationDate = recipeModel.CreationDate,
+                CreatorId = recipeModel.CreatorId,
+                IsPublic = recipeModel.IsPublic,
+                OriginId = recipeModel.OriginId,
+                Picture = recipeModel.Picture,
+                ThemeId = recipeModel.ThemeId,
+                Title = recipeModel.Title,
+                RecipeIngredients = GetIngredientsLinks(recipeId),
+                RecipeSteps = GetLinkedSteps(recipeId).ToList(),
+                Categories = GetCategories(),
+                Origins = GetOrigins(),
+                Themes = GetThemes()
+            };
 
-                StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
-                itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
-                HttpResponseMessage itemRes = await client.PostAsync("api/Recipe_Ingredients", itemInsert);
-
-                if (itemRes.IsSuccessStatusCode) continue;
-                else isComplete = false;
-            }
-            return isComplete;
+            return recipeVM;
         }
-        public async Task<bool> RegisterStepsLinks(HttpClient client, int recipeId, IList<StepModel> items)
+        public int[] GetRecipeIndexes()
         {
-            bool isComplete = true;
-            foreach (var item in items)
+            using(var client = new HttpClient())
             {
-                item.RecipeId = recipeId;
+                client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
 
-                StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
-                itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
-                HttpResponseMessage itemRes = await client.PostAsync("api/Step", itemInsert);
-
-                if (itemRes.IsSuccessStatusCode) continue;
-                else isComplete = false;
+                HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetRecipeIndexes").Result;
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = Res.Content.ReadAsStringAsync().Result;
+                    if (result != null) return JsonConvert.DeserializeObject<int[]>(result);
+                    else return null;
+                }
+                else return null;
             }
-            return isComplete;
         }
     }
 }

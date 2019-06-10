@@ -1,6 +1,7 @@
 ﻿using DessertTaCeinture.WEB.Models.Home;
 using DessertTaCeinture.WEB.Models.Recipe;
 using DessertTaCeinture.WEB.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -27,7 +28,6 @@ namespace DessertTaCeinture.WEB.Controllers
 
             return View(model);
         }
-
         public ActionResult News()
         {
             return View(NewsService.GetAll());
@@ -39,14 +39,16 @@ namespace DessertTaCeinture.WEB.Controllers
         }
         public ActionResult RandomRecipe()
         {
-            return View();
+            Random random = new Random();
+            int[] indexes = RecipeService.GetRecipeIndexes();
+            int i = random.Next(0, indexes.Count());
+            return RedirectToAction("Details", "Recipe", new { id = indexes[i] });
         }
         public ActionResult Recipes()
         {
             List<RecipeModel> model = RecipeService.GetLastPublished().ToList();
             return View(model);
         }
-
         public ActionResult TopRecipes()
         {
             return View();
