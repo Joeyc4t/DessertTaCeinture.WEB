@@ -248,6 +248,40 @@ namespace DessertTaCeinture.WEB.Services
                 return null;
             }
         }
+        public IEnumerable<RecipeModel> GetPublicRecipes()
+        {
+            List<RecipeModel> recipes = new List<RecipeModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetPublicRecipes").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (RecipeModel model in JsonConvert.DeserializeObject<List<RecipeModel>>(result))
+                            {
+                                recipes.Add(model);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return recipes;
+            }
+            catch
+            {
+                // LOG ERROR
+                return null;
+            }
+        }
         public IEnumerable<IngredientViewModel> GetLinkedIngredients(int recipeId)
         {
             List<IngredientViewModel> viewModels = new List<IngredientViewModel>();
@@ -431,6 +465,41 @@ namespace DessertTaCeinture.WEB.Services
             }
         }
 
+        public List<Recipe_IngredientModel> GetRecipe_Ingredients(int? a, int? b, int? c, int? d, bool with)
+        {
+            List<Recipe_IngredientModel> items = new List<Recipe_IngredientModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (Recipe_IngredientModel origin in JsonConvert.DeserializeObject<List<Recipe_IngredientModel>>(result))
+                            {
+                                items.Add(origin);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                if(with) return items.Where(i => i.IngredientId == a || i.IngredientId == b || i.IngredientId == c || i.IngredientId == d).ToList();
+                else return items.Where(i => i.IngredientId != a || i.IngredientId != b || i.IngredientId != c || i.IngredientId != d).ToList();
+            }
+            catch
+            {
+                // LOG ERROR
+                return null;
+            }
+        }
         public List<Recipe_IngredientModel> GetIngredientsLinks(int recipeId)
         {
             List<Recipe_IngredientModel> items = new List<Recipe_IngredientModel>();

@@ -5,6 +5,17 @@
         <img src="@Model.Picture" class="img-rounded img-responsive" alt="Image" style="height: 100%; width: 85%;" />
     </div>
     <div class="col-md-6">
+        @if (Session["loggedUser"] != null)
+        {
+            <div>
+                @Html.Action("Create", "Rate", new { recipeId = Model.Id })
+            </div>
+        }
+        else
+        {
+            <div>
 
+            </div>
+        }
     </div>
 </div>

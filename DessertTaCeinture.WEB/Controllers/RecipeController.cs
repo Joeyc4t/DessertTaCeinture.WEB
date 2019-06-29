@@ -1,5 +1,5 @@
-﻿using DessertTaCeinture.WEB.Models.Recipe;
-using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
+﻿using DessertTaCeinture.WEB.Models.Recipe_Ingredients;
+using DessertTaCeinture.WEB.Models.Recipe;
 using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Services;
 using DessertTaCeinture.WEB.Tools;
@@ -7,12 +7,13 @@ using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
 
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DessertTaCeinture.WEB.Controllers
 {
@@ -20,10 +21,10 @@ namespace DessertTaCeinture.WEB.Controllers
     {
         #region Instances
         public List<Recipe_IngredientModel> ingredients = new List<Recipe_IngredientModel>();
-        private Recipe RecipeService = Services.Recipe.Instance;
-        private Session SessionService = Services.Session.Instance;
-        private User UserService = Services.User.Instance;
-
+        private Recipe recipeService = Services.Recipe.Instance;
+        private Session sessionService = Services.Session.Instance;
+        private User userService = Services.User.Instance;
+        private Search searchService = Services.Search.Instance;
         #endregion Instances
 
         [HttpGet]
@@ -33,9 +34,9 @@ namespace DessertTaCeinture.WEB.Controllers
             {
                 RecipeViewModel viewModel = new RecipeViewModel()
                 {
-                    Categories = RecipeService.GetCategories(),
-                    Origins = RecipeService.GetOrigins(),
-                    Themes = RecipeService.GetThemes()
+                    Categories = recipeService.GetCategories(),
+                    Origins = recipeService.GetOrigins(),
+                    Themes = recipeService.GetThemes()
                 };
                 return View(viewModel);
             }
@@ -45,7 +46,7 @@ namespace DessertTaCeinture.WEB.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(FormCollection collection, HttpPostedFileBase fileUpload)
         {
-            CreateRecipeModel model = RecipeService.MapCollectionToRecipeModel(Request, collection, ((UserModel)Session["loggedUser"]).Id);
+            CreateRecipeModel model = recipeService.MapCollectionToRecipeModel(Request, collection, ((UserModel)Session["loggedUser"]).Id);
 
             try
             {
@@ -71,8 +72,8 @@ namespace DessertTaCeinture.WEB.Controllers
                     Int32.TryParse(recipeRes.Headers.Location.Query.Split('=')[1], out recipeId);
                     if (recipeRes.IsSuccessStatusCode && recipeId > 0)
                     {
-                        bool ingredientsComplete = await RecipeService.RegisterIngredientsLinks(client, recipeId, model.RecipeIngredients);
-                        bool stepsComplete = await RecipeService.RegisterStepsLinks(client, recipeId, model.RecipeSteps);
+                        bool ingredientsComplete = await recipeService.RegisterIngredientsLinks(client, recipeId, model.RecipeIngredients);
+                        bool stepsComplete = await recipeService.RegisterStepsLinks(client, recipeId, model.RecipeSteps);
 
                         if (ingredientsComplete && stepsComplete) return RedirectToAction("Index");
                         else return RedirectToAction("Error", "Home");
@@ -90,7 +91,7 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             if (IsConnectedUser())
             {
-                RecipeModel model = RecipeService.GetRecipe(id);
+                RecipeModel model = recipeService.GetRecipe(id);
                 return View(model);
             }
             else return RedirectToAction("Error", "Home");
@@ -106,12 +107,12 @@ namespace DessertTaCeinture.WEB.Controllers
                 {
                     client.BaseAddress = new Uri(StaticValues.BASE_URI);
 
-                    bool ingredientsComplete = await RecipeService.DeleteIngredientsLinks(client, id);
-                    bool stepsComplete = await RecipeService.DeleteStepsLinks(client, id);
+                    bool ingredientsComplete = await recipeService.DeleteIngredientsLinks(client, id);
+                    bool stepsComplete = await recipeService.DeleteStepsLinks(client, id);
 
                     if (ingredientsComplete && stepsComplete)
                     {
-                        if (await RecipeService.DeleteRecipe(client, id)) return RedirectToAction("Index");
+                        if (await recipeService.DeleteRecipe(client, id)) return RedirectToAction("Index");
                         else return RedirectToAction("Error", "Home");
                     }
                     else return RedirectToAction("Error", "Home");
@@ -124,23 +125,84 @@ namespace DessertTaCeinture.WEB.Controllers
         }
 
         [HttpGet]
+        public ActionResult RecipesICanDo(string a, string b, string c, string d)
+        {
+            List<RecipeViewModel> recipes = new List<RecipeViewModel>();
+            List<int> ingredientIds = new List<int>();
+
+            int? ia = !string.IsNullOrEmpty(a) ? Convert.ToInt32(a) : (int?)null;
+            int? ib = !string.IsNullOrEmpty(b) ? Convert.ToInt32(b) : (int?)null;
+            int? ic = !string.IsNullOrEmpty(c) ? Convert.ToInt32(c) : (int?)null;
+            int? id = !string.IsNullOrEmpty(d) ? Convert.ToInt32(d) : (int?)null;
+
+            List<Recipe_IngredientModel> links = recipeService.GetRecipe_Ingredients(ia, ib, ic, id, true);
+
+            if (ia.HasValue) ingredientIds.Add(ia.Value);
+            if (ib.HasValue) ingredientIds.Add(ib.Value);
+            if (ic.HasValue) ingredientIds.Add(ic.Value);
+            if (id.HasValue) ingredientIds.Add(id.Value);
+
+            foreach(int recipeId in links.Select(l => l.RecipeId).Distinct())
+            {
+                RecipeViewModel tmp = recipeService.GetRecipeFull(recipeId);
+                if(tmp.RecipeIngredients.Select(ri => ri.IngredientId).Any(ingredientIds.Contains) && tmp.IsPublic)
+                {
+                    recipes.Add(tmp);
+                }
+            }
+
+            return View(recipes);
+        }
+
+        [HttpGet]
+        public ActionResult RecipesWithout(string a, string b, string c, string d)
+        {
+            List<RecipeViewModel> recipes = new List<RecipeViewModel>();
+            List<int> ingredientIds = new List<int>();
+
+            int? ia = !string.IsNullOrEmpty(a) ? Convert.ToInt32(a) : (int?)null;
+            int? ib = !string.IsNullOrEmpty(b) ? Convert.ToInt32(b) : (int?)null;
+            int? ic = !string.IsNullOrEmpty(c) ? Convert.ToInt32(c) : (int?)null;
+            int? id = !string.IsNullOrEmpty(d) ? Convert.ToInt32(d) : (int?)null;
+
+            List<Recipe_IngredientModel> links = recipeService.GetRecipe_Ingredients(ia, ib, ic, id, false);
+
+            if (ia.HasValue) ingredientIds.Add(ia.Value);
+            if (ib.HasValue) ingredientIds.Add(ib.Value);
+            if (ic.HasValue) ingredientIds.Add(ic.Value);
+            if (id.HasValue) ingredientIds.Add(id.Value);
+
+            foreach (int recipeId in links.Select(l => l.RecipeId).Distinct())
+            {
+                RecipeViewModel tmp = recipeService.GetRecipeFull(recipeId);
+                if (!tmp.RecipeIngredients.Select(ri => ri.IngredientId).Any(ingredientIds.Contains) && tmp.IsPublic)
+                {
+                    recipes.Add(tmp);
+                }
+            }
+
+            return View(recipes);
+        }
+
+        [HttpGet]
         public ActionResult Details(int id)
         {
-            RecipeModel item = RecipeService.GetRecipe(id);
+            RecipeModel item = recipeService.GetRecipe(id);
 
             if (item != null)
             {
                 RecipeDetailViewModel viewModel = new RecipeDetailViewModel()
                 {
+                    Id = item.Id,
                     Title = item.Title,
                     CreationDate = item.CreationDate,
                     Picture = item.Picture,
-                    Creator = UserService.GetUserById(item.CreatorId),
-                    Category = RecipeService.GetCategory(item.CategoryId),
-                    Origin = RecipeService.GetOrigin(item.OriginId),
-                    Theme = RecipeService.GetTheme(item.ThemeId),
-                    RecipeIngredients = RecipeService.GetLinkedIngredients(id),
-                    RecipeSteps = RecipeService.GetLinkedSteps(id)
+                    Creator = userService.GetUserById(item.CreatorId),
+                    Category = recipeService.GetCategory(item.CategoryId),
+                    Origin = recipeService.GetOrigin(item.OriginId),
+                    Theme = recipeService.GetTheme(item.ThemeId),
+                    RecipeIngredients = recipeService.GetLinkedIngredients(id),
+                    RecipeSteps = recipeService.GetLinkedSteps(id)
                 };
                 return View(viewModel);
             }
@@ -151,7 +213,7 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             if (IsConnectedUser())
             {
-                RecipeViewModel model = RecipeService.GetRecipeFull(id);
+                RecipeViewModel model = recipeService.GetRecipeFull(id);
                 return View(model);
             } 
             else return RedirectToAction("Error", "Home");
@@ -178,9 +240,9 @@ namespace DessertTaCeinture.WEB.Controllers
 
                 using (var client = new HttpClient())
                 {
-                    recipeUpdated = await RecipeService.UpdateRecipe(client, recipeModel);
-                    ingredientsUpdated = await RecipeService.UpdateIngredientsLinks(client, recipeViewModel.RecipeIngredients);
-                    stepsUpdated = await RecipeService.UpdateStepsLinks(client, recipeViewModel.RecipeSteps);
+                    recipeUpdated = await recipeService.UpdateRecipe(client, recipeModel);
+                    ingredientsUpdated = await recipeService.UpdateIngredientsLinks(client, recipeViewModel.RecipeIngredients);
+                    stepsUpdated = await recipeService.UpdateStepsLinks(client, recipeViewModel.RecipeSteps);
                 }
 
                 if(recipeUpdated && ingredientsUpdated && stepsUpdated) return RedirectToAction("Index");
@@ -194,14 +256,14 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Index()
         {
-            if (IsConnectedUser()) return View(RecipeService.GetUserRecipes());
+            if (IsConnectedUser()) return View(recipeService.GetUserRecipes());
             else return RedirectToAction("Error", "Home");
         }
 
         #region Private methods
         private bool IsConnectedUser()
         {
-            if (SessionService.GetConnectedUser() != null) return true;
+            if (sessionService.GetConnectedUser() != null) return true;
             else return false;
         }
 

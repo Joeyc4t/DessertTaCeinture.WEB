@@ -1,0 +1,72 @@
+﻿@model DessertTaCeinture.WEB.Models.Rate.RateModel
+
+<div class="col-md-12" id="rateSection">
+    <div class="col-md-6">
+        <h3 class="cursive-font">Donnez votre avis !</h3>
+    </div>
+    <div class="col-md-6 pull-right">
+        @for (int i = 1; i < 6; i++)
+        {
+            <img class="star" src="~/Content/Images/recipes/star1.gif" id='rate_@i' onmouseover="rate(@i)" height="25" width="25" />
+        }
+    </div>
+    <br />
+    <div class="col-md-12">
+        @Html.TextAreaFor(model => model.Commentary, new { @class = "form-control", rows = 5, style = "resize:none;", id = "txtAreaCommentary" })
+        <div class="pull-right" style="margin-top:25px;">
+            <input type="button" id="SendBtn" value="Envoyer" class="btn btn-primary" onclick="sendRate()" />
+            <input type="button" id="CancelBtn" value="Annuler" class="btn btn-primary" onclick="clearRate()" />
+        </div>
+    </div>
+    <br />
+</div>
+
+
+<script type="text/javascript">
+    var done = false
+    var pic = new Array();
+    pic[0] = new Image();
+    pic[0].src = "@Url.Content("~/Content/images/recipes/star1.gif")";
+    pic[1] = new Image();
+    pic[1].src = "@Url.Content("~/Content/images/recipes/star2.gif")";
+    var currentLevel = 0;
+
+
+    function rate(level)
+    {
+        for (i = 1; i < 6; i++)
+        {
+            document.getElementById('rate_' + i).src = (level < i) ? pic[0].src : pic[1].src;
+        }
+        currentLevel = level;
+    }
+    function clearRate()
+    {
+        for (i = 1; i < 6; i++)
+        {
+            document.getElementById('rate_' + i).src = pic[0].src;
+        }
+        var txtArea = document.getElementById("txtAreaCommentary");
+        txtArea.value = "";
+    }
+    function sendRate()
+    {
+        var recipeId = @Model.RecipeId;
+        var userId = @Model.UserId;
+        var commentary = document.getElementById("txtAreaCommentary").value;
+        var rateOnFive = currentLevel;
+        var date = '@DateTime.Now';
+        
+        $.ajax({
+            type: 'POST',
+            url: '/Rate/Create?recipeId=' + recipeId +
+                             '&userId=' + userId +
+                             '&commentary=' + commentary +
+                             '&rateOnFive=' + rateOnFive +
+                             '&date=' + date
+        }).success(function (partialView)
+        {
+            $('#rateSection').replaceWith(partialView)
+            });
+    }
+</script>

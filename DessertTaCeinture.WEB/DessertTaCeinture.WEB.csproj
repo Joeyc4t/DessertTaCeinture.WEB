@@ -164,6 +164,7 @@
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\Recipe_IngredientController.cs" />
     <Compile Include="Controllers\StepController.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Models\News\NewsModel.cs" />
     <Compile Include="Models\Origin\OriginModel.cs" />
     <Compile Include="Models\Picture\PictureModel.cs" />
+    <Compile Include="Models\Rate\RateModel.cs" />
     <Compile Include="Models\Recipe\CreateRecipeModel.cs" />
     <Compile Include="Models\Recipe\RecipeDetailViewModel.cs" />
     <Compile Include="Models\Recipe\RecipeModel.cs" />
@@ -193,7 +195,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Authentification.cs" />
     <Compile Include="Services\News.cs" />
+    <Compile Include="Services\Rate.cs" />
     <Compile Include="Services\Recipe.cs" />
+    <Compile Include="Services\Search.cs" />
     <Compile Include="Services\Session.cs" />
     <Compile Include="Services\User.cs" />
     <Compile Include="Tools\AutoMapper.cs" />
@@ -240,6 +244,8 @@
     <Content Include="Content\images\pictures\img_1.jpg" />
     <Content Include="Content\images\keys\key-console.png" />
     <Content Include="Content\images\recipes\default-image.png" />
+    <Content Include="Content\images\recipes\star1.gif" />
+    <Content Include="Content\images\recipes\star2.gif" />
     <Content Include="Content\images\social\facebook.png" />
     <Content Include="Content\images\social\google-plus.png" />
     <Content Include="Content\images\social\instagram.png" />
@@ -499,10 +505,20 @@
     <Content Include="Views\Recipe_Ingredient\EditField.cshtml" />
     <Content Include="Views\Step\EditField.cshtml" />
     <Content Include="Views\Shared\_RecipeEditStepsPart.cshtml" />
+    <Content Include="Views\Shared\_NewRate.cshtml" />
+    <Content Include="Views\Shared\_RateSuccess.cshtml" />
+    <Content Include="Views\Shared\_RateFail.cshtml" />
+    <Content Include="Views\Home\RandomRecipe.cshtml" />
+    <Content Include="Views\Home\QuickSearch.cshtml" />
+    <Content Include="Views\Shared\_PublicRecipesList.cshtml" />
+    <Content Include="Views\Recipe\RecipesICanDo.cshtml" />
+    <Content Include="Views\Shared\_PublicRecipesListVM.cshtml" />
+    <Content Include="Views\Recipe\RecipesWithout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Rate\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

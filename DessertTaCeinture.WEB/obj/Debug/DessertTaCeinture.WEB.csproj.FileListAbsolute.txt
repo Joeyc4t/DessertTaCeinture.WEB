@@ -315,4 +315,3 @@ C:\Git\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeinture.W
 C:\Git\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeinture.WEB.csproj.CopyComplete
 C:\Git\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeinture.WEB.dll
 C:\Git\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeinture.WEB.pdb
-C:\GitHub\DessertTaCeinture.WEB\DessertTaCeinture.WEB\obj\Debug\DessertTaCeinture.WEB.csprojAssemblyReference.cache

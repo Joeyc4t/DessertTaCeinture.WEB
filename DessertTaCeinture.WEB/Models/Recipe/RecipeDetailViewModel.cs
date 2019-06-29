@@ -12,6 +12,8 @@ namespace DessertTaCeinture.WEB.Models.Recipe
 {
     public class RecipeDetailViewModel
     {
+        public int Id { get; set; }
+
         public CategoryModel Category { get; set; }
 
         public DateTime CreationDate { get; set; }

@@ -1,28 +1,40 @@
-﻿<div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
-    <div class="form-wrap">
-        <div class="tab">
-            <div class="tab-content">
-                <div class="tab-content-inner active">
-                    <h3 class="cursive-font">Que puis-je faire avec ce que j'ai ?</h3>
-                    <form action="#">
+﻿@using DessertTaCeinture.WEB.Services
+
+@{
+    List<SelectListItem> ingredients = new List<SelectListItem>();
+    ingredients.Add(new SelectListItem() { Text = string.Empty, Value = null });
+    foreach (var ingredient in Recipe.Instance.GetIngredients())
+    {
+        ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() });
+    }
+}
+
+@using (Html.BeginForm("RecipesWithout", "Recipe", FormMethod.Get))
+{
+    <div class="col-md-6 animate-box" data-animate-effect="fadeInRight">
+        <div class="form-wrap">
+            <div class="tab">
+                <div class="tab-content">
+                    <div class="tab-content-inner active">
+                        <h3 class="cursive-font">Recettes sans :</h3>
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input type="text" id="ingredient1" class="form-control" placeholder="Ingrédient 1">
+                                @Html.DropDownList("a", ingredients, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input type="text" id="ingredient2" class="form-control" placeholder="Ingrédient 2">
+                                @Html.DropDownList("b", ingredients, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input type="text" id="ingredient3" class="form-control" placeholder="Ingrédient 3">
+                                @Html.DropDownList("c", ingredients, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input type="text" id="ingredient4" class="form-control" placeholder="Ingrédient 4">
+                                @Html.DropDownList("d", ingredients, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="row form-group">
@@ -30,9 +42,9 @@
                                 <input type="submit" class="btn btn-primary btn-block" value="Rechercher">
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}

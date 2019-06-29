@@ -1,19 +1,20 @@
 ﻿using DessertTaCeinture.WEB.Models.Home;
 using DessertTaCeinture.WEB.Models.Recipe;
 using DessertTaCeinture.WEB.Services;
+
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Collections.Generic;
 
 namespace DessertTaCeinture.WEB.Controllers
 {
     public class HomeController : Controller
     {
         #region Instances
-        private News NewsService = Services.News.Instance;
-        private Recipe RecipeService = Recipe.Instance;
-
+        private News newsService = Services.News.Instance;
+        private Recipe recipeService = Recipe.Instance;
+        private Search searchService = Search.Instance;
         #endregion Instances
 
         public ActionResult Error()
@@ -24,13 +25,13 @@ namespace DessertTaCeinture.WEB.Controllers
         public ActionResult Index()
         {
             IndexViewModel model = new IndexViewModel();
-            model.News = NewsService.GetLastPublished();
+            model.News = newsService.GetLastPublished();
 
             return View(model);
         }
         public ActionResult News()
         {
-            return View(NewsService.GetAll());
+            return View(newsService.GetAll());
         }
         public ActionResult NotAuthorized()
         {
@@ -40,18 +41,36 @@ namespace DessertTaCeinture.WEB.Controllers
         public ActionResult RandomRecipe()
         {
             Random random = new Random();
-            int[] indexes = RecipeService.GetRecipeIndexes();
+            int[] indexes = recipeService.GetRecipeIndexes();
             int i = random.Next(0, indexes.Count());
-            return RedirectToAction("Details", "Recipe", new { id = indexes[i] });
+
+            int recipeId = indexes[i];
+
+            return View(recipeId);
         }
         public ActionResult Recipes()
         {
-            List<RecipeModel> model = RecipeService.GetLastPublished().ToList();
+            List<RecipeModel> model = recipeService.GetLastPublished().ToList();
             return View(model);
         }
         public ActionResult TopRecipes()
         {
             return View();
         }
+        public ActionResult QuickSearch(string searchtext)
+        {
+            var models = recipeService.GetPublicRecipes();
+            if (!string.IsNullOrEmpty(searchtext))
+            {
+                searchtext = searchService.ConvertSearchString(searchtext);
+                var result = new List<RecipeModel>();
+                foreach(RecipeModel model in models)
+                {
+                    if (searchService.ConvertSearchString(model.Title).Contains(searchtext)) result.Add(model);
+                }
+                return View(result);
+            }
+            return View(models);
+        }       
     }
 }

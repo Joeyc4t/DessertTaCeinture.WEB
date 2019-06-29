@@ -1,7 +1,7 @@
-﻿@model IEnumerable<DessertTaCeinture.WEB.Models.News.NewsModel>
+﻿@model List<DessertTaCeinture.WEB.Models.Recipe.RecipeViewModel>
 
 @{
-    ViewBag.Title = "News";
+    ViewBag.Title = "Résultat de la recherche";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,12 +14,10 @@
                 <div class="col-md-12 col-md-offset-0">
                     <div class="row row-mt-15em">
                         <div style="margin-top:-75px;">
-                            <span class="intro-text-small">Restez informé ...</span>
                             <div class="mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
-                                <h1 class="cursive-font primary-color">@ViewBag.Title</h1>
+                                <h1 class="cursive-font primary-color">@ViewBag.Title :</h1>
                             </div>
-                            @*@Html.Partial("_NewsFilter")*@
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
@@ -28,10 +26,8 @@
 
     <div class="gtco-section">
         <div class="gtco-container" style="margin-top: -100px;">
-            @Html.Partial("_LastNewsList", Model)
+            @Html.Partial("_PublicRecipesListVM", Model)
         </div>
     </div>
 </div>
-
-
 

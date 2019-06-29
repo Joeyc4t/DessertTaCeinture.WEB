@@ -1,38 +1,52 @@
-﻿<div class="col-md-6 animate-box" data-animate-effect="fadeInRight">
-    <div class="form-wrap">
-        <div class="tab">
-            <div class="tab-content">
-                <div class="tab-content-inner active">
-                    <h3 class="cursive-font">Spécial allergies :</h3>
-                    <form action="#">
-                        <div class="row form-group">
-                            <div class="col-md-12">
-                                <input type="text" id="without-ingredient1" class="form-control" placeholder="Sans">
+﻿@using DessertTaCeinture.WEB.Services
+
+@{
+    List<SelectListItem> ingredients = new List<SelectListItem>();
+    ingredients.Add(new SelectListItem() { Text = string.Empty, Value = null });
+    foreach (var ingredient in Recipe.Instance.GetIngredients())
+    {
+        ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() });
+    }
+}
+
+@using (Html.BeginForm("RecipesICanDo", "Recipe", FormMethod.Get))
+{
+    <div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
+        <div class="form-wrap">
+            <div class="tab">
+                <div class="tab-content">
+                    <div class="tab-content-inner active">
+                        <h3 class="cursive-font">Que puis-je faire avec ce que j'ai ?</h3>
+                        <form action="#">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("a", ingredients, new { @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12">
-                                <input type="text" id="without-ingredient2" class="form-control" placeholder="Sans">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("b", ingredients, new { @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12">
-                                <input type="text" id="without-ingredient3" class="form-control" placeholder="Sans">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("c", ingredients, new { @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12">
-                                <input type="text" id="without-ingredient4" class="form-control" placeholder="Sans">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("d", ingredients, new { @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12">
-                                <input type="submit" class="btn btn-primary btn-block" value="Rechercher">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <input type="submit" class="btn btn-primary btn-block" value="Rechercher">
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
