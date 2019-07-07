@@ -1,13 +1,12 @@
-﻿@model IEnumerable<DessertTaCeinture.WEB.Models.News.NewsModel>
+﻿@model List<DessertTaCeinture.WEB.Models.Recipe.RecipeModel>
 
 @{
-    ViewBag.Title = "News";
+    ViewBag.Title = "Recettes au top";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="gtco-loader"></div>
 <div id="page">
-    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" data-stellar-background-ratio="0.5" style="height:450px;">
+    <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" data-stellar-background-ratio="0.5" style="height:450px;">
         <div class="overlay"></div>
         <div class="gtco-container">
             <div class="row">
@@ -18,20 +17,16 @@
                             <div class="mt-text animate-box" data-animate-effect="fadeInUp" style="margin-top:-25px;">
                                 <h1 class="cursive-font primary-color">@ViewBag.Title</h1>
                             </div>
-                            @*@Html.Partial("_NewsFilter")*@
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
+</header>
 
     <div class="gtco-section">
         <div class="gtco-container" style="margin-top: -75px;">
-            @Html.Partial("_LastNewsList", Model)
+            @Html.Partial("_TopRecipesList", Model)
         </div>
     </div>
 </div>
-
-
-

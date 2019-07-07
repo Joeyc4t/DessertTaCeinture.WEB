@@ -1,7 +1,7 @@
 ﻿using DessertTaCeinture.WEB.Models.Rate;
 using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
-
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -31,6 +31,23 @@ namespace DessertTaCeinture.WEB.Services
             else isComplete = false;
 
             return isComplete;
+        }
+        public bool? RateExists(HttpClient client, int userId, int recipeId)
+        {
+            using (client)
+            {
+                client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                HttpResponseMessage Res = client.GetAsync($"api/Rate/RateExists?userId={userId}&recipeId={recipeId}").Result;
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = Res.Content.ReadAsStringAsync().Result;
+                    return JsonConvert.DeserializeObject<bool>(result);
+                }
+                else return null;
+            }
         }
     }
 }

@@ -514,6 +514,8 @@
     <Content Include="Views\Recipe\RecipesICanDo.cshtml" />
     <Content Include="Views\Shared\_PublicRecipesListVM.cshtml" />
     <Content Include="Views\Recipe\RecipesWithout.cshtml" />
+    <Content Include="Views\Home\TopRecipes.cshtml" />
+    <Content Include="Views\Shared\_TopRecipesList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

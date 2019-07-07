@@ -55,7 +55,8 @@ namespace DessertTaCeinture.WEB.Controllers
         }
         public ActionResult TopRecipes()
         {
-            return View();
+            IEnumerable<RecipeModel> models = recipeService.GetTopRecipes();
+            return View(models);
         }
         public ActionResult QuickSearch(string searchtext)
         {

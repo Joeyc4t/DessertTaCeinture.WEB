@@ -282,6 +282,40 @@ namespace DessertTaCeinture.WEB.Services
                 return null;
             }
         }
+        public IEnumerable<RecipeModel> GetTopRecipes()
+        {
+            List<RecipeModel> recipes = new List<RecipeModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Rate/GetTopRecipes").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (RecipeModel model in JsonConvert.DeserializeObject<List<RecipeModel>>(result))
+                            {
+                                recipes.Add(model);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return recipes;
+            }
+            catch
+            {
+                // LOG ERROR
+                return null;
+            }
+        }
         public IEnumerable<IngredientViewModel> GetLinkedIngredients(int recipeId)
         {
             List<IngredientViewModel> viewModels = new List<IngredientViewModel>();
@@ -534,7 +568,7 @@ namespace DessertTaCeinture.WEB.Services
                 return null;
             }
         }
-
+        
         public CategoryModel GetCategory(int categoryId)
         {
             CategoryModel item = new CategoryModel();
