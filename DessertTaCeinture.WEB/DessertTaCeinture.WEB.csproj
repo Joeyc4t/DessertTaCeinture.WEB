@@ -163,6 +163,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogsController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Models\Ingredient\IngredientModel.cs" />
     <Compile Include="Models\Ingredient\IngredientViewModel.cs" />
+    <Compile Include="Models\Logs\LogsModel.cs" />
     <Compile Include="Models\News\NewsModel.cs" />
     <Compile Include="Models\Origin\OriginModel.cs" />
     <Compile Include="Models\Picture\PictureModel.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Models\User\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Authentification.cs" />
+    <Compile Include="Services\Logs.cs" />
     <Compile Include="Services\News.cs" />
     <Compile Include="Services\Rate.cs" />
     <Compile Include="Services\Recipe.cs" />
@@ -520,6 +523,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Logs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
