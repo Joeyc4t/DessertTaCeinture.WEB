@@ -1,21 +1,35 @@
 ﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeDetailViewModel
 
+@{ 
+    DessertTaCeinture.WEB.Services.Rate rateService = DessertTaCeinture.WEB.Services.Rate.Instance;
+    DessertTaCeinture.WEB.Services.Session sessionService = DessertTaCeinture.WEB.Services.Session.Instance;
+
+    DessertTaCeinture.WEB.Models.User.UserModel user = sessionService.GetConnectedUser();
+}
+
 <div class="col-md-12">
     <div class="col-md-6">
         <img src="@Model.Picture" class="img-rounded img-responsive" alt="Image" style="height: 100%; width: 85%;" />
     </div>
     <div class="col-md-6">
-        @if (Session["loggedUser"] != null)
+        @if (user != null)
         {
-            <div>
-                @Html.Action("Create", "Rate", new { recipeId = Model.Id })
-            </div>
-        }
-        else
-        {
-            <div>
-
-            </div>
+            bool? rateExists = rateService.RateExists(user.Id, Model.Id);
+            if (rateExists.HasValue)
+            {
+                if (rateExists.Value)
+                {
+                    <div>
+                        @Html.Action("Edit", "Rate", new { recipeId = Model.Id })
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        @Html.Action("Create", "Rate", new { recipeId = Model.Id })
+                    </div>
+                }
+            }
         }
     </div>
 </div>

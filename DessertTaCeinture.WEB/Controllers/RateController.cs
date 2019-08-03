@@ -31,14 +31,14 @@ namespace DessertTaCeinture.WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<PartialViewResult> Create(int recipeId, int userId, DateTime date, string commentary, int rateOnFive)
+        public async Task<PartialViewResult> Create(int recipeId, int userId, string commentary, int rateOnFive)
         {
             RateModel model = new RateModel()
             {
                 RecipeId = recipeId,
                 UserId = userId,
                 Commentary = commentary,
-                Date = date,
+                Date = DateTime.Now,
                 RateOnFive = rateOnFive
             };
 
@@ -48,7 +48,7 @@ namespace DessertTaCeinture.WEB.Controllers
                 try
                 {
                     bool rateRegistered = await RateService.RegisterRate(client, model);
-                    if(rateRegistered) return PartialView("_RateSuccess", model);
+                    if(rateRegistered) return PartialView("_EditRate", model);
                     else return PartialView("_RateFail");
                 }
                 catch(Exception e)
@@ -58,34 +58,59 @@ namespace DessertTaCeinture.WEB.Controllers
             }
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int recipeId)
         {
-            return View();
+            RateModel model = RateService.GetRate(SessionService.GetConnectedUser().Id, recipeId);
+            return PartialView("_EditRate", model);
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit(int recipeId, int userId, string commentary, int rateOnFive)
         {
+            bool rateUpdated; 
+
+            RateModel oldModel = RateService.GetRate(userId, recipeId);
+            RateModel updatedModel = oldModel;
+            updatedModel.Date = DateTime.Now;
+            updatedModel.Commentary = commentary;
+            updatedModel.RateOnFive = rateOnFive;
+
             try
             {
-                return RedirectToAction("Index");
+                using(HttpClient client = new HttpClient())
+                {
+                    rateUpdated = await RateService.EditRate(client, updatedModel); 
+                }
+
+                if (rateUpdated) return PartialView("_EditRate", updatedModel);
+                else return RedirectToAction("Error", "Home");
             }
             catch
             {
-                return View();
+                return PartialView("_EditRate", oldModel);
             }
         }
 
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public async Task<ActionResult> Delete(int recipeId, int userId)
         {
             try
             {
+                using (var client = new HttpClient())
+                {
+                    RateModel oldRate = RateService.GetRate(userId, recipeId);
+
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    if (await RateService.DeleteRate(client, oldRate.Id))
+                    {
+                        RateModel model = new RateModel()
+                        {
+                            RecipeId = oldRate.RecipeId,
+                            UserId = oldRate.UserId
+                        };
+                        return PartialView("_NewRate", model);
+                    }
+                }
                 return RedirectToAction("Index");
             }
             catch

@@ -506,7 +506,6 @@
     <Content Include="Views\Step\EditField.cshtml" />
     <Content Include="Views\Shared\_RecipeEditStepsPart.cshtml" />
     <Content Include="Views\Shared\_NewRate.cshtml" />
-    <Content Include="Views\Shared\_RateSuccess.cshtml" />
     <Content Include="Views\Shared\_RateFail.cshtml" />
     <Content Include="Views\Home\RandomRecipe.cshtml" />
     <Content Include="Views\Home\QuickSearch.cshtml" />
@@ -516,11 +515,11 @@
     <Content Include="Views\Recipe\RecipesWithout.cshtml" />
     <Content Include="Views\Home\TopRecipes.cshtml" />
     <Content Include="Views\Shared\_TopRecipesList.cshtml" />
+    <Content Include="Views\Shared\_EditRate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\Rate\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

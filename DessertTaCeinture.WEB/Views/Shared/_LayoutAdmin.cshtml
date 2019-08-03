@@ -52,12 +52,13 @@
                 <hr />
                 <a href="@Url.Action("Users","Admin")">Utilisateurs</a>
                 <a href="@Url.Action("News","Admin")">News</a>
-                <a href="@Url.Action("Messages","Admin")">Messages</a>
                 <button class="dropdown-btn">Live pages<i class="fa fa-caret-down" style="margin-top: 0.4em;"></i>
                 </button>
                 <div class="dropdown-container">
                     <a href="@Url.Action("Recipes","Home")" target="_blank">Recettes</a>
                     <a href="@Url.Action("News","Home")" target="_blank">News</a>
+                    <a href="@Url.Action("TopRecipes","Home")" target="_blank">Desserts au top</a>
+                    <a href="@Url.Action("RandomRecipe","Home")" target="_blank">Recette au hasard</a>
                 </div>
                 <hr />
                 <a href="@Url.Action("Logout","Admin")">Se déconnecter</a>
