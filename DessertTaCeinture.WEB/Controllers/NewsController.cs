@@ -1,13 +1,15 @@
-﻿using DessertTaCeinture.WEB.Models.News;
+﻿using DessertTaCeinture.WEB.Tools;
 using DessertTaCeinture.WEB.Services;
-using DessertTaCeinture.WEB.Tools;
+using DessertTaCeinture.WEB.Models.News;
+
 using Newtonsoft.Json;
+
 using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
 
 namespace DessertTaCeinture.WEB.Controllers
 {
@@ -16,13 +18,21 @@ namespace DessertTaCeinture.WEB.Controllers
         #region Instances
         private News NewsService = News.Instance;
         private Session SessionService = Services.Session.Instance;
-
+        private Logs logsService = Logs.Instance;
         #endregion Instances
 
         public ActionResult Create()
         {
-            if (IsConnectedAdmin()) return View();
-            else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            try
+            {
+                if (IsConnectedAdmin()) return View();
+                else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News/Create - Get");
+                return RedirectToAction("Error", "Home");
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -57,15 +67,24 @@ namespace DessertTaCeinture.WEB.Controllers
                 }
                 else return View(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return View(model);
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News/Create - Post");
+                return RedirectToAction("Error", "Home");
             }
         }
         public ActionResult Delete(int id)
         {
-            if (IsConnectedAdmin()) return View(NewsService.Get(id));
-            else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            try
+            {
+                if (IsConnectedAdmin()) return View(NewsService.Get(id));
+                else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News/Delete - Get");
+                return RedirectToAction("Error", "Home");
+            }
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -83,23 +102,40 @@ namespace DessertTaCeinture.WEB.Controllers
                     else return RedirectToAction("Error", "Home");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News/Delete - Post");
                 return RedirectToAction("Error", "Home");
             }
         }
         public ActionResult Details(int id)
         {
-            return View(NewsService.Get(id));
+            try
+            {
+                return View(NewsService.Get(id));
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News/Details");
+                return RedirectToAction("Error", "Home");
+            }
         }
         public ActionResult Edit(int id)
         {
-            if (IsConnectedAdmin())
+            try
             {
-                NewsModel model = NewsService.Get(id);
-                return View(model);
+                if (IsConnectedAdmin())
+                {
+                    NewsModel model = NewsService.Get(id);
+                    return View(model);
+                }
+                else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
             }
-            else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News/Edit - Get");
+                return RedirectToAction("Error", "Home");
+            }
         }
         [HttpPost]
         public async Task<ActionResult> Edit(int id, NewsModel model, HttpPostedFileBase fileUpload)
@@ -132,17 +168,26 @@ namespace DessertTaCeinture.WEB.Controllers
                         else return RedirectToAction("Error", "Home");
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return View();
+                    logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News/Edit - Post");
+                    return RedirectToAction("Error", "Home");
                 }
             }
             else return RedirectToAction("Error", "Home");
         }
         public ActionResult Index()
         {
-            if (IsConnectedAdmin()) return View(NewsService.GetAll());
-            else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            try
+            {
+                if (IsConnectedAdmin()) return View(NewsService.GetAll());
+                else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News/Index");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         #region Private methods

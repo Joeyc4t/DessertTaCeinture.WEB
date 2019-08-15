@@ -10,6 +10,9 @@ namespace DessertTaCeinture.WEB.Services
     public class Authentification
     {
         #region Instance
+        private Logs logsService = Logs.Instance;
+        private Session SessionService = Session.Instance;
+
         private static Authentification _Instance;
         public static Authentification Instance
         {
@@ -20,36 +23,51 @@ namespace DessertTaCeinture.WEB.Services
 
         public bool LoginUser(LoginModel model)
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-                HttpResponseMessage Res = client.GetAsync($"api/User?id={model.Email}").Result;
-
-                if (Res.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    var Response = Res.Content.ReadAsStringAsync().Result;
-                    UserModel globalModel = JsonConvert.DeserializeObject<UserModel>(Response);
-                    if (globalModel.IsActive == true)
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+                    HttpResponseMessage Res = client.GetAsync($"api/User?id={model.Email}").Result;
+
+                    if (Res.IsSuccessStatusCode)
                     {
-                        string hash = BCrypt.Net.BCrypt.HashPassword(model.Password, globalModel.Salt);
-                        if (globalModel.Password.Equals(hash))
+                        var Response = Res.Content.ReadAsStringAsync().Result;
+                        UserModel globalModel = JsonConvert.DeserializeObject<UserModel>(Response);
+                        if (globalModel.IsActive == true)
                         {
-                            Session.Instance.StoreUser(globalModel);
-                            return client != null;
+                            string hash = BCrypt.Net.BCrypt.HashPassword(model.Password, globalModel.Salt);
+                            if (globalModel.Password.Equals(hash))
+                            {
+                                Session.Instance.StoreUser(globalModel);
+                                return client != null;
+                            }
+                            else return false;
                         }
                         else return false;
                     }
                     else return false;
-                }
-                else return false;
+                }            
+            }
+            catch(Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Auth service - Login");
+                return false;
             }
         }
 
         public void Logout()
         {
-            Session.Instance.CloseSession();
+            try
+            {
+                Session.Instance.CloseSession();
+            }
+            catch(Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Auth service - Logout");
+            }            
         }
     }
 }

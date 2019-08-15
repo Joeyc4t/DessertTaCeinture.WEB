@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DessertTaCeinture.WEB.Models.Logs
@@ -28,6 +29,7 @@ namespace DessertTaCeinture.WEB.Models.Logs
             }
         }
 
+        [DisplayName("Guid")]
         public Guid LogGuid
         {
             get
@@ -40,6 +42,7 @@ namespace DessertTaCeinture.WEB.Models.Logs
             }
         }
 
+        [DisplayName("Date")]
         public DateTime LogDate
         {
             get
@@ -52,6 +55,7 @@ namespace DessertTaCeinture.WEB.Models.Logs
             }
         }
 
+        [DisplayName("ID utilisateur")]
         public int UserId
         {
             get
@@ -64,6 +68,7 @@ namespace DessertTaCeinture.WEB.Models.Logs
             }
         }
 
+        [DisplayName("Message d'erreur")]
         public string LogMessage
         {
             get
@@ -76,6 +81,7 @@ namespace DessertTaCeinture.WEB.Models.Logs
             }
         }
 
+        [DisplayName("Page/Action")]
         public string ErrorPage
         {
             get

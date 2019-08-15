@@ -15,63 +15,129 @@ namespace DessertTaCeinture.WEB.Controllers
         private News newsService = Services.News.Instance;
         private Recipe recipeService = Recipe.Instance;
         private Search searchService = Search.Instance;
+        private Logs logsService = Logs.Instance;
+        private Session SessionService = Services.Session.Instance;
         #endregion Instances
 
         public ActionResult Error()
         {
-            ViewBag.Title = "Une erreur est survenue";
-            return View("~/Views/Shared/Errors/GenericError.cshtml");
+            try
+            {
+                ViewBag.Title = "Une erreur est survenue";
+                return View("~/Views/Shared/Errors/GenericError.cshtml");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/Error");
+                return RedirectToAction("Error", "Home");
+            }
         }
         public ActionResult Index()
         {
-            IndexViewModel model = new IndexViewModel();
-            model.News = newsService.GetLastPublished();
+            try
+            {
+                IndexViewModel model = new IndexViewModel();
+                model.News = newsService.GetLastPublished();
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/Index");
+                return RedirectToAction("Error", "Home");
+            }
         }
         public ActionResult News()
         {
-            return View(newsService.GetAll());
+            try
+            {
+                return View(newsService.GetAll());
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/News");
+                return RedirectToAction("Error", "Home");
+            }
         }
         public ActionResult NotAuthorized()
         {
-            ViewBag.Title = "Accès non autorisé";
-            return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            try
+            {
+                ViewBag.Title = "Accès non autorisé";
+                return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            }
+            catch(Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/NotAuthorized");
+                return RedirectToAction("Error", "Home");
+            }
         }
         public ActionResult RandomRecipe()
         {
-            Random random = new Random();
-            int[] indexes = recipeService.GetRecipeIndexes();
-            int i = random.Next(0, indexes.Count());
+            try
+            {
+                Random random = new Random();
+                int[] indexes = recipeService.GetRecipeIndexes();
+                int i = random.Next(0, indexes.Count());
 
-            int recipeId = indexes[i];
+                int recipeId = indexes[i];
 
-            return View(recipeId);
+                return View(recipeId);
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/RandomRecipe");
+                return RedirectToAction("Error", "Home");
+            }
         }
         public ActionResult Recipes()
         {
-            List<RecipeModel> model = recipeService.GetLastPublished().ToList();
-            return View(model);
+            try
+            {
+                List<RecipeModel> model = recipeService.GetLastPublished().ToList();
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/Recipes");
+                return RedirectToAction("Error", "Home");
+            }
         }
         public ActionResult TopRecipes()
         {
-            IEnumerable<RecipeModel> models = recipeService.GetTopRecipes();
-            return View(models);
+            try
+            {
+                IEnumerable<RecipeModel> models = recipeService.GetTopRecipes();
+                return View(models);
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/TopRecipes");
+                return RedirectToAction("Error", "Home");
+            }
         }
         public ActionResult QuickSearch(string searchtext)
         {
-            var models = recipeService.GetPublicRecipes();
-            if (!string.IsNullOrEmpty(searchtext))
+            try
             {
-                searchtext = searchService.ConvertSearchString(searchtext);
-                var result = new List<RecipeModel>();
-                foreach(RecipeModel model in models)
+                var models = recipeService.GetPublicRecipes();
+                if (!string.IsNullOrEmpty(searchtext))
                 {
-                    if (searchService.ConvertSearchString(model.Title).Contains(searchtext)) result.Add(model);
+                    searchtext = searchService.ConvertSearchString(searchtext);
+                    var result = new List<RecipeModel>();
+                    foreach (RecipeModel model in models)
+                    {
+                        if (searchService.ConvertSearchString(model.Title).Contains(searchtext)) result.Add(model);
+                    }
+                    return View(result);
                 }
-                return View(result);
+                return View(models);
             }
-            return View(models);
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/QuickSearch");
+                return RedirectToAction("Error", "Home");
+            }            
         }       
     }
 }

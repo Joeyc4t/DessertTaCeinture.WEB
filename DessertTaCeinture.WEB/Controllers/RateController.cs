@@ -1,6 +1,7 @@
 ﻿using DessertTaCeinture.WEB.Models.Rate;
 using DessertTaCeinture.WEB.Services;
 using DessertTaCeinture.WEB.Tools;
+
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,14 +12,10 @@ namespace DessertTaCeinture.WEB.Controllers
     public class RateController : Controller
     {
         #region Instances
-        Session SessionService = Services.Session.Instance;
-        Rate RateService = Rate.Instance;
+        private Session SessionService = Services.Session.Instance;
+        private Rate RateService = Rate.Instance;
+        private Logs logsService = Logs.Instance;
         #endregion
-
-        public ActionResult Index()
-        {
-            return View();
-        }
 
         public PartialViewResult Create(int recipeId)
         {
@@ -60,8 +57,16 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Edit(int recipeId)
         {
-            RateModel model = RateService.GetRate(SessionService.GetConnectedUser().Id, recipeId);
-            return PartialView("_EditRate", model);
+            try
+            {
+                RateModel model = RateService.GetRate(SessionService.GetConnectedUser().Id, recipeId);
+                return PartialView("_EditRate", model);
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Rate/Edit - Get");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
@@ -85,8 +90,9 @@ namespace DessertTaCeinture.WEB.Controllers
                 if (rateUpdated) return PartialView("_EditRate", updatedModel);
                 else return RedirectToAction("Error", "Home");
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Rate/Edit - Post");
                 return PartialView("_EditRate", oldModel);
             }
         }
@@ -113,8 +119,9 @@ namespace DessertTaCeinture.WEB.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Rate/Delete - Post");
                 return View();
             }
         }

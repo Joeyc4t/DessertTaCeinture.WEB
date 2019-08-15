@@ -11,7 +11,10 @@
                                     <div class="tab-content-inner active" data-content="signup">
                                         <div class="row form-horizontal animate-box">
                                             <h1 class="text-center">Oops !</h1>
-                                            <p class="text-center">Une erreur est survenue lors de votre demande.</p>
+                                            <p class="text-center">
+                                                Une erreur est survenue lors de votre demande.
+                                                Contactez l'administrateur système pour plus d'informations.
+                                            </p>
                                             @using (Html.BeginForm("Delete", "User"))
                                             {
                                                 @Html.AntiForgeryToken()

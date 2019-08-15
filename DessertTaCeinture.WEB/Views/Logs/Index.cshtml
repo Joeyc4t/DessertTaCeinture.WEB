@@ -1,0 +1,55 @@
+﻿@model IEnumerable<DessertTaCeinture.WEB.Models.Logs.LogsModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Logs :</h3>
+<p>
+    <br />
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LogGuid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LogDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LogMessage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ErrorPage)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.LogGuid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LogDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LogMessage)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ErrorPage)
+        </td>
+        <td>
+            <a href="@Url.Action("Details","Logs", new { id = item.Id })" target="_blank"><img src="~/Content/images/keys/eye.png" /></a>&nbsp;
+        </td>
+    </tr>
+}
+
+</table>

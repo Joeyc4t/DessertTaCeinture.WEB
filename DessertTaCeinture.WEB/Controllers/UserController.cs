@@ -15,19 +15,29 @@ namespace DessertTaCeinture.WEB.Controllers
         #region Instances
         private Authentification AuthService = Services.Authentification.Instance;
         private User UserService = Services.User.Instance;
+        private Logs logsService = Logs.Instance;
+        private Session SessionService = Services.Session.Instance;
         #endregion Instances
 
         public ActionResult Create()
         {
             if (!UserService.IsConnectedUser()) return View();
-            else return RedirectToAction("Error", "Home");
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Utilisateur connecté", "User/Create - Get");
+                return RedirectToAction("Error", "Home");
+            } 
         }
 
         [HttpGet]
         public ActionResult Index()
         {
             if (UserService.IsConnectedUser()) return View(UserService.GetAll());
-            else return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "User/Index - Get");
+                return View("~/Views/Shared/Errors/NotAuthorized.cshtml");
+            }                
         }
 
         [HttpPost]
@@ -57,8 +67,9 @@ namespace DessertTaCeinture.WEB.Controllers
                         else return RedirectToAction("Error", "Home");
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
+                    logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User/Create - Post");
                     return View(model);
                 }
             }
@@ -67,11 +78,19 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Activate(int? id)
         {
-            if (id == null || !UserService.IsConnectedUser()) return RedirectToAction("NotAuthorized", "Home");
+            if (id == null || !UserService.IsConnectedUser())
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "User/Activate - Get");
+                return RedirectToAction("NotAuthorized", "Home");
+            }            
 
             UserModel model = UserService.GetConnectedUser();
             if (model.Id != id && UserService.IsConnectedAdmin()) return View("~/Views/Admin/ActivateUser.cshtml", model);
-            else return RedirectToAction("Error", "Home");
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Id du model différent ou Admin non connecté", "User/Activate - Get");
+                return RedirectToAction("Error", "Home");
+            }               
         }
 
         [HttpPost, ActionName("Activate")]
@@ -103,21 +122,28 @@ namespace DessertTaCeinture.WEB.Controllers
                     else return RedirectToAction("Error", "Home");
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User/Activate - Post");
                 return RedirectToAction("Error", "Home");
             }
         }
 
         public ActionResult Delete(int? id)
         {
-            if (id == null || !UserService.IsConnectedUser()) return RedirectToAction("Error", "Home");
+            if (id == null || !UserService.IsConnectedUser())
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "User/Delete - Get");
+                return RedirectToAction("NotAuthorized", "Home");
+            }
 
             UserModel model = UserService.GetConnectedUser();
             if (model.Id != id && UserService.IsConnectedAdmin()) return View("~/Views/Admin/DeleteUser.cshtml", model);
-            if(model.Id == id) return View(model);
-            else return RedirectToAction("Error", "Home");
-
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Id du model différent ou Admin non connecté", "User/Delete - Get");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost, ActionName("Delete")]
@@ -146,8 +172,9 @@ namespace DessertTaCeinture.WEB.Controllers
                     else return RedirectToAction("Error", "Home");
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User/DeleteConfirmed - Post");
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -155,12 +182,21 @@ namespace DessertTaCeinture.WEB.Controllers
         public ActionResult Details()
         {
             if (UserService.IsConnectedUser()) return View(AutoMapper<UserModel, DetailsModel>.AutoMap(UserService.GetConnectedUser()));
-            else return RedirectToAction("Error", "Home");
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "User/Details - Get");
+                return RedirectToAction("Error", "Home");
+            }
+            
         }
 
         public ActionResult Edit(int? id)
         {
-            if (id == null) return RedirectToAction("Error", "Home");
+            if (id == null)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Id null", "User/Edit - Get");
+                return RedirectToAction("Error", "Home");
+            } 
             return View();
         }
 
@@ -192,8 +228,9 @@ namespace DessertTaCeinture.WEB.Controllers
                     else return RedirectToAction("Error", "Home");
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User/Edit - Post");
                 return View();
             }
         }
@@ -202,7 +239,11 @@ namespace DessertTaCeinture.WEB.Controllers
         public ActionResult Login()
         {
             if (!UserService.IsConnectedUser()) return View();
-            else return RedirectToAction("Error", "Home");
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Utilisateur déjà connecté", "User/Login - Get");
+                return RedirectToAction("Error", "Home");
+            } 
         }
 
         [HttpPost]

@@ -14,7 +14,9 @@ namespace DessertTaCeinture.WEB.Services
     public class User
     {
         #region Instances
+        private Logs logsService = Logs.Instance;
         private Session SessionService = Session.Instance;
+
         private static User _Instance;
         public static User Instance
         {
@@ -44,8 +46,9 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return globalModel;
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User service - GetLoggedUser");
                 return null;
             }
         }
@@ -71,8 +74,9 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return model;
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User service - GetUserById");
                 return null;
             }
         }
@@ -98,8 +102,9 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return globalModel;
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User service - Get");
                 return null;
             }
         }
@@ -130,8 +135,9 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return models;
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User service - GetAll");
                 return null;
             }
         }

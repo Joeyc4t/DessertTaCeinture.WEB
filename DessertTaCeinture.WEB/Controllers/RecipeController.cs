@@ -25,6 +25,8 @@ namespace DessertTaCeinture.WEB.Controllers
         private Session sessionService = Services.Session.Instance;
         private User userService = Services.User.Instance;
         private Search searchService = Services.Search.Instance;
+        private Logs logsService = Logs.Instance;
+        private Session SessionService = Services.Session.Instance;
         #endregion Instances
 
         [HttpGet]
@@ -40,7 +42,11 @@ namespace DessertTaCeinture.WEB.Controllers
                 };
                 return View(viewModel);
             }
-            else return RedirectToAction("Error", "Home");
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "Recipe/Create - Get");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
@@ -81,8 +87,9 @@ namespace DessertTaCeinture.WEB.Controllers
                     else return RedirectToAction("Error", "Home");
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/Create - Post");
                 return View(model);
             }
         }
@@ -118,8 +125,9 @@ namespace DessertTaCeinture.WEB.Controllers
                     else return RedirectToAction("Error", "Home");
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/DeleteConfirmed - Post");
                 return View();
             }
         }
@@ -206,7 +214,11 @@ namespace DessertTaCeinture.WEB.Controllers
                 };
                 return View(viewModel);
             }
-            else return RedirectToAction("Error", "Home");
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Item is null", "Recipe/Details - Get");
+                return RedirectToAction("Error", "Home");
+            }         
         }
 
         public ActionResult Edit(int id)
@@ -215,8 +227,12 @@ namespace DessertTaCeinture.WEB.Controllers
             {
                 RecipeViewModel model = recipeService.GetRecipeFull(id);
                 return View(model);
-            } 
-            else return RedirectToAction("Error", "Home");
+            }
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "Recipe/Edit - Get");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
@@ -248,8 +264,9 @@ namespace DessertTaCeinture.WEB.Controllers
                 if(recipeUpdated && ingredientsUpdated && stepsUpdated) return RedirectToAction("Index");
                 else return RedirectToAction("Error", "Home");
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/Edit - Post");
                 return View(recipeViewModel);
             }
         }
@@ -257,7 +274,11 @@ namespace DessertTaCeinture.WEB.Controllers
         public ActionResult Index()
         {
             if (IsConnectedUser()) return View(recipeService.GetUserRecipes());
-            else return RedirectToAction("Error", "Home");
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "Rate/Edit - Get");
+                return RedirectToAction("Error", "Home");
+            } 
         }
 
         #region Private methods

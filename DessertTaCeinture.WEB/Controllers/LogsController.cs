@@ -1,75 +1,27 @@
-﻿using System;
+﻿using DessertTaCeinture.WEB.Models.Logs;
+using DessertTaCeinture.WEB.Services;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Controllers
 {
     public class LogsController : Controller
     {
+        #region Instances
+        private Logs logsService = Logs.Instance;
+        #endregion
+
         public ActionResult Index()
         {
-            return View();
+            IEnumerable<LogsModel> models = logsService.GetAll();
+            return View(models);
         }
 
         public ActionResult Details(int id)
         {
-            return View();
-        }
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            LogsModel model = logsService.GetById(id);
+            return View(model);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using DessertTaCeinture.WEB.Models.News;
 using DessertTaCeinture.WEB.Tools;
+
 using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,9 @@ namespace DessertTaCeinture.WEB.Services
     public class News
     {
         #region Instances
+        private Logs logsService = Logs.Instance;
+        private Session SessionService = Session.Instance;
+
         private static News _Instance;
         public static News Instance
         {
@@ -41,8 +46,9 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return models.OrderByDescending(m => m.ReleaseDate);
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News service - GetAll");
                 return null;
             }
         }
@@ -68,8 +74,9 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return model;
             }
-            catch
+            catch(Exception ex)
             {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "News service - Get");
                 return null;
             }
         }

@@ -519,11 +519,11 @@
     <Content Include="Views\Home\TopRecipes.cshtml" />
     <Content Include="Views\Shared\_TopRecipesList.cshtml" />
     <Content Include="Views\Shared\_EditRate.cshtml" />
+    <Content Include="Views\Logs\Index.cshtml" />
+    <Content Include="Views\Logs\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Base\" />
-    <Folder Include="Views\Logs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -9,6 +9,7 @@ namespace DessertTaCeinture.WEB.Controllers
     {
         #region Instances
         private Recipe recipeService = Recipe.Instance;
+        private Logs logsService = Logs.Instance;
         #endregion
 
         public ActionResult CreateField(CreateRecipeModel model, int? index)

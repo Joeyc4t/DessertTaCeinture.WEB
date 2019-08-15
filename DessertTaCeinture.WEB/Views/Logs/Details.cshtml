@@ -1,0 +1,59 @@
+﻿@model DessertTaCeinture.WEB.Models.Logs.LogsModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>LogsModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LogGuid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LogGuid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LogDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LogDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LogMessage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LogMessage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ErrorPage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ErrorPage)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
