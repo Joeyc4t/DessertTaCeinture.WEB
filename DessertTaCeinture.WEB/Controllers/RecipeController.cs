@@ -205,6 +205,7 @@ namespace DessertTaCeinture.WEB.Controllers
                     Title = item.Title,
                     CreationDate = item.CreationDate,
                     Picture = item.Picture,
+                    IsPublic = item.IsPublic,
                     Creator = userService.GetUserById(item.CreatorId),
                     Category = recipeService.GetCategory(item.CategoryId),
                     Origin = recipeService.GetOrigin(item.OriginId),

@@ -100,6 +100,32 @@ namespace DessertTaCeinture.WEB.Controllers
             }
         }
 
+        public ActionResult Categories()
+        {
+            try
+            {
+                return RedirectToAction("Index", "Categories");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Admin/Categories");
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        public ActionResult Themes()
+        {
+            try
+            {
+                return RedirectToAction("Index", "Themes");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Admin/Themes");
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
         public ActionResult Logs()
         {
             try

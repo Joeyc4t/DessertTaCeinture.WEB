@@ -1,13 +1,251 @@
-﻿<div class="gtco-section">
+﻿<script src="~/Scripts/Chart.js"></script>
+
+<script type="text/javascript">
+
+    var basicOpt = {
+        maintainAspectRatio: false,
+        responsive: true
+    };
+
+    var scaledBarYOpt = {
+        legend: {
+            display: false
+        },
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    userCallback: function (label, index, labels) {
+                        // when the floored value is the same as the value we have a whole number
+                        if (Math.floor(label) === label) {
+                            return label;
+                        }
+                    },
+                }
+            }],
+        }
+    };
+
+    var scaledBarXOpt = {
+        legend: {
+            display: false
+        },
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    userCallback: function (label, index, labels) {
+                        // when the floored value is the same as the value we have a whole number
+                        if (Math.floor(label) === label) {
+                            return label;
+                        }
+                    },
+                }
+            }],
+        }
+    };
+
+    var scaledBarWithoutGraphLinesOpt = {
+        legend: {
+            display: false
+        },
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    userCallback: function (label, index, labels) {
+                        // when the floored value is the same as the value we have a whole number
+                        if (Math.floor(label) === label) {
+                            return label;
+                        }
+                    },
+                },
+                gridLines: {
+                    display: true,
+                    drawBorder: true,
+                    drawOnChartArea: false
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: true,
+                    drawBorder: true,
+                    drawOnChartArea: false
+                }
+            }],
+        }
+    };
+
+    $(document).ready(function () {
+        loadGraphs();
+    });
+
+    function callWS(id, type, opt) {
+        $.ajax({
+            type: "Get",
+            url: '/Statistics/GenerateChart',
+            data: { id: id },
+            contentType: "application/json; charset=utf-8",
+            responseType: "json",
+            beforeSend: function () {
+            },
+            success: function (data) {
+                if (data != null) {
+                    initChart(id, data, type, opt);
+                }
+            },
+            error: function (xhr, status, error) {
+                var err = JSON.parse(xhr.responseText);
+                console.log(err.Message);
+            }
+        });
+    }
+
+    function initChart(id, data, type, opt) {
+        var elem = document.getElementById(id);
+        var ctx = elem.getContext('2d');
+        var grph = $(ctx).data('chart');
+        if (grph) {
+            grph.destroy();
+        }
+
+        if (data == null || data.labels == null || data.labels.length == 0) {
+            elem.style.display = "none";
+            var sibling = elem.nextElementSibling;
+            if (sibling) {
+                sibling.style.display = "block";
+                sibling.style.marginTop = elem.attributes["height"].value / 2 + "px";
+                sibling.style.height = elem.attributes["height"].value / 2 + "px";
+            }
+        }
+        else {
+            elem.style.display = "inherit";
+            var sibling = elem.nextElementSibling;
+            if (sibling) {
+                sibling.style.display = "none";
+            }
+
+            var myChart = new Chart(ctx, {
+                type: type,
+                data: data,
+                options: opt
+            });
+            $(ctx).data('chart', myChart);
+        }
+    };
+
+    function loadGraphs() {
+        callWS('chartUsers', 'doughnut', basicOpt);
+        callWS('chartCommentariesCount', 'bar', scaledBarWithoutGraphLinesOpt);
+        callWS('chartRecipesVisibility', 'doughnut', basicOpt);
+        callWS('chartRecipesByOrigineCount', 'horizontalBar', scaledBarXOpt);
+        callWS('chartRecipesByCategory', 'horizontalBar', scaledBarXOpt);
+        callWS('chartRates', 'bar', scaledBarWithoutGraphLinesOpt);
+    }
+</script>
+
+<style>
+    .pie-title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+        .pie-title a {
+            cursor: pointer;
+        }
+
+    .pie-content {
+        padding: 10px;
+    }
+        .pie-content p {
+            text-align: center;
+        }
+</style>
+
+<div class="gtco-section">
     <div class="gtco-container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                <h2 class="cursive-font primary-color">Dashboard</h2>
+            <h2 class="cursive-font primary-color">Dashboard</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pie-title">
+                    <label>Nombre d'utilisateurs</label>
+                </div>
+                <div class="pie-content">
+                    <canvas id="chartUsers" width="400" height="400"></canvas>
+                    <p style="display: none;">
+                        <label>No data</label>
+                    </p>
+                </div>
+            </div>            
+            <div class="col-md-6">
+                <div class="pie-title">
+                    <label>Nombre de commentaires</label>
+                </div>
+                <div class="pie-content">
+                    <canvas id="chartCommentariesCount" width="400" height="400"></canvas>
+                    <p style="display: none;">
+                        <label>No data</label>
+                    </p>
+                </div>
             </div>
         </div>
         <div class="row">
-            
+            <div class="col-md-6">
+                <div class="pie-title">
+                    <label>Nombre de recettes par catégorie</label>
+                </div>
+                <div class="pie-content">
+                    <canvas id="chartRecipesByCategory" width="400" height="400"></canvas>
+                    <p style="display: none;">
+                        <label>No data</label>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="pie-title">
+                    <label>Nombre de recettes par origine</label>
+                </div>
+                <div class="pie-content">
+                    <canvas id="chartRecipesByOrigineCount" width="400" height="400"></canvas>
+                    <p style="display: none;">
+                        <label>No data</label>
+                    </p>
+                </div>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pie-title">
+                    <label>Nombre de recettes</label>
+                </div>
+                <div class="pie-content">
+                    <canvas id="chartRecipesVisibility" width="400" height="400"></canvas>
+                    <p style="display: none;">
+                        <label>No data</label>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="pie-title">
+                    <label>Nombre de cotations</label>
+                </div>
+                <div class="pie-content">
+                    <canvas id="chartRates" width="400" height="400"></canvas>
+                    <p style="display: none;">
+                        <label>No data</label>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-

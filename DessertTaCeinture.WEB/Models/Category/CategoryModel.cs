@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace DessertTaCeinture.WEB.Models.Category
 {
@@ -25,6 +26,7 @@ namespace DessertTaCeinture.WEB.Models.Category
 
         [Required]
         [StringLength(50)]
+        [DisplayName("Nom")]
         public string Name
         {
             get

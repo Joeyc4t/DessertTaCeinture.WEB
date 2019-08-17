@@ -23,6 +23,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         public OriginModel Origin { get; set; }
 
         public string Picture { get; set; }
+        public bool IsPublic { get; set; }
 
         public IEnumerable<IngredientViewModel> RecipeIngredients { get; set; }
 

@@ -161,6 +161,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogsController.cs" />
@@ -168,7 +169,9 @@
     <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\Recipe_IngredientController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\StepController.cs" />
+    <Compile Include="Controllers\ThemesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -187,6 +190,8 @@
     <Compile Include="Models\Recipe\RecipeModel.cs" />
     <Compile Include="Models\Recipe\RecipeViewModel.cs" />
     <Compile Include="Models\Recipe_Ingredients\Recipe_IngredientModel.cs" />
+    <Compile Include="Models\Statistics\ChartModel.cs" />
+    <Compile Include="Models\Statistics\CustomData.cs" />
     <Compile Include="Models\Step\StepModel.cs" />
     <Compile Include="Models\Theme\ThemeModel.cs" />
     <Compile Include="Models\User\DetailsModel.cs" />
@@ -196,12 +201,15 @@
     <Compile Include="Models\User\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Authentification.cs" />
+    <Compile Include="Services\Categories.cs" />
     <Compile Include="Services\Logs.cs" />
     <Compile Include="Services\News.cs" />
     <Compile Include="Services\Rate.cs" />
     <Compile Include="Services\Recipe.cs" />
     <Compile Include="Services\Search.cs" />
     <Compile Include="Services\Session.cs" />
+    <Compile Include="Services\Statistics.cs" />
+    <Compile Include="Services\Themes.cs" />
     <Compile Include="Services\User.cs" />
     <Compile Include="Tools\AutoMapper.cs" />
     <Compile Include="Tools\DataContainer.cs" />
@@ -213,6 +221,7 @@
     <Content Include="Content\css\bootstrap-datepicker.min.css" />
     <Content Include="Content\css\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\Chart.css" />
     <Content Include="Content\css\datepicker.css" />
     <Content Include="Content\css\flexslider.css" />
     <Content Include="Content\css\font-awesome.min.css" />
@@ -422,6 +431,7 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\bootstrap\datepicker.less" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\google_map.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -521,9 +531,16 @@
     <Content Include="Views\Shared\_EditRate.cshtml" />
     <Content Include="Views\Logs\Index.cshtml" />
     <Content Include="Views\Logs\Details.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Categories\Create.cshtml" />
+    <Content Include="Views\Categories\Delete.cshtml" />
+    <Content Include="Views\Themes\Index.cshtml" />
+    <Content Include="Views\Themes\Create.cshtml" />
+    <Content Include="Views\Themes\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Statistiques\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
