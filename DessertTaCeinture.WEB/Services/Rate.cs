@@ -4,6 +4,8 @@ using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -127,6 +129,40 @@ namespace DessertTaCeinture.WEB.Services
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Rate service - GetRate");
                 return null;
             }            
+        }
+        public List<RateModel> GetRates()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Rate").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        return JsonConvert.DeserializeObject<List<RateModel>>(result);
+                    }
+                    else return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Rate service - GetRates");
+                return null;
+            }
+        }
+
+        public double? CalculateAverage(int recipeId)
+        {
+            IEnumerable<int> recipeRates = GetRates().Where(r => r.RecipeId.Equals(recipeId))
+                                                     .Select(r => r.RateOnFive);
+
+            if (recipeRates.Count() > 0) return recipeRates.Average();
+            else return null;            
         }
     }
 }

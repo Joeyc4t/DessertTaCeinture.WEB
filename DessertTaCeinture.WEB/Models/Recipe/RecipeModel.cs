@@ -15,7 +15,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         public DateTime CreationDate { get; set; }
 
         [Required]
-        public int CreatorId { get; set; }        
+        public int CreatorId { get; set; }
 
         [Required]
         public bool IsPublic { get; set; }
@@ -30,5 +30,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         [Required]
         [StringLength(75)]
         public string Title { get; set; }
+
+        public double? Average { get; set; }
     }
 }

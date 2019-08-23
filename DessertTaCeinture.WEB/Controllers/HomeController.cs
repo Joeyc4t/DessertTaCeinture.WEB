@@ -17,6 +17,7 @@ namespace DessertTaCeinture.WEB.Controllers
         private Search searchService = Search.Instance;
         private Logs logsService = Logs.Instance;
         private Session SessionService = Services.Session.Instance;
+        private Rate rateService = Rate.Instance;
         #endregion Instances
 
         public ActionResult Error()
@@ -108,6 +109,12 @@ namespace DessertTaCeinture.WEB.Controllers
             try
             {
                 IEnumerable<RecipeModel> models = recipeService.GetTopRecipes();
+
+                foreach(RecipeModel item in models)
+                {
+                    item.Average = rateService.CalculateAverage(item.Id);
+                }
+
                 return View(models);
             }
             catch (Exception ex)
