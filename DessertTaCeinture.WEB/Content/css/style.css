@@ -604,21 +604,24 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 .gtco-contact-info {
-  margin-bottom: 30px;
   float: left;
   width: 100%;
   position: relative;
 }
-.gtco-contact-info ul {
-  padding: 0;
-  margin: 0;
-}
-.gtco-contact-info ul li {
-  padding: 0 0 0 50px;
-  margin: 0 0 30px 0;
-  list-style: none;
-  position: relative;
-}
+    .gtco-contact-info ul {
+        padding-left: 100px;
+        margin: 0;
+    }
+        .gtco-contact-info ul li {
+            color:white;
+            margin-bottom: 5px;
+            list-style: none;
+            position: relative;
+            text-align:left;
+        }
+            .gtco-contact-info ul li a {
+                color:white;
+            }
 .gtco-contact-info ul li:before {
   color: #cccccc;
   position: absolute;
