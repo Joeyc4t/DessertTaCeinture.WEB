@@ -11,7 +11,7 @@ namespace DessertTaCeinture.WEB.Controllers
         private Authentification AuthService = Services.Authentification.Instance;
         private Session SessionService = Services.Session.Instance;
         private Logs logsService = Services.Logs.Instance;
-
+        private Recipe recipeService = Recipe.Instance;
         #endregion Instances
 
         public ActionResult Index()
@@ -83,6 +83,19 @@ namespace DessertTaCeinture.WEB.Controllers
             catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Admin/Users");
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        public ActionResult WaitingRecipes()
+        {
+            try
+            {
+                return View(recipeService.GetWaitingRecipes());
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Admin/WaitingRecipes");
                 return RedirectToAction("Error", "Home");
             }
         }

@@ -1,0 +1,28 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeDetailViewModel
+
+@{
+    ViewBag.Title = "Preview";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <h2>Preview</h2>
+    <p class="pull-right">@Html.ActionLink("Retour", "WaitingRecipes")</p>
+
+    <div class="row">
+        @Html.Partial("_RecipePreviewHeaderPart", Model)
+
+        @Html.Partial("_TagsBanner", Model)
+
+        @Html.Partial("_RecipeDescriptivePart", Model)
+    </div>
+
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-6">
+            <a href="@Url.Action("PostDecision","Recipe", new { id = Model.Id, decision = true })" class="btn btn-success btn-block">Valider</a>
+        </div>
+        <div class="col-md-6">
+            <a href="@Url.Action("PostDecision","Recipe", new { id = Model.Id, decision = false })" class="btn btn-danger btn-block">Refuser</a>
+        </div>
+    </div>
+</div>

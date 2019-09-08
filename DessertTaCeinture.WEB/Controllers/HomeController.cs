@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using System.Collections.Generic;
+using DessertTaCeinture.WEB.Models.News;
 
 namespace DessertTaCeinture.WEB.Controllers
 {
@@ -52,7 +53,9 @@ namespace DessertTaCeinture.WEB.Controllers
         {
             try
             {
-                return View(newsService.GetAll());
+                IEnumerable<NewsModel> models = newsService.GetAll();
+                if(models.Count() > 0) return View(models);
+                else return View("~/Views/Shared/_NoContent.cshtml");
             }
             catch (Exception ex)
             {
@@ -81,13 +84,17 @@ namespace DessertTaCeinture.WEB.Controllers
                 int[] indexes = recipeService.GetRecipeIndexes();
                 int i = random.Next(0, indexes.Count());
 
-                int recipeId = indexes[i];
-
-                return View(recipeId);
+                if(indexes.Count() > 0)
+                {
+                    int recipeId = indexes[i];
+                    return View(recipeId);
+                }
+                else return View("~/Views/Shared/_NoContent.cshtml");
+                
             }
             catch (Exception ex)
             {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/RandomRecipe");
+                logsService.GenerateLog(0, ex.Message, "Home/RandomRecipe");
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -96,11 +103,13 @@ namespace DessertTaCeinture.WEB.Controllers
             try
             {
                 List<RecipeModel> model = recipeService.GetLastPublished().ToList();
-                return View(model);
+
+                if(model.Count > 0) return View(model);
+                else return View("~/Views/Shared/_NoContent.cshtml");
             }
             catch (Exception ex)
             {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/Recipes");
+                logsService.GenerateLog(0, ex.Message, "Home/Recipes");
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -115,11 +124,12 @@ namespace DessertTaCeinture.WEB.Controllers
                     item.Average = rateService.CalculateAverage(item.Id);
                 }
 
-                return View(models);
+                if(models.Count() > 0) return View(models);
+                else return View("~/Views/Shared/_NoContent.cshtml");
             }
             catch (Exception ex)
             {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/TopRecipes");
+                logsService.GenerateLog(0, ex.Message, "Home/TopRecipes");
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -142,7 +152,7 @@ namespace DessertTaCeinture.WEB.Controllers
             }
             catch (Exception ex)
             {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Home/QuickSearch");
+                logsService.GenerateLog(0, ex.Message, "Home/QuickSearch");
                 return RedirectToAction("Error", "Home");
             }            
         }       

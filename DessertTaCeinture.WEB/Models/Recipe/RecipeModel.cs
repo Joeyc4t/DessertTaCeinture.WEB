@@ -32,5 +32,7 @@ namespace DessertTaCeinture.WEB.Models.Recipe
         public string Title { get; set; }
 
         public double? Average { get; set; }
+
+        public bool? IsValid { get; set; }
     }
 }

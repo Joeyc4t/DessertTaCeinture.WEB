@@ -1,0 +1,36 @@
+﻿@model IEnumerable<DessertTaCeinture.WEB.Models.Recipe.RecipeModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Recettes en attente :</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            Titre
+        </th>
+        <th>
+            Date de création
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td width="10%">
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td width="10%">
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
+            <td width="10%">
+                <a href="@Url.Action("Preview","Recipe", new { id = item.Id })"><img src="~/Content/images/keys/eye.png" /></a>
+            </td>
+        </tr>
+    }
+</table>

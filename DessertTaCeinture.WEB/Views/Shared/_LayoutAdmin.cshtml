@@ -25,6 +25,10 @@
     @Styles.Render("~/Content/css")
 </head>
 
+@{
+    var count = DessertTaCeinture.WEB.Services.Recipe.Instance.GetWaitingRecipes().Count();
+}
+
 <body>
 
     <script type="text/javascript">
@@ -45,18 +49,46 @@
         });
     </script>
 
+    <style>
+        .notification {
+            background-color: #555;
+            color: white;
+            text-decoration: none;
+            padding: 15px 26px;
+            position: relative;
+            display: inline-block;
+            border-radius: 2px;
+        }
+
+            .notification:hover {
+                background: red;
+            }
+
+            .notification .badge {
+                padding: 5px 10px;
+                border-radius: 50%;
+                background: red;
+                color: white;
+            }
+    </style>
+
     <div id="page">
         <div class="col-md-12">
             <div id="SideBar" class="sidenav">
-                <a href="@Url.Action("Index","Home")" target="_blank">Live site <span style="color: orange;">.</span></a>
+                <a href="@Url.Action("Index", "Home")" target="_blank">Live site <span style="color: orange;">.</span></a>
                 <hr />
-                <a href="@Url.Action("Index","Admin")">Dashboard</a>
-                <a href="@Url.Action("Users","Admin")">Utilisateurs</a>
+                <a href="@Url.Action("Index", "Admin")">Dashboard</a>
+                <a href="@Url.Action("Users", "Admin")">Utilisateurs</a>
+                <a href="@Url.Action("WaitingRecipes", "Admin")" class="notification">
+                    Recettes en attente @if (count > 0)
+                    { <span class="badge">@count</span> }
+                </a>
                 <a href="@Url.Action("News","Admin")">News</a>
                 <a href="@Url.Action("Categories","Admin")">Catégories</a>
                 <a href="@Url.Action("Themes","Admin")">Thèmes</a>
                 <a href="@Url.Action("Logs","Admin")">Logs</a>
-                <button class="dropdown-btn">Live pages<i class="fa fa-caret-down" style="margin-top: 0.4em;"></i>
+                <button class="dropdown-btn">
+                    Live pages<i class="fa fa-caret-down" style="margin-top: 0.4em;"></i>
                 </button>
                 <div class="dropdown-container">
                     <a href="@Url.Action("Recipes","Home")" target="_blank">Recettes</a>
@@ -69,7 +101,7 @@
             </div>
 
             <div class="col-md-10 col-md-offset-1" style="margin-top:50px;">
-                <div style="margin-left:75px;">                    
+                <div style="margin-left:75px;">
                     @RenderBody()
                 </div>
             </div>
@@ -79,7 +111,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/modernizr")    
+    @Scripts.Render("~/bundles/modernizr")
 
 </body>
 </html>

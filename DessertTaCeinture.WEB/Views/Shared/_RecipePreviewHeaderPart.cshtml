@@ -1,0 +1,17 @@
+﻿@model DessertTaCeinture.WEB.Models.Recipe.RecipeDetailViewModel
+
+@{
+    DessertTaCeinture.WEB.Services.Rate rateService = DessertTaCeinture.WEB.Services.Rate.Instance;
+    DessertTaCeinture.WEB.Services.Session sessionService = DessertTaCeinture.WEB.Services.Session.Instance;
+
+    DessertTaCeinture.WEB.Models.User.UserModel user = sessionService.GetConnectedUser();
+}
+
+<div class="col-md-12">
+    <div class="col-md-6">
+        <img src="@Model.Picture" class="img-rounded img-responsive" alt="Image" style="height: 100%; width: 85%;" />
+    </div>
+    <div class="col-md-6">
+       
+    </div>
+</div>

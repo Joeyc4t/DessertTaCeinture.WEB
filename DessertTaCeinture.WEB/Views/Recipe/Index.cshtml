@@ -37,14 +37,17 @@
                                             {
                                                 <table class="table">
                                                     <tr>
-                                                        <th class="text-center" width="25%">
+                                                        <th class="text-center" width="20%">
                                                             Titre
                                                         </th>
-                                                        <th class="text-center" width="25%">
+                                                        <th class="text-center" width="20%">
                                                             Date de publication
                                                         </th>
                                                         <th class="text-center" width="10%">
-                                                            Publiée
+                                                            Publier
+                                                        </th>
+                                                        <th class="text-center" width="10%">
+                                                            Statut
                                                         </th>
                                                         <th class="text-center" width="40%">
                                                             Actions
@@ -52,25 +55,46 @@
                                                     </tr>
                                                     @foreach (var item in Model)
                                                     {
-                                                        <tr>
-                                                            <td class="text-center" width="25%">
-                                                                @Html.DisplayFor(modelItem => item.Title)
-                                                            </td>
-                                                            <td class="text-center" width="25%">
-                                                                @Html.DisplayFor(modelItem => item.CreationDate)
-                                                            </td>
-                                                            <td class="text-center" width="10%">
-                                                                @if (item.IsPublic)
-                                                                {<img src="~/Content/images/keys/isactive.png" /> }
+                                                    <tr>
+                                                        <td class="text-center" width="20%">
+                                                            @Html.DisplayFor(modelItem => item.Title)
+                                                        </td>
+                                                        <td class="text-center" width="20%">
+                                                            @Html.DisplayFor(modelItem => item.CreationDate)
+                                                        </td>
+                                                        <td class="text-center" width="10%">
+                                                            @if (item.IsPublic)
+                                                            {
+                                                                <img src="~/Content/images/keys/isactive.png" /> 
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Content/images/keys/isnotactive.png" />
+                                                            }
+                                                        </td>
+                                                        <td class="text-center" width="10%">
+                                                            @if (item.IsValid.HasValue)
+                                                            {
+                                                                if (item.IsValid.Value)
+                                                                {
+                                                                    <img src="~/Content/images/keys/like.png" />
+                                                                }
                                                                 else
-                                                                { <img src="~/Content/images/keys/isnotactive.png" />}
-                                                            </td>
-                                                            <td class="text-center" width="40%">
-                                                                <a href="@Url.Action("Edit","Recipe", new { id = item.Id })"><img src="~/Content/images/keys/edit-yellow.png" /></a>&nbsp;
-                                                                <a href="@Url.Action("Details","Recipe", new { id = item.Id })" target="_blank"><img src="~/Content/images/keys/eye-yellow.png" /></a>&nbsp;
-                                                                <a href="@Url.Action("Delete","Recipe", new { id = item.Id })"><img src="~/Content/images/keys/delete-yellow.png" /></a>
-                                                            </td>
-                                                        </tr>
+                                                                {
+                                                                    <img src="~/Content/images/keys/dislike.png" />
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Content/images/keys/waiting.png" />
+                                                            }
+                                                        </td>
+                                                        <td class="text-center" width="40%">
+                                                            <a href="@Url.Action("Edit","Recipe", new { id = item.Id })"><img src="~/Content/images/keys/edit-yellow.png" /></a>&nbsp;
+                                                            <a href="@Url.Action("Details","Recipe", new { id = item.Id })" target="_blank"><img src="~/Content/images/keys/eye-yellow.png" /></a>&nbsp;
+                                                            <a href="@Url.Action("Delete","Recipe", new { id = item.Id })"><img src="~/Content/images/keys/delete-yellow.png" /></a>
+                                                        </td>
+                                                    </tr>
                                                     }
                                                 </table>
                                             }

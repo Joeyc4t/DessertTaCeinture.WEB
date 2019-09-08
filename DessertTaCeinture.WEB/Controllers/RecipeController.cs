@@ -87,7 +87,7 @@ namespace DessertTaCeinture.WEB.Controllers
                     else return RedirectToAction("Error", "Home");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/Create - Post");
                 return View(model);
@@ -125,7 +125,7 @@ namespace DessertTaCeinture.WEB.Controllers
                     else return RedirectToAction("Error", "Home");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/DeleteConfirmed - Post");
                 return View();
@@ -150,10 +150,10 @@ namespace DessertTaCeinture.WEB.Controllers
             if (ic.HasValue) ingredientIds.Add(ic.Value);
             if (id.HasValue) ingredientIds.Add(id.Value);
 
-            foreach(int recipeId in links.Select(l => l.RecipeId).Distinct())
+            foreach (int recipeId in links.Select(l => l.RecipeId).Distinct())
             {
                 RecipeViewModel tmp = recipeService.GetRecipeFull(recipeId);
-                if(tmp.RecipeIngredients.Select(ri => ri.IngredientId).Any(ingredientIds.Contains) && tmp.IsPublic)
+                if (tmp.RecipeIngredients.Select(ri => ri.IngredientId).Any(ingredientIds.Contains) && tmp.IsPublic)
                 {
                     recipes.Add(tmp);
                 }
@@ -219,7 +219,63 @@ namespace DessertTaCeinture.WEB.Controllers
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Item is null", "Recipe/Details - Get");
                 return RedirectToAction("Error", "Home");
-            }         
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Preview(int id)
+        {
+            RecipeModel item = recipeService.GetRecipe(id);
+
+            if (item != null)
+            {
+                RecipeDetailViewModel viewModel = new RecipeDetailViewModel()
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    CreationDate = item.CreationDate,
+                    Picture = item.Picture,
+                    IsPublic = item.IsPublic,
+                    Creator = userService.GetUserById(item.CreatorId),
+                    Category = recipeService.GetCategory(item.CategoryId),
+                    Origin = recipeService.GetOrigin(item.OriginId),
+                    Theme = recipeService.GetTheme(item.ThemeId),
+                    RecipeIngredients = recipeService.GetLinkedIngredients(id),
+                    RecipeSteps = recipeService.GetLinkedSteps(id)
+                };
+                return View(viewModel);
+            }
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Item is null", "Recipe/Preview - Get");
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        public async Task<ActionResult> PostDecision(int id, bool decision)
+        {
+            if(!IsConnectedAdmin()) return RedirectToAction("Error", "Home");
+
+            RecipeModel recipeModel = recipeService.GetRecipe(id);
+            recipeModel.IsValid = decision;
+
+            bool recipeUpdated;
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    recipeUpdated = await recipeService.UpdateRecipe(client, recipeModel);
+                }
+
+                if (recipeUpdated) return RedirectToAction("WaitingRecipes", "Admin");
+                else return RedirectToAction("Error", "Home");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/Validate - Post");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         public ActionResult Edit(int id)
@@ -240,6 +296,7 @@ namespace DessertTaCeinture.WEB.Controllers
         public async Task<ActionResult> Edit(int id, RecipeViewModel recipeViewModel, HttpPostedFileBase fileUpload)
         {
             RecipeModel recipeModel = AutoMapper<RecipeViewModel, RecipeModel>.AutoMap(recipeViewModel) ;
+            recipeModel.IsValid = null;
 
             bool recipeUpdated;
             bool ingredientsUpdated;
@@ -286,6 +343,12 @@ namespace DessertTaCeinture.WEB.Controllers
         private bool IsConnectedUser()
         {
             if (sessionService.GetConnectedUser() != null) return true;
+            else return false;
+        }
+
+        private bool IsConnectedAdmin()
+        {
+            if (sessionService.GetConnectedAdmin() != null) return true;
             else return false;
         }
 

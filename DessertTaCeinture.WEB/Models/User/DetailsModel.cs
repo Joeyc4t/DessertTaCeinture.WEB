@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DessertTaCeinture.WEB.Models.Rate;
+using DessertTaCeinture.WEB.Models.Recipe;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -30,5 +32,8 @@ namespace DessertTaCeinture.WEB.Models.User
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [DisplayName("Date d'inscription")]
         public DateTime InscriptionDate { get; set; }
+
+        public List<RateModel> associatedRates { get; set; }
+        public List<RecipeModel> associatedRecipes { get; set; }
     }
 }

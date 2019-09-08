@@ -537,6 +537,10 @@
     <Content Include="Views\Themes\Index.cshtml" />
     <Content Include="Views\Themes\Create.cshtml" />
     <Content Include="Views\Themes\Delete.cshtml" />
+    <Content Include="Views\Shared\_NoContent.cshtml" />
+    <Content Include="Views\Admin\WaitingRecipes.cshtml" />
+    <Content Include="Views\Recipe\Preview.cshtml" />
+    <Content Include="Views\Shared\_RecipePreviewHeaderPart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,8 +1,12 @@
-﻿using DessertTaCeinture.WEB.Models.User;
+﻿using DessertTaCeinture.WEB.Models.Rate;
+using DessertTaCeinture.WEB.Models.Recipe;
+using DessertTaCeinture.WEB.Models.User;
 using DessertTaCeinture.WEB.Services;
 using DessertTaCeinture.WEB.Tools;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -17,6 +21,8 @@ namespace DessertTaCeinture.WEB.Controllers
         private User UserService = Services.User.Instance;
         private Logs logsService = Logs.Instance;
         private Session SessionService = Services.Session.Instance;
+        private Recipe recipeService = Recipe.Instance;
+        private Rate rateService = Rate.Instance;
         #endregion Instances
 
         public ActionResult Create()
@@ -181,7 +187,17 @@ namespace DessertTaCeinture.WEB.Controllers
 
         public ActionResult Details()
         {
-            if (UserService.IsConnectedUser()) return View(AutoMapper<UserModel, DetailsModel>.AutoMap(UserService.GetConnectedUser()));
+            if (UserService.IsConnectedUser())
+            {
+                DetailsModel detailsModel = AutoMapper<UserModel, DetailsModel>.AutoMap(UserService.GetConnectedUser());
+                var associatedRecipes = recipeService.GetUserRecipes();
+                var associatedRates = rateService.GetRates().Where(r => r.UserId.Equals(detailsModel.Id));
+
+                detailsModel.associatedRecipes = associatedRecipes != null ? associatedRecipes.ToList() : new List<RecipeModel>();
+                detailsModel.associatedRates = associatedRates != null ? associatedRates.ToList() : new List<RateModel>();
+
+                return View(detailsModel);
+            }
             else
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "User/Details - Get");

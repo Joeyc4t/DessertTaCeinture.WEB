@@ -348,6 +348,10 @@ namespace DessertTaCeinture.WEB.Services
                 return null;
             }
         }
+        public IEnumerable<RecipeModel> GetWaitingRecipes()
+        {
+            return GetPublicRecipes().Where(r => !r.IsValid.HasValue);
+        }
         public IEnumerable<RecipeModel> GetTopRecipes()
         {
             List<RecipeModel> recipes = new List<RecipeModel>();
