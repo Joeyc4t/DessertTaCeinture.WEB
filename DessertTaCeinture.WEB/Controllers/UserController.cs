@@ -70,13 +70,13 @@ namespace DessertTaCeinture.WEB.Controllers
 
                         HttpResponseMessage Res = await client.PostAsync("api/User", toInsert);
                         if (Res.IsSuccessStatusCode) return RedirectToAction("Index", "Home");
-                        else return RedirectToAction("Error", "Home");
+                        else return View(model);
                     }
                 }
                 catch(Exception ex)
                 {
                     logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "User/Create - Post");
-                    return View(model);
+                    return RedirectToAction("Error", "Home");                    
                 }
             }
             return View(model);

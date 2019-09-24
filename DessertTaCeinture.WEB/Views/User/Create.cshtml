@@ -29,35 +29,35 @@
                                             <h3 class="cursive-font text-center">S'enregistrer</h3>
                                             <div class="row form-group">
                                                 @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                @Html.ValidationMessageFor(model => model.Email, "*", new { @class = "text-danger" })
+                                                @Html.ValidationMessageFor(model => model.Email)
                                                 <div class="col-md-8">
                                                     @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="row form-group">
                                                 @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                @Html.ValidationMessageFor(model => model.Password, "*", new { @class = "text-danger" })
+                                                @Html.ValidationMessageFor(model => model.Password)
                                                 <div class="col-md-8">
                                                     @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="row form-group">
                                                 @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                @Html.ValidationMessageFor(model => model.ConfirmPassword, "*", new { @class = "text-danger" })
+                                                @Html.ValidationMessageFor(model => model.ConfirmPassword)
                                                 <div class="col-md-8">
                                                     @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="row form-group">
                                                 @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                @Html.ValidationMessageFor(model => model.LastName, "*", new { @class = "text-danger" })
+                                                @Html.ValidationMessageFor(model => model.LastName)
                                                 <div class="col-md-8">
                                                     @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="row form-group">
                                                 @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                @Html.ValidationMessageFor(model => model.FirstName, "*", new { @class = "text-danger" })
+                                                @Html.ValidationMessageFor(model => model.FirstName)
                                                 <div class="col-md-8">
                                                     @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>

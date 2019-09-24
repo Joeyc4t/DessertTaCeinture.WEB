@@ -9,6 +9,7 @@ namespace DessertTaCeinture.WEB.Models.User
         [Required]
         [StringLength(50)]
         [DisplayName("Adresse mail")]
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "Adresse email invalide !")]
         public string Email { get; set; }
 
         [Required]
