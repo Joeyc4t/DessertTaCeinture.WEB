@@ -36,6 +36,10 @@
                                 <ul class="dropdown">
                                     <li><a href="@Url.Action("Details","User")">Mon profil</a></li>
                                     <li><a href="@Url.Action("Index","Recipe")">Mes recettes</a></li>
+                                    @if (Session["loggedAdmin"] != null)
+                                    {
+                                        <li><a href="@Url.Action("Index","Admin")">Administration</a></li>
+                                    }
                                     <li><a href="@Url.Action("Logout","User")">Se déconnecter</a></li>
                                 </ul>
                             </li>
