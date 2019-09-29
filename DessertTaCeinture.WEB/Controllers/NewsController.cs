@@ -16,9 +16,10 @@ namespace DessertTaCeinture.WEB.Controllers
     public class NewsController : Controller
     {
         #region Instances
+        private Logs logsService = Logs.Instance;
         private News NewsService = News.Instance;
         private Session SessionService = Services.Session.Instance;
-        private Logs logsService = Logs.Instance;
+
         #endregion Instances
 
         public ActionResult Create()
@@ -35,7 +36,7 @@ namespace DessertTaCeinture.WEB.Controllers
             }
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public async Task<ActionResult> Create(NewsModel model, HttpPostedFileBase fileUpload)
         {
             try

@@ -1,20 +1,37 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Web.Mvc;
 
 namespace DessertTaCeinture.WEB.Models.News
 {
     public class NewsModel
     {
         #region Fields
-        private int _Id;
-        private string _Title;
-        private string _ImageUrl;
-        private string _Summary;
         private string _Description;
+        private int _Id;
+        private string _ImageUrl;
         private DateTime _ReleaseDate;
-        #endregion
+        private string _Summary;
+        private string _Title;
+
+        #endregion Fields
 
         #region Properties
+
+        [AllowHtml]
+        [DisplayName("Description")]
+        public string Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                _Description = value;
+            }
+        }
+
         public int Id
         {
             get
@@ -24,19 +41,6 @@ namespace DessertTaCeinture.WEB.Models.News
             set
             {
                 _Id = value;
-            }
-        }
-
-        [DisplayName("Titre")]
-        public string Title
-        {
-            get
-            {
-                return _Title;
-            }
-            set
-            {
-                _Title = value;
             }
         }
 
@@ -53,6 +57,19 @@ namespace DessertTaCeinture.WEB.Models.News
             }
         }
 
+        [DisplayName("Publier à partir du")]
+        public DateTime ReleaseDate
+        {
+            get
+            {
+                return _ReleaseDate;
+            }
+            set
+            {
+                _ReleaseDate = value;
+            }
+        }
+
         [DisplayName("Résumé")]
         public string Summary
         {
@@ -66,31 +83,19 @@ namespace DessertTaCeinture.WEB.Models.News
             }
         }
 
-        [DisplayName("Description")]
-        public string Description
+        [DisplayName("Titre")]
+        public string Title
         {
             get
             {
-                return _Description;
+                return _Title;
             }
             set
             {
-                _Description = value;
+                _Title = value;
             }
         }
 
-        [DisplayName("Publier à partir du")]
-        public DateTime ReleaseDate
-        {
-            get
-            {
-                return _ReleaseDate;
-            }
-            set
-            {
-                _ReleaseDate = value;
-            }
-        }
-        #endregion
+        #endregion Properties
     }
 }

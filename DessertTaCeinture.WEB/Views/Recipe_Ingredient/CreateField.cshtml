@@ -9,7 +9,7 @@
     foreach (var ingredient in Recipe.Instance.GetIngredients()) { ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() }); }
 
     List<SelectListItem> units = new List<SelectListItem>();
-    units.Add(new SelectListItem { Text = string.Empty, Value = string.Empty });
+    units.Add(new SelectListItem { Text = "pc", Value = "pc" });
     units.Add(new SelectListItem { Text = "mg", Value = "mg" });
     units.Add(new SelectListItem { Text = "gr", Value = "gr" });
     units.Add(new SelectListItem { Text = "kg", Value = "kg" });

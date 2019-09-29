@@ -24,10 +24,9 @@ namespace DessertTaCeinture.WEB.Services
     public class Recipe
     {
         #region Instances
+        private static Recipe _Instance;
         private Logs logsService = Logs.Instance;
         private Session SessionService = Session.Instance;
-
-        private static Recipe _Instance;
         private Recipe()
         {
         }
@@ -57,11 +56,11 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return isComplete;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - DeleteIngredientsLink");
                 return false;
-            }            
+            }
         }
         public async Task<bool> DeleteRecipe(HttpClient client, int recipeId)
         {
@@ -70,11 +69,11 @@ namespace DessertTaCeinture.WEB.Services
                 HttpResponseMessage itemRes = await client.DeleteAsync($"api/Recipe?id={recipeId}");
                 return itemRes.IsSuccessStatusCode;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - DeleteRecipe");
                 return false;
-            }            
+            }
         }
         public async Task<bool> DeleteStepsLinks(HttpClient client, int recipeId)
         {
@@ -94,124 +93,12 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return isComplete;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - DeleteStepsLink");
                 return false;
-            }            
-        }
-        public async Task<bool> RegisterIngredientsLinks(HttpClient client, int recipeId, IList<Recipe_IngredientModel> items)
-        {
-            try
-            {
-                bool isComplete = true;
-                foreach (var item in items)
-                {
-                    item.RecipeId = recipeId;
-
-                    StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
-                    itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
-                    HttpResponseMessage itemRes = await client.PostAsync("api/Recipe_Ingredients", itemInsert);
-
-                    if (itemRes.IsSuccessStatusCode) continue;
-                    else isComplete = false;
-                }
-                return isComplete;
             }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - RegisterIngredientsLinks");
-                return false;
-            }            
         }
-        public async Task<bool> RegisterStepsLinks(HttpClient client, int recipeId, IList<StepModel> items)
-        {
-            try
-            {
-                bool isComplete = true;
-                foreach (var item in items)
-                {
-                    item.RecipeId = recipeId;
-
-                    StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
-                    itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
-                    HttpResponseMessage itemRes = await client.PostAsync("api/Step", itemInsert);
-
-                    if (itemRes.IsSuccessStatusCode) continue;
-                    else isComplete = false;
-                }
-                return isComplete;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - RegisterStepsLinks");
-                return false;
-            }            
-        }
-        public async Task<bool> UpdateRecipe(HttpClient client, RecipeModel model)
-        {
-            try
-            {
-                client.BaseAddress = new Uri(StaticValues.BASE_URI);
-
-                StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(model));
-                toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
-
-                HttpResponseMessage Res = await client.PutAsync($"api/Recipe?id={model.Id}", toUpdate);
-                if (Res.IsSuccessStatusCode) return true;
-                else return false;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - UpdateRecipe");
-                return false;
-            }            
-        }
-        public async Task<bool> UpdateIngredientsLinks(HttpClient client, IList<Recipe_IngredientModel> items)
-        {
-            try
-            {
-                bool isComplete = true;
-                foreach (var item in items)
-                {
-                    StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(item));
-                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
-                    HttpResponseMessage itemRes = await client.PutAsync($"api/Recipe_Ingredients?id={item.Id}", toUpdate);
-
-                    if (itemRes.IsSuccessStatusCode) continue;
-                    else isComplete = false;
-                }
-                return isComplete;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - UpdateIngredientsLinks");
-                return false;
-            }            
-        }
-        public async Task<bool> UpdateStepsLinks(HttpClient client, IList<StepModel> items)
-        {
-            try
-            {
-                bool isComplete = true;
-                foreach (var item in items)
-                {
-                    StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(item));
-                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
-                    HttpResponseMessage itemRes = await client.PutAsync($"api/Step?id={item.Id}", toUpdate);
-
-                    if (itemRes.IsSuccessStatusCode) continue;
-                    else isComplete = false;
-                }
-                return isComplete;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - UpdateStepsLinks");
-                return false;
-            }            
-        }
-
         public IEnumerable<CategoryModel> GetCategories()
         {
             List<CategoryModel> items = new List<CategoryModel>();
@@ -240,9 +127,37 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return items;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetCategories");
+                return null;
+            }
+        }
+        public CategoryModel GetCategory(int categoryId)
+        {
+            try
+            {
+                CategoryModel item = new CategoryModel();
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Category/{categoryId}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null) item = JsonConvert.DeserializeObject<CategoryModel>(result);
+                        else return null;
+                    }
+                }
+                return item;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetCategory");
                 return null;
             }
         }
@@ -274,9 +189,43 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return ingredients.OrderBy(i => i.Name).ToList();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetIngredients");
+                return null;
+            }
+        }
+        public List<Recipe_IngredientModel> GetIngredientsLinks(int recipeId)
+        {
+            List<Recipe_IngredientModel> items = new List<Recipe_IngredientModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients?recipeId={recipeId}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (Recipe_IngredientModel model in JsonConvert.DeserializeObject<List<Recipe_IngredientModel>>(result))
+                            {
+                                items.Add(model);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return items;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetIngredientsLinks");
                 return null;
             }
         }
@@ -308,81 +257,9 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return recipes;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetLastPublished");
-                return null;
-            }
-        }
-        public IEnumerable<RecipeModel> GetPublicRecipes()
-        {
-            List<RecipeModel> recipes = new List<RecipeModel>();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetPublicRecipes").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null)
-                        {
-                            foreach (RecipeModel model in JsonConvert.DeserializeObject<List<RecipeModel>>(result))
-                            {
-                                recipes.Add(model);
-                            }
-                        }
-                        else return null;
-                    }
-                }
-                return recipes;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetPublicRecipes");
-                return null;
-            }
-        }
-        public IEnumerable<RecipeModel> GetWaitingRecipes()
-        {
-            return GetPublicRecipes().Where(r => !r.IsValid.HasValue);
-        }
-        public IEnumerable<RecipeModel> GetTopRecipes()
-        {
-            List<RecipeModel> recipes = new List<RecipeModel>();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Rate/GetTopRecipes").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null)
-                        {
-                            foreach (RecipeModel model in JsonConvert.DeserializeObject<List<RecipeModel>>(result))
-                            {
-                                recipes.Add(model);
-                            }
-                        }
-                        else return null;
-                    }
-                }
-                return recipes;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetTopRecipes");
                 return null;
             }
         }
@@ -423,7 +300,7 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return viewModels;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetLinkedIngredients");
                 return null;
@@ -457,9 +334,287 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return items.OrderBy(s => s.StepOrder);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetLinkedSteps");
+                return null;
+            }
+        }
+        public OriginModel GetOrigin(int? originId)
+        {
+            if (originId != null)
+            {
+                try
+                {
+                    OriginModel item = new OriginModel();
+
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                        client.DefaultRequestHeaders.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                        HttpResponseMessage Res = client.GetAsync($"api/Origin/{originId}").Result;
+                        if (Res.IsSuccessStatusCode)
+                        {
+                            var result = Res.Content.ReadAsStringAsync().Result;
+                            if (result != null) item = JsonConvert.DeserializeObject<OriginModel>(result);
+                            else return null;
+                        }
+                    }
+                    return item;
+                }
+                catch (Exception ex)
+                {
+                    logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - UpdateStepsLinks");
+                    return null;
+                }
+            }
+            else return null;
+        }
+        public IEnumerable<OriginModel> GetOrigins()
+        {
+            List<OriginModel> items = new List<OriginModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Origin").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (OriginModel origin in JsonConvert.DeserializeObject<List<OriginModel>>(result))
+                            {
+                                items.Add(origin);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return items.OrderBy(i => i.Country).ToList();
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetOrigins");
+                return null;
+            }
+        }
+        public IEnumerable<RecipeModel> GetPublicRecipes()
+        {
+            List<RecipeModel> recipes = new List<RecipeModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetPublicRecipes").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (RecipeModel model in JsonConvert.DeserializeObject<List<RecipeModel>>(result))
+                            {
+                                recipes.Add(model);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return recipes;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetPublicRecipes");
+                return null;
+            }
+        }
+        public RecipeModel GetRecipe(int recipeId)
+        {
+            try
+            {
+                RecipeModel item = new RecipeModel();
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/{recipeId}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null) item = JsonConvert.DeserializeObject<RecipeModel>(result);
+                        else return null;
+                    }
+                }
+                return item;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipe");
+                return null;
+            }
+        }
+        public List<Recipe_IngredientModel> GetRecipe_Ingredients(int? a, int? b, int? c, int? d, bool with)
+        {
+            List<Recipe_IngredientModel> items = new List<Recipe_IngredientModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (Recipe_IngredientModel origin in JsonConvert.DeserializeObject<List<Recipe_IngredientModel>>(result))
+                            {
+                                items.Add(origin);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                if (with) return items.Where(i => i.IngredientId == a || i.IngredientId == b || i.IngredientId == c || i.IngredientId == d).ToList();
+                else return items.Where(i => i.IngredientId != a || i.IngredientId != b || i.IngredientId != c || i.IngredientId != d).ToList();
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipe_Ingredients");
+                return null;
+            }
+        }
+        public RecipeViewModel GetRecipeFull(int recipeId)
+        {
+            try
+            {
+                RecipeModel recipeModel = GetRecipe(recipeId);
+
+                RecipeViewModel recipeVM = new RecipeViewModel()
+                {
+                    Id = recipeId,
+                    CategoryId = recipeModel.CategoryId,
+                    CreationDate = recipeModel.CreationDate,
+                    CreatorId = recipeModel.CreatorId,
+                    IsPublic = recipeModel.IsPublic,
+                    IsValid = recipeModel.IsValid,
+                    OriginId = recipeModel.OriginId,
+                    Picture = recipeModel.Picture,
+                    ThemeId = recipeModel.ThemeId,
+                    Title = recipeModel.Title,
+                    RecipeIngredients = GetIngredientsLinks(recipeId),
+                    RecipeSteps = GetLinkedSteps(recipeId).ToList(),
+                    Categories = GetCategories(),
+                    Origins = GetOrigins(),
+                    Themes = GetThemes()
+                };
+
+                return recipeVM;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipeFull");
+                return null;
+            }
+        }
+        public int[] GetRecipeIndexes()
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetRecipeIndexes").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null) return JsonConvert.DeserializeObject<int[]>(result);
+                        else return null;
+                    }
+                    else return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipeIndexes");
+                return null;
+            }
+        }
+        public Recipe_IngredientModel GetRecipeIngredientLink(int ingredientId, int recipeId)
+        {
+            try
+            {
+                Recipe_IngredientModel item = new Recipe_IngredientModel();
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients/GetLink?ingredientId={ingredientId}&recipeId={recipeId}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null) item = JsonConvert.DeserializeObject<Recipe_IngredientModel>(result);
+                        else return null;
+                    }
+                }
+                return item;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipeIngredientLink");
+                return null;
+            }
+        }
+        public ThemeModel GetTheme(int themeId)
+        {
+            try
+            {
+                ThemeModel item = new ThemeModel();
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Theme/{themeId}").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null) item = JsonConvert.DeserializeObject<ThemeModel>(result);
+                        else return null;
+                    }
+                }
+                return item;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetTheme");
                 return null;
             }
         }
@@ -491,9 +646,43 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return items;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetThemes");
+                return null;
+            }
+        }
+        public IEnumerable<RecipeModel> GetTopRecipes()
+        {
+            List<RecipeModel> recipes = new List<RecipeModel>();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+
+                    HttpResponseMessage Res = client.GetAsync($"api/Rate/GetTopRecipes").Result;
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = Res.Content.ReadAsStringAsync().Result;
+                        if (result != null)
+                        {
+                            foreach (RecipeModel model in JsonConvert.DeserializeObject<List<RecipeModel>>(result))
+                            {
+                                recipes.Add(model);
+                            }
+                        }
+                        else return null;
+                    }
+                }
+                return recipes;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetTopRecipes");
                 return null;
             }
         }
@@ -528,261 +717,15 @@ namespace DessertTaCeinture.WEB.Services
                 }
                 return recipes;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetUserRecipes");
                 return null;
             }
         }
-        public IEnumerable<OriginModel> GetOrigins()
+        public IEnumerable<RecipeModel> GetWaitingRecipes()
         {
-            List<OriginModel> items = new List<OriginModel>();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Origin").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null)
-                        {
-                            foreach (OriginModel origin in JsonConvert.DeserializeObject<List<OriginModel>>(result))
-                            {
-                                items.Add(origin);
-                            }
-                        }
-                        else return null;
-                    }
-                }
-                return items.OrderBy(i => i.Country).ToList();
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetOrigins");
-                return null;
-            }
-        }
-
-        public List<Recipe_IngredientModel> GetRecipe_Ingredients(int? a, int? b, int? c, int? d, bool with)
-        {
-            List<Recipe_IngredientModel> items = new List<Recipe_IngredientModel>();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null)
-                        {
-                            foreach (Recipe_IngredientModel origin in JsonConvert.DeserializeObject<List<Recipe_IngredientModel>>(result))
-                            {
-                                items.Add(origin);
-                            }
-                        }
-                        else return null;
-                    }
-                }
-                if(with) return items.Where(i => i.IngredientId == a || i.IngredientId == b || i.IngredientId == c || i.IngredientId == d).ToList();
-                else return items.Where(i => i.IngredientId != a || i.IngredientId != b || i.IngredientId != c || i.IngredientId != d).ToList();
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipe_Ingredients");
-                return null;
-            }
-        }
-        public List<Recipe_IngredientModel> GetIngredientsLinks(int recipeId)
-        {
-            List<Recipe_IngredientModel> items = new List<Recipe_IngredientModel>();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients?recipeId={recipeId}").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null)
-                        {
-                            foreach (Recipe_IngredientModel model in JsonConvert.DeserializeObject<List<Recipe_IngredientModel>>(result))
-                            {
-                                items.Add(model);
-                            }
-                        }
-                        else return null;
-                    }
-                }
-                return items;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetIngredientsLinks");
-                return null;
-            }
-        }
-        
-        public CategoryModel GetCategory(int categoryId)
-        {
-            try
-            {
-                CategoryModel item = new CategoryModel();
-
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Category/{categoryId}").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null) item = JsonConvert.DeserializeObject<CategoryModel>(result);
-                        else return null;
-                    }
-                }
-                return item;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetCategory");
-                return null;
-            }            
-        }
-        public OriginModel GetOrigin(int? originId)
-        {
-            if (originId != null)
-            {
-                try
-                {
-                    OriginModel item = new OriginModel();
-
-                    using (var client = new HttpClient())
-                    {
-                        client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                        client.DefaultRequestHeaders.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                        HttpResponseMessage Res = client.GetAsync($"api/Origin/{originId}").Result;
-                        if (Res.IsSuccessStatusCode)
-                        {
-                            var result = Res.Content.ReadAsStringAsync().Result;
-                            if (result != null) item = JsonConvert.DeserializeObject<OriginModel>(result);
-                            else return null;
-                        }
-                    }
-                    return item;
-                }
-                catch(Exception ex)
-                {
-                    logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - UpdateStepsLinks");
-                    return null;
-                }                
-            }
-            else return null;
-        }
-        public RecipeModel GetRecipe(int recipeId)
-        {
-            try
-            {
-                RecipeModel item = new RecipeModel();
-
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/{recipeId}").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null) item = JsonConvert.DeserializeObject<RecipeModel>(result);
-                        else return null;
-                    }
-                }
-                return item;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipe");
-                return null;
-            }            
-        }
-        public Recipe_IngredientModel GetRecipeIngredientLink(int ingredientId, int recipeId)
-        {
-            try
-            {
-                Recipe_IngredientModel item = new Recipe_IngredientModel();
-
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Recipe_Ingredients/GetLink?ingredientId={ingredientId}&recipeId={recipeId}").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null) item = JsonConvert.DeserializeObject<Recipe_IngredientModel>(result);
-                        else return null;
-                    }
-                }
-                return item;
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipeIngredientLink");
-                return null;
-            }            
-        }
-        public ThemeModel GetTheme(int themeId)
-        {
-            try
-            {
-                ThemeModel item = new ThemeModel();
-
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
-
-                    HttpResponseMessage Res = client.GetAsync($"api/Theme/{themeId}").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null) item = JsonConvert.DeserializeObject<ThemeModel>(result);
-                        else return null;
-                    }
-                }
-                return item;
-
-            }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetTheme");
-                return null;
-            }            
+            return GetPublicRecipes().Where(r => !r.IsValid.HasValue);
         }
         public CreateRecipeModel MapCollectionToRecipeModel(HttpRequestBase request, FormCollection collection, int creatorId)
         {
@@ -848,69 +791,122 @@ namespace DessertTaCeinture.WEB.Services
 
                 return model;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - MapCollectionToRecipeModel");
                 return null;
-            }            
-        }
-        public RecipeViewModel GetRecipeFull(int recipeId)
-        {
-            try
-            {
-                RecipeModel recipeModel = GetRecipe(recipeId);
-
-                RecipeViewModel recipeVM = new RecipeViewModel()
-                {
-                    Id = recipeId,
-                    CategoryId = recipeModel.CategoryId,
-                    CreationDate = recipeModel.CreationDate,
-                    CreatorId = recipeModel.CreatorId,
-                    IsPublic = recipeModel.IsPublic,
-                    OriginId = recipeModel.OriginId,
-                    Picture = recipeModel.Picture,
-                    ThemeId = recipeModel.ThemeId,
-                    Title = recipeModel.Title,
-                    RecipeIngredients = GetIngredientsLinks(recipeId),
-                    RecipeSteps = GetLinkedSteps(recipeId).ToList(),
-                    Categories = GetCategories(),
-                    Origins = GetOrigins(),
-                    Themes = GetThemes()
-                };
-
-                return recipeVM;
             }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipeFull");
-                return null;
-            }            
         }
-        public int[] GetRecipeIndexes()
+        public async Task<bool> RegisterIngredientsLinks(HttpClient client, int recipeId, IList<Recipe_IngredientModel> items)
         {
             try
             {
-                using (var client = new HttpClient())
+                bool isComplete = true;
+                foreach (var item in items)
                 {
-                    client.BaseAddress = new Uri(StaticValues.BASE_URI);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(StaticValues.API_MEDIA_TYPE));
+                    item.RecipeId = recipeId;
 
-                    HttpResponseMessage Res = client.GetAsync($"api/Recipe/GetRecipeIndexes").Result;
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-                        if (result != null) return JsonConvert.DeserializeObject<int[]>(result);
-                        else return null;
-                    }
-                    else return null;
+                    StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
+                    itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+                    HttpResponseMessage itemRes = await client.PostAsync("api/Recipe_Ingredients", itemInsert);
+
+                    if (itemRes.IsSuccessStatusCode) continue;
+                    else isComplete = false;
                 }
+                return isComplete;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - GetRecipeIndexes");
-                return null;
-            }            
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - RegisterIngredientsLinks");
+                return false;
+            }
+        }
+        public async Task<bool> RegisterStepsLinks(HttpClient client, int recipeId, IList<StepModel> items)
+        {
+            try
+            {
+                bool isComplete = true;
+                foreach (var item in items)
+                {
+                    item.RecipeId = recipeId;
+
+                    StringContent itemInsert = new StringContent(JsonConvert.SerializeObject(item));
+                    itemInsert.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+                    HttpResponseMessage itemRes = await client.PostAsync("api/Step", itemInsert);
+
+                    if (itemRes.IsSuccessStatusCode) continue;
+                    else isComplete = false;
+                }
+                return isComplete;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - RegisterStepsLinks");
+                return false;
+            }
+        }
+        public async Task<bool> UpdateIngredientsLinks(HttpClient client, IList<Recipe_IngredientModel> items)
+        {
+            try
+            {
+                bool isComplete = true;
+                foreach (var item in items)
+                {
+                    StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(item));
+                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+                    HttpResponseMessage itemRes = await client.PutAsync($"api/Recipe_Ingredients?id={item.Id}", toUpdate);
+
+                    if (itemRes.IsSuccessStatusCode) continue;
+                    else isComplete = false;
+                }
+                return isComplete;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - UpdateIngredientsLinks");
+                return false;
+            }
+        }
+        public async Task<bool> UpdateRecipe(HttpClient client, RecipeModel model)
+        {
+            try
+            {
+                client.BaseAddress = new Uri(StaticValues.BASE_URI);
+
+                StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(model));
+                toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+
+                HttpResponseMessage Res = await client.PutAsync($"api/Recipe?id={model.Id}", toUpdate);
+                if (Res.IsSuccessStatusCode) return true;
+                else return false;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - UpdateRecipe");
+                return false;
+            }
+        }
+        public async Task<bool> UpdateStepsLinks(HttpClient client, IList<StepModel> items)
+        {
+            try
+            {
+                bool isComplete = true;
+                foreach (var item in items)
+                {
+                    StringContent toUpdate = new StringContent(JsonConvert.SerializeObject(item));
+                    toUpdate.Headers.ContentType = new MediaTypeHeaderValue(StaticValues.API_MEDIA_TYPE);
+                    HttpResponseMessage itemRes = await client.PutAsync($"api/Step?id={item.Id}", toUpdate);
+
+                    if (itemRes.IsSuccessStatusCode) continue;
+                    else isComplete = false;
+                }
+                return isComplete;
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe service - UpdateStepsLinks");
+                return false;
+            }
         }
     }
 }

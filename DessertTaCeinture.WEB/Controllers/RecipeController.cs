@@ -21,12 +21,13 @@ namespace DessertTaCeinture.WEB.Controllers
     {
         #region Instances
         public List<Recipe_IngredientModel> ingredients = new List<Recipe_IngredientModel>();
-        private Recipe recipeService = Services.Recipe.Instance;
-        private Session sessionService = Services.Session.Instance;
-        private User userService = Services.User.Instance;
-        private Search searchService = Services.Search.Instance;
         private Logs logsService = Logs.Instance;
+        private Recipe recipeService = Services.Recipe.Instance;
+        private Search searchService = Services.Search.Instance;
+        private Session sessionService = Services.Session.Instance;
         private Session SessionService = Services.Session.Instance;
+        private User userService = Services.User.Instance;
+
         #endregion Instances
 
         [HttpGet]
@@ -133,66 +134,6 @@ namespace DessertTaCeinture.WEB.Controllers
         }
 
         [HttpGet]
-        public ActionResult RecipesICanDo(string a, string b, string c, string d)
-        {
-            List<RecipeViewModel> recipes = new List<RecipeViewModel>();
-            List<int> ingredientIds = new List<int>();
-
-            int? ia = !string.IsNullOrEmpty(a) ? Convert.ToInt32(a) : (int?)null;
-            int? ib = !string.IsNullOrEmpty(b) ? Convert.ToInt32(b) : (int?)null;
-            int? ic = !string.IsNullOrEmpty(c) ? Convert.ToInt32(c) : (int?)null;
-            int? id = !string.IsNullOrEmpty(d) ? Convert.ToInt32(d) : (int?)null;
-
-            List<Recipe_IngredientModel> links = recipeService.GetRecipe_Ingredients(ia, ib, ic, id, true);
-
-            if (ia.HasValue) ingredientIds.Add(ia.Value);
-            if (ib.HasValue) ingredientIds.Add(ib.Value);
-            if (ic.HasValue) ingredientIds.Add(ic.Value);
-            if (id.HasValue) ingredientIds.Add(id.Value);
-
-            foreach (int recipeId in links.Select(l => l.RecipeId).Distinct())
-            {
-                RecipeViewModel tmp = recipeService.GetRecipeFull(recipeId);
-                if (tmp.RecipeIngredients.Select(ri => ri.IngredientId).Any(ingredientIds.Contains) && tmp.IsPublic)
-                {
-                    recipes.Add(tmp);
-                }
-            }
-
-            return View(recipes);
-        }
-
-        [HttpGet]
-        public ActionResult RecipesWithout(string a, string b, string c, string d)
-        {
-            List<RecipeViewModel> recipes = new List<RecipeViewModel>();
-            List<int> ingredientIds = new List<int>();
-
-            int? ia = !string.IsNullOrEmpty(a) ? Convert.ToInt32(a) : (int?)null;
-            int? ib = !string.IsNullOrEmpty(b) ? Convert.ToInt32(b) : (int?)null;
-            int? ic = !string.IsNullOrEmpty(c) ? Convert.ToInt32(c) : (int?)null;
-            int? id = !string.IsNullOrEmpty(d) ? Convert.ToInt32(d) : (int?)null;
-
-            List<Recipe_IngredientModel> links = recipeService.GetRecipe_Ingredients(ia, ib, ic, id, false);
-
-            if (ia.HasValue) ingredientIds.Add(ia.Value);
-            if (ib.HasValue) ingredientIds.Add(ib.Value);
-            if (ic.HasValue) ingredientIds.Add(ic.Value);
-            if (id.HasValue) ingredientIds.Add(id.Value);
-
-            foreach (int recipeId in links.Select(l => l.RecipeId).Distinct())
-            {
-                RecipeViewModel tmp = recipeService.GetRecipeFull(recipeId);
-                if (!tmp.RecipeIngredients.Select(ri => ri.IngredientId).Any(ingredientIds.Contains) && tmp.IsPublic)
-                {
-                    recipes.Add(tmp);
-                }
-            }
-
-            return View(recipes);
-        }
-
-        [HttpGet]
         public ActionResult Details(int id)
         {
             RecipeModel item = recipeService.GetRecipe(id);
@@ -221,7 +162,89 @@ namespace DessertTaCeinture.WEB.Controllers
                 return RedirectToAction("Error", "Home");
             }
         }
+        public ActionResult Edit(int id)
+        {
+            if (IsConnectedUser())
+            {
+                RecipeViewModel model = recipeService.GetRecipeFull(id);
+                return View(model);
+            }
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "Recipe/Edit - Get");
+                return RedirectToAction("Error", "Home");
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> Edit(int id, RecipeViewModel recipeViewModel, HttpPostedFileBase fileUpload)
+        {
+            RecipeModel recipeModel = AutoMapper<RecipeViewModel, RecipeModel>.AutoMap(recipeViewModel);
+            recipeModel.IsValid = null;
 
+            bool recipeUpdated;
+            bool ingredientsUpdated;
+            bool stepsUpdated;
+
+            try
+            {
+                if (!ModelState.IsValid) return View(recipeViewModel);
+
+                if (fileUpload != null && fileUpload.ContentLength > 0)
+                {
+                    recipeModel.Picture = "/Content/images/recipes/" + fileUpload.FileName;
+                    fileUpload.SaveAs(Server.MapPath("~/Content/images/recipes/" + fileUpload.FileName));
+                }
+
+                using (var client = new HttpClient())
+                {
+                    recipeUpdated = await recipeService.UpdateRecipe(client, recipeModel);
+                    ingredientsUpdated = await recipeService.UpdateIngredientsLinks(client, recipeViewModel.RecipeIngredients);
+                    stepsUpdated = await recipeService.UpdateStepsLinks(client, recipeViewModel.RecipeSteps);
+                }
+
+                if (recipeUpdated && ingredientsUpdated && stepsUpdated) return RedirectToAction("Index");
+                else return RedirectToAction("Error", "Home");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/Edit - Post");
+                return View(recipeViewModel);
+            }
+        }
+        public ActionResult Index()
+        {
+            if (IsConnectedUser()) return View(recipeService.GetUserRecipes());
+            else
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "Rate/Edit - Get");
+                return RedirectToAction("Error", "Home");
+            }
+        }
+        public async Task<ActionResult> PostDecision(int id, bool decision)
+        {
+            if (!IsConnectedAdmin()) return RedirectToAction("Error", "Home");
+
+            RecipeModel recipeModel = recipeService.GetRecipe(id);
+            recipeModel.IsValid = decision;
+
+            bool recipeUpdated;
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    recipeUpdated = await recipeService.UpdateRecipe(client, recipeModel);
+                }
+
+                if (recipeUpdated) return RedirectToAction("WaitingRecipes", "Admin");
+                else return RedirectToAction("Error", "Home");
+            }
+            catch (Exception ex)
+            {
+                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/Validate - Post");
+                return RedirectToAction("Error", "Home");
+            }
+        }
         [HttpGet]
         public ActionResult Preview(int id)
         {
@@ -251,104 +274,75 @@ namespace DessertTaCeinture.WEB.Controllers
                 return RedirectToAction("Error", "Home");
             }
         }
-
-        public async Task<ActionResult> PostDecision(int id, bool decision)
+        [HttpGet]
+        public ActionResult RecipesICanDo(string a, string b, string c, string d)
         {
-            if(!IsConnectedAdmin()) return RedirectToAction("Error", "Home");
+            List<RecipeViewModel> recipes = new List<RecipeViewModel>();
+            List<int> ingredientIds = new List<int>();
 
-            RecipeModel recipeModel = recipeService.GetRecipe(id);
-            recipeModel.IsValid = decision;
+            int? ia = !string.IsNullOrEmpty(a) ? Convert.ToInt32(a) : (int?)null;
+            int? ib = !string.IsNullOrEmpty(b) ? Convert.ToInt32(b) : (int?)null;
+            int? ic = !string.IsNullOrEmpty(c) ? Convert.ToInt32(c) : (int?)null;
+            int? id = !string.IsNullOrEmpty(d) ? Convert.ToInt32(d) : (int?)null;
 
-            bool recipeUpdated;
+            List<Recipe_IngredientModel> links = recipeService.GetRecipe_Ingredients(ia, ib, ic, id, true);
 
-            try
+            if (ia.HasValue) ingredientIds.Add(ia.Value);
+            if (ib.HasValue) ingredientIds.Add(ib.Value);
+            if (ic.HasValue) ingredientIds.Add(ic.Value);
+            if (id.HasValue) ingredientIds.Add(id.Value);
+
+            foreach (int recipeId in links.Select(l => l.RecipeId).Distinct())
             {
-                using (var client = new HttpClient())
+                RecipeViewModel tmp = recipeService.GetRecipeFull(recipeId);
+                if (tmp.RecipeIngredients.Select(ri => ri.IngredientId).Any(ingredientIds.Contains) && tmp.IsPublic && (tmp.IsValid.HasValue && tmp.IsValid.Value))
                 {
-                    recipeUpdated = await recipeService.UpdateRecipe(client, recipeModel);
+                    recipes.Add(tmp);
                 }
+            }
 
-                if (recipeUpdated) return RedirectToAction("WaitingRecipes", "Admin");
-                else return RedirectToAction("Error", "Home");
-            }
-            catch (Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/Validate - Post");
-                return RedirectToAction("Error", "Home");
-            }
+            return View(recipes);
         }
 
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public ActionResult RecipesWithout(string a, string b, string c, string d)
         {
-            if (IsConnectedUser())
+            List<RecipeViewModel> recipes = new List<RecipeViewModel>();
+            List<int> ingredientIds = new List<int>();
+
+            int? ia = !string.IsNullOrEmpty(a) ? Convert.ToInt32(a) : (int?)null;
+            int? ib = !string.IsNullOrEmpty(b) ? Convert.ToInt32(b) : (int?)null;
+            int? ic = !string.IsNullOrEmpty(c) ? Convert.ToInt32(c) : (int?)null;
+            int? id = !string.IsNullOrEmpty(d) ? Convert.ToInt32(d) : (int?)null;
+
+            List<Recipe_IngredientModel> links = recipeService.GetRecipe_Ingredients(ia, ib, ic, id, false);
+
+            if (ia.HasValue) ingredientIds.Add(ia.Value);
+            if (ib.HasValue) ingredientIds.Add(ib.Value);
+            if (ic.HasValue) ingredientIds.Add(ic.Value);
+            if (id.HasValue) ingredientIds.Add(id.Value);
+
+            foreach (int recipeId in links.Select(l => l.RecipeId).Distinct())
             {
-                RecipeViewModel model = recipeService.GetRecipeFull(id);
-                return View(model);
-            }
-            else
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "Recipe/Edit - Get");
-                return RedirectToAction("Error", "Home");
-            }
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Edit(int id, RecipeViewModel recipeViewModel, HttpPostedFileBase fileUpload)
-        {
-            RecipeModel recipeModel = AutoMapper<RecipeViewModel, RecipeModel>.AutoMap(recipeViewModel) ;
-            recipeModel.IsValid = null;
-
-            bool recipeUpdated;
-            bool ingredientsUpdated;
-            bool stepsUpdated;
-
-            try
-            {
-                if (!ModelState.IsValid) return View(recipeViewModel);
-
-                if (fileUpload != null && fileUpload.ContentLength > 0)
+                RecipeViewModel tmp = recipeService.GetRecipeFull(recipeId);
+                if (!tmp.RecipeIngredients.Select(ri => ri.IngredientId).Any(ingredientIds.Contains) && tmp.IsPublic && (tmp.IsValid.HasValue && tmp.IsValid.Value))
                 {
-                    recipeModel.Picture = "/Content/images/recipes/" + fileUpload.FileName;
-                    fileUpload.SaveAs(Server.MapPath("~/Content/images/recipes/" + fileUpload.FileName));
+                    recipes.Add(tmp);
                 }
-
-                using (var client = new HttpClient())
-                {
-                    recipeUpdated = await recipeService.UpdateRecipe(client, recipeModel);
-                    ingredientsUpdated = await recipeService.UpdateIngredientsLinks(client, recipeViewModel.RecipeIngredients);
-                    stepsUpdated = await recipeService.UpdateStepsLinks(client, recipeViewModel.RecipeSteps);
-                }
-
-                if(recipeUpdated && ingredientsUpdated && stepsUpdated) return RedirectToAction("Index");
-                else return RedirectToAction("Error", "Home");
             }
-            catch(Exception ex)
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, ex.Message, "Recipe/Edit - Post");
-                return View(recipeViewModel);
-            }
-        }
 
-        public ActionResult Index()
-        {
-            if (IsConnectedUser()) return View(recipeService.GetUserRecipes());
-            else
-            {
-                logsService.GenerateLog(SessionService.GetConnectedUser().Id, "Aucun utilisateur connecté", "Rate/Edit - Get");
-                return RedirectToAction("Error", "Home");
-            } 
+            return View(recipes);
         }
 
         #region Private methods
-        private bool IsConnectedUser()
-        {
-            if (sessionService.GetConnectedUser() != null) return true;
-            else return false;
-        }
-
         private bool IsConnectedAdmin()
         {
             if (sessionService.GetConnectedAdmin() != null) return true;
+            else return false;
+        }
+        private bool IsConnectedUser()
+        {
+            if (sessionService.GetConnectedUser() != null) return true;
             else return false;
         }
 
