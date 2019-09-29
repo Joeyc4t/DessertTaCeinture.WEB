@@ -84,7 +84,7 @@
                                                                     <img src="~/Content/images/keys/dislike.png" />
                                                                 }
                                                             }
-                                                            else
+                                                            else if(!item.IsValid.HasValue && item.IsPublic)
                                                             {
                                                                 <img src="~/Content/images/keys/waiting.png" />
                                                             }
